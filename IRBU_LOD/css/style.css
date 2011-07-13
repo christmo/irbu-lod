@@ -1,0 +1,67 @@
+/**
+ * CSS Reset
+ * From Blueprint reset.css
+ * http://blueprintcss.googlecode.com
+*/
+
+/*Hacer que el mapa ocupe el 100% de la pantalla*/
+html,body{
+    margin:0px;
+    height:100%;
+    width: 100%;
+    overflow: hidden;	/*Ocultar las barras de scroll*/
+}
+
+/**
+ * Map Examples Specific
+*/
+#map {
+    height: 100%;
+    width: 100%;
+    border: 1px solid black;
+    position: absolute;
+}
+
+#popid {
+
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 11px;
+}
+#infoparada{
+
+    color: #0000ff;
+}
+.search-item {
+    font:normal 11px tahoma, arial, helvetica, sans-serif;
+    padding:3px 10px 3px 10px;
+    border:1px solid #fff;
+    border-bottom:1px solid #eeeeee;
+    white-space:normal;
+    color:#555;
+    text-align: justify;
+}
+.search-item h3 {
+    display:block;
+    font:inherit;
+    font-weight:bold;
+    color:#222;
+}
+
+.search-item h3 span {
+    float: right;
+    font-weight:normal;
+    margin:0 0 5px 5px;
+    width:10px;
+    display:block;
+    clear:none;
+}
+
+/*Imagenes de navegador*/
+.texto_navegador{
+    font-family: 'Courier New',Courier,monospace;
+    font-size: 30px;
+    text-align: center;
+    vertical-align: middle;
+    font-weight: bold;
+    font-style: normal;
+}
