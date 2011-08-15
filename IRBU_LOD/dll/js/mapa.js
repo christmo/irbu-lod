@@ -13,9 +13,12 @@ var markerInicioFin;
 var contadorPuntos=0;
 var puntosLineaRuta;
 
+/* lista de puntos de una nueva ruta */
+var puntosLatLonRutas = new Array();
+
 function init(){
     puntosLineaRuta = new Array();
-    
+
     capturarPosicion = false;
     
     OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
@@ -53,15 +56,30 @@ function init(){
             var pt = new OpenLayers.Geometry.Point(xpos,ypos);
             pt.transform( new OpenLayers.Projection( "EPSG:4326" ),
                 new OpenLayers.Projection( "EPSG:900913" ) );
+
             contadorPuntos++;
+            /*poner puntos en la lista para una nueva ruta*/
+            puntosLatLonRutas[(contadorPuntos-1)]=new Array(contadorPuntos, aux.x, aux.y);
+            //console.info(puntosLatLonRutas);
+            /*Enviar al estore de la tabla de puntos de ruta*/
+            storeRutas.add(new Ext.data.Record({
+                numero: contadorPuntos,
+                latitud: aux.x,
+                longitud: aux.y,
+                newRecord:true
+            }));
+            /*fin store*/
+            
             var puntoRuta = new OpenLayers.Feature.Vector( pt, {
                 id : contadorPuntos
             });
+            puntoRuta.id = contadorPuntos;
             features.push(puntoRuta);
             lienzoRutas.addFeatures(features);
 
-        //-- linea
+            //-- linea
             puntosLineaRuta.push(pt);
+
             var ruta = new OpenLayers.Geometry.LineString(puntosLineaRuta);
             //Estilo de Linea de Recorrido
             var style = {

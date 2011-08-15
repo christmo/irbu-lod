@@ -65,6 +65,24 @@ Ext.onReady(function(){
             handler: function(){
                 window.open ("img/ayuda.pdf","Ayuda KRADAC...");
             }
+        },'-',{
+            xtype: 'tbbutton',
+            cls: 'x-btn-text-icon',
+            //icon: 'img/ayuda.png',
+            text: 'Nueva Ruta',
+            handler: function(){
+                ventanaNuevaRuta();
+            }
+        },'-',{
+            xtype: 'tbbutton',
+            cls: 'x-btn-text-icon',
+            icon: 'img/ayuda.png',
+            text: 'remover',
+            handler: function(){
+                console.info(puntosLineaRuta);
+                //puntosLineaRuta.pop();
+                delete puntosLineaRuta[2];
+            }
         }]
 
     };
