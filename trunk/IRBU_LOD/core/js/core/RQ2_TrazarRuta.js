@@ -44,11 +44,11 @@ function dibujarTrazado(coord){
 
     }else{
         Ext.MessageBox.show({
-                                title: 'Error',
-                                msg: 'Ups... Datos no encontrados',
-                                buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.ERROR
-                            });
+            title: 'Error',
+            msg: 'Ups... Datos no encontrados',
+            buttons: Ext.MessageBox.OK,
+            icon: Ext.MessageBox.ERROR
+        });
     }
 }
 
@@ -84,6 +84,6 @@ function iconosInicioFin(coordPuntos){
     pFin.transform(new OpenLayers.Projection( "EPSG:4326" ),
         new OpenLayers.Projection( "EPSG:900913" ) );
     markerInicioFin.addMarker(new OpenLayers.Marker(pFin, iconFin));
-    }
+}
 
 

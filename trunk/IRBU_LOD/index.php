@@ -22,7 +22,7 @@
         <script type="text/javascript" src="core/js/gui/contenedorPrincipal.js">
         </script>
 
-
+<script type="text/javascript" src="core/js/gui/ventanaNuevaRuta.js"/>
 
         <!--Ventanas-->
 
