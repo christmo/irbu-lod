@@ -22,8 +22,6 @@
         <script type="text/javascript" src="core/js/gui/contenedorPrincipal.js">
         </script>
 
-<script type="text/javascript" src="core/js/gui/ventanaNuevaRuta.js"/>
-
         <!--Ventanas-->
 
         <script type="text/javascript" src="core/js/gui/ventanaBuscarRutas.js">
@@ -43,12 +41,21 @@
         <script type="text/javascript" src="core/js/gui/RQ3_busqueda_aprox.js">
         </script>
         <script type="text/javascript" src="core/js/core/RQ3_AreaBusqueda.js">
-        </script><!-- spinner -->
+        </script>
+
+        <!-- spinner -->
         <link rel="stylesheet" type="text/css" href="dll/js/ext-js/ux/spinner/Spinner.css">
         <script type="text/javascript" src="dll/js/ext-js/ux/spinner/Spinner.js">
         </script>
         <script type="text/javascript" src="dll/js/ext-js/ux/spinner/SpinnerStrategy.js">
-        </script><!--  RQ1 TRATAMIENTO DE IMAGENES  -->
+        </script>
+
+        <script type="text/javascript" src="core/js/gui/ventanaNuevaRuta.js">
+        </script>
+        <script type="text/javascript" src="core/js/gui/login/ventanaLogin.js">
+        </script>
+        
+        <!--  RQ1 TRATAMIENTO DE IMAGENES  -->
 
         <script type="text/javascript" src="dll/js/jquery/jquery.js">
         </script>
@@ -69,7 +76,7 @@
 <!--        <div class="c1"><a href='http://www.kradac.com'><img alt="www.kradac.com" src='img/datap/credits.png'></a></div>-->
 
         <div class="c2"><a href="http://validator.w3.org/check?uri=referer"><img
-        src="http://www.w3.org/Icons/valid-html401"
-        alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></div>
+                    src="http://www.w3.org/Icons/valid-html401"
+                    alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></div>
     </body>
 </html>

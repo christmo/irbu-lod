@@ -22,8 +22,8 @@ Ext.onReady(function(){
             icon: 'img/buscar.png',
             text: 'Parada mas Cercana',
             handler: function(){
-                //capturarPuntoReferencia();
-                ventanaNuevaRuta();
+                capturarPuntoReferencia();
+            //ventanaNuevaRuta();
             }
         },'-',{
             xtype: 'tbbutton',
@@ -68,6 +68,7 @@ Ext.onReady(function(){
         },'-',{
             xtype: 'tbbutton',
             cls: 'x-btn-text-icon',
+            id: 'btnNuevaRuta',
             //icon: 'img/ayuda.png',
             text: 'Nueva Ruta',
             handler: function(){
@@ -79,9 +80,20 @@ Ext.onReady(function(){
             icon: 'img/ayuda.png',
             text: 'remover',
             handler: function(){
-                console.info(puntosLineaRuta);
-                //puntosLineaRuta.pop();
-                delete puntosLineaRuta[2];
+                //console.info(puntosLineaRuta);
+                console.info(Ext.get('btnNuevaRuta'));
+                Ext.get('btnNuevaRuta').toggle();
+                
+            //puntosLineaRuta.pop();
+            //delete puntosLineaRuta[2];
+            }
+        },'->',{
+            xtype: 'tbbutton',
+            cls: 'x-btn-text-icon',
+            icon: 'img/user.png',
+            text: 'Ingresar',
+            handler: function(){
+                ventanaLogin();
             }
         }]
 
