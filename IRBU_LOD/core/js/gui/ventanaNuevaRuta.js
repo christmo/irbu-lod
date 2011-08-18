@@ -79,11 +79,7 @@ Ext.onReady(function(){
 });
 
 
-var myData = [
-['Apple','-78.156','-3.61561'],
-['Apple','-78.156','-3.61561'],
-['Apple','-78.156','-3.61561']
-];
+var myData = [];
 
 // proxy = new Ext.data.MemoryProxy(puntosLatLonRutas);
 proxy = new Ext.data.MemoryProxy(myData);
@@ -128,20 +124,20 @@ function limpiar_tabla_puntos(){
     alert('salir y limpiar');
 }
 
-function buscarParadas(id_ruta,radioTipo){
+/*function buscarParadas(id_ruta,radioTipo){
     /**
-         * Peticion de las paradas segun una ruta seleccionada
-         */
-    Ext.Ajax.request({
+     * Peticion de las paradas segun una ruta seleccionada
+     */
+   /* Ext.Ajax.request({
         url: 'core/php/core/RQ4_ParadasRuta.php',
         method: 'POST',
         success: function (result) {
             var r = Ext.util.JSON.decode(result.responseText);
             if(typeof r.datos != "undefined"){
                 /**
-                     * Dibuja las paradas en el mapa
-                     */
-                lienzosRecorridoHistorico(r.datos.coordenadas);
+                 * Dibuja las paradas en el mapa
+                 */
+               /* lienzosRecorridoHistorico(r.datos.coordenadas);
             }
         },
         timeout: 1000,
@@ -150,7 +146,7 @@ function buscarParadas(id_ruta,radioTipo){
             tipo: radioTipo
         }
     });
-}
+}*/
 
 
 /**

@@ -1,6 +1,6 @@
 <?php
 
-include ('../../../dll/php/conexionBD.php');
+include ('../../../../dll/php/conexionBD.php');
 extract($_POST);
 
 //$salt = "KOMPRESORKR@D@C";
@@ -18,15 +18,17 @@ if ($registro["CLAVE_USU"] == $txtClave && $registro["USUARIO_USU"] == $txtUsuar
     $_SESSION["usuario"] = $registro["USUARIO_USU"];
     $_SESSION["sesion"] = true;
 
-    echo '<script type="text/javascript">';
+    /* echo '<script type="text/javascript">';
 
-    //redireccionar a dentro de la aplicación
-    echo "window.location='../../indexg.php';";
-    echo '</script>';
+      //redireccionar a dentro de la aplicación
+      echo "window.location='../../indexg.php';";
+      echo '</script>'; */
+    echo '{"success": true, "login":{"web": "user"}}';
 } else {
-    echo '<script type="text/javascript">';
-    echo 'alert ("LO SENTIMOS NO ESTA REGISTRADO");';
-    echo "window.location='../../index.php';";
-    echo '</script>';
+    /* echo '<script type="text/javascript">';
+      echo 'alert ("LO SENTIMOS NO ESTA REGISTRADO");';
+      echo "window.location='../../index.php';";
+      echo '</script>'; */
+    echo '{"success": false, "errors":{"reason": "Usuario o contraseña incorrecta"}}';
 }
 ?>
