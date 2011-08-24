@@ -172,6 +172,7 @@ function recargarComboRutasParadas(){
     op = radioTipo;
 
     if(typeof radioTipo!="undefined"){
+        console.info(urlRutas);
         storeRutas.proxy.conn.url = urlRutas;
         storeRutas.load();
     }

@@ -2,16 +2,15 @@
  * Permite desplegar la venta para buscar la ruta de los buses de la UTPL
  */
 
-var contNuevaRuta;
-var winNuevaRuta;
+var winPuntosRuta;
 var grid;
 var proxy;
-var storeRutas;
+
 
 Ext.onReady(function(){
 
     grid = new Ext.grid.GridPanel({
-        store: storeRutas,
+        store: storePuntosRuta,
         columns: [{
             header: 'N\xFAmero',
             width: 30,
@@ -31,9 +30,9 @@ Ext.onReady(function(){
                 icon   : 'img/delete.gif',  // Use a URL in the icon config
                 tooltip: 'Eliminar Punto',
                 handler: function(grid, rowIndex, colIndex) {
-                    var rec = storeRutas.getAt(rowIndex);
+                    var rec = storePuntosRuta.getAt(rowIndex);
                     //var selectedRow = grid.getSelectionModel().getSelected();
-                    storeRutas.removeAt(rowIndex);
+                    storePuntosRuta.removeAt(rowIndex);
                     
                     console.info(rec.get('numero'));
                     var puntoBorrar = lienzoRutas.getFeatureById(rec.get('numero'));
@@ -73,7 +72,13 @@ Ext.onReady(function(){
         //width: 500,
         autoScroll: true,
         //autoHeight: true,
-        frame: true
+        frame: true,
+        buttons: [{
+            text: 'Guardar',
+            handler: function() {
+                //enviar los datos de la tabla a la base
+            }
+        }]
     });
 
 });
@@ -102,7 +107,7 @@ var myReader = new Ext.data.ArrayReader({},
  * Store para alamcenar los puntos que se van seleccionando para crear una
  * nueva ruta.
  */
-storeRutas = new Ext.data.Store({
+storePuntosRuta = new Ext.data.Store({
     // data: myData,
     autoDestroy: true,
     reader: myReader,
@@ -124,38 +129,13 @@ function limpiar_tabla_puntos(){
     alert('salir y limpiar');
 }
 
-/*function buscarParadas(id_ruta,radioTipo){
-    /**
-     * Peticion de las paradas segun una ruta seleccionada
-     */
-   /* Ext.Ajax.request({
-        url: 'core/php/core/RQ4_ParadasRuta.php',
-        method: 'POST',
-        success: function (result) {
-            var r = Ext.util.JSON.decode(result.responseText);
-            if(typeof r.datos != "undefined"){
-                /**
-                 * Dibuja las paradas en el mapa
-                 */
-               /* lienzosRecorridoHistorico(r.datos.coordenadas);
-            }
-        },
-        timeout: 1000,
-        params: {
-            id_ruta: id_ruta,
-            tipo: radioTipo
-        }
-    });
-}*/
-
-
 /**
-     * Muestra la ventana para buscar una ruta
-     * @return NO retorna valor
-     */
-function ventanaNuevaRuta(){
-    if(!winNuevaRuta){
-        winNuevaRuta = new Ext.Window({
+* Muestra la ventana para buscar una ruta
+* @return NO retorna valor
+*/
+function ventanaPuntosRuta(){
+    if(!winPuntosRuta){
+        winPuntosRuta = new Ext.Window({
             layout:'fit',
             title:'Nueva Ruta',
             resizable : true,
@@ -166,5 +146,5 @@ function ventanaNuevaRuta(){
             items: [grid]
         });
     }
-    winNuevaRuta.show(this);
+    winPuntosRuta.show(this);
 }

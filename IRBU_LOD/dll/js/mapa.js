@@ -13,6 +13,11 @@ var markerInicioFin;
 var contadorPuntos=0;
 var puntosLineaRuta;
 
+/**
+ * Store para recoger los puntos de las rutas nuevas
+ */
+var storePuntosRuta;
+
 /* lista de puntos de una nueva ruta */
 var puntosLatLonRutas = new Array();
 
@@ -62,7 +67,7 @@ function init(){
             puntosLatLonRutas[(contadorPuntos-1)]=new Array(contadorPuntos, aux.x, aux.y);
             //console.info(puntosLatLonRutas);
             /*Enviar al estore de la tabla de puntos de ruta*/
-            storeRutas.add(new Ext.data.Record({
+            storePuntosRuta.add(new Ext.data.Record({
                 numero: contadorPuntos,
                 latitud: aux.x,
                 longitud: aux.y,

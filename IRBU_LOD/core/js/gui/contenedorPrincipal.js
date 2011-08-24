@@ -3,6 +3,8 @@
  * and open the template in the editor.
  */
 
+var isLogin = false;
+
 Ext.onReady(function(){
 
     /**
@@ -68,32 +70,61 @@ Ext.onReady(function(){
         },'-',{
             xtype: 'tbbutton',
             cls: 'x-btn-text-icon',
-            id: 'btnNuevaRuta',
-            //icon: 'img/ayuda.png',
-            text: 'Nueva Ruta',
-            handler: function(){
-                ventanaNuevaRuta();
-            }
+            id: 'btnAdministrador',
+            icon: 'img/ayuda.png',
+            text: 'Administrador',
+            menu: [{
+                text: 'Rutas',
+                icon: 'img/ayuda.png',
+                menu: [{
+                    text: 'Nueva Ruta',
+                    id: 'btnNuevaRuta',
+                    icon: 'img/ayuda.png',
+                    handler: function(){
+                        ventanaNuevaRuta();
+                    }
+                },{
+                    text: 'Eliminar Ruta'
+                },{
+                    text: 'Editar Ruta'
+                }]
+            },{
+                text: 'Paradas',
+                icon: 'img/ayuda.png',
+                menu: [{
+                    text: 'Nueva Parada',
+                    icon: 'img/ayuda.png',
+                    handler: function(){
+                    //ventanaNuevaRuta();
+                    }
+                },{
+                    text: 'Eliminar Parada'
+                },{
+                    text: 'Editar Parada'
+                }]
+            },{
+                text: 'Ayuda'
+            }]
         },'-',{
             xtype: 'tbbutton',
             cls: 'x-btn-text-icon',
             icon: 'img/ayuda.png',
             text: 'remover',
             handler: function(){
-                //console.info(puntosLineaRuta);
-                console.info(Ext.get('btnNuevaRuta'));
-                Ext.get('btnNuevaRuta').toggle();
-                
-            //puntosLineaRuta.pop();
-            //delete puntosLineaRuta[2];
+               ventanaNuevaRuta();
             }
         },'->',{
             xtype: 'tbbutton',
             cls: 'x-btn-text-icon',
-            icon: 'img/user.png',
+            icon: 'img/login.png',
             text: 'Ingresar',
+            id: 'btnLogin',
             handler: function(){
-                ventanaLogin();
+                if(!isLogin){
+                    ventanaLogin();
+                }else{
+                    ocultarBotonAdministrador();
+                }
             }
         }]
 
@@ -102,8 +133,8 @@ Ext.onReady(function(){
     var viewport = new Ext.Viewport({
         layout: 'border',
         items: [
-        barraHerramientas
-        ,{
+        barraHerramientas,
+        {
             region: 'center',
             contentEl: 'map',
             split: false,
@@ -112,7 +143,34 @@ Ext.onReady(function(){
             maxSize: 200,
             collapsible: false,
             margins: '0 0 0 0'
-        }
-        ]
+        }]
     });
+
+    Ext.get('btnAdministrador').hide();
 });
+
+/**
+* Muestra el boton de administracion el que permite hacer toda la edicion de
+* rutas, paradas y usuarios
+ */
+function mostrarBotonAdministrador(){
+    Ext.get('btnAdministrador').show();
+    winLogin.hide();
+    formulario.getForm().reset();
+
+    Ext.getCmp('btnLogin').setText('Salir');
+
+    isLogin = true;
+}
+
+/**
+* Oculta el boton de administracion el que permite hacer toda la edicion de
+* rutas, paradas y usuarios
+ */
+function ocultarBotonAdministrador(){
+    Ext.get('btnAdministrador').hide();
+
+    Ext.getCmp('btnLogin').setText('Ingresar');
+
+    isLogin = false;
+}

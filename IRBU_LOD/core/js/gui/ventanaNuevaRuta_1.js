@@ -2,14 +2,19 @@
  * Permite desplegar la venta para buscar la ruta de los buses de la UTPL
  */
 
-var contBuscarRutas;
-var winBuscarRutas;
-var radioTipo = 'B';
-var urlBuscarRutas = phpComboRutas+"?op="+radioTipo;
+var winNuevaRuta;
+var panelNuevaRuta;
+var panelInfoRuta;
+
+//var idRuta;
+var rbTipoRecorrido='B';
+var urlNuevaRuta = phpComboRutas+"?op="+rbTipoRecorrido;
 
 Ext.onReady(function(){
-
-    contBuscarRutas = new Ext.FormPanel({
+    
+    var nombreRuta;
+ 
+    panelInfoRuta = new Ext.FormPanel({
         labelAlign: 'top',
         frame:true,
         bodyStyle:'padding:5px 5px 0',
@@ -22,6 +27,7 @@ Ext.onReady(function(){
             items: [{
                 xtype: 'radiogroup',
                 fieldLabel: 'Tipo de recorrido',
+                allowBlank:false,
                 items: [
                 {
                     boxLabel: 'Baja de la UTPL',
@@ -30,7 +36,8 @@ Ext.onReady(function(){
                     //checked: true,
                     listeners: {
                         check: function (ctl, val) {
-                            recargarComboRutas(contBuscarRutas);
+                            //recargarCbxRutasNuevaRuta();
+                            recargarCbxNuevaRuta(panelInfoRuta);
                         }
                     }
                 },{
@@ -39,7 +46,8 @@ Ext.onReady(function(){
                     inputValue: 'R',
                     listeners: {
                         check: function (ctl, val) {
-                            recargarComboRutas(contBuscarRutas);
+                            //recargarCbxRutasNuevaRuta();
+                            recargarCbxNuevaRuta(panelInfoRuta);
                         }
                     }
                 },{
@@ -48,36 +56,31 @@ Ext.onReady(function(){
                     inputValue: 'BR',
                     listeners: {
                         check: function (ctl, val) {
-                            recargarComboRutas(contBuscarRutas);
+                            //recargarCbxRutasNuevaRuta();
+                            recargarCbxNuevaRuta(panelInfoRuta);
                         }
                     }
-                }
-                ]
-            }
-            ]
+                }]
+            }]
         },{
             layout: 'form',
             items: [
-            cbxBuscarRutas
+            cbxNuevaRuta
             ]
-        }
-        ],
+        }],
 
         buttons: [{
-            text: 'Graficar Ruta',
+            text: 'Guardar',
             handler: function() {
-                contBuscarRutas.getForm().submit({
-                    url : 'core/php/core/RQ2_TrazadoRutas.php',
+                nombreRuta=cbxNuevaRuta.getValue();
+                panelInfoRuta.getForm().submit({
+                    url : 'core/php/core/guardarRuta.php?nombreRuta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
                     method:'POST',
-                    waitMsg : 'Comprobando Datos...',
-                    params:{
-                        id_ruta: id_ruta,
-                        tipo: radioTipo
-                    },
+                    waitMsg : 'Guardando Ruta...',
                     failure: function (form, action) {
                         Ext.MessageBox.show({
                             title: 'Error...',
-                            msg: 'Ups... Datos no encontrados',
+                            msg: 'Ruta ya guardada...',
                             buttons: Ext.MessageBox.OK,
                             icon: Ext.MessageBox.ERROR
                         });
@@ -89,74 +92,69 @@ Ext.onReady(function(){
                         limpiarCapas();
 
                         //dibujar la ruta en el mapa
-                        dibujarTrazado(resultado.datos.coordenadas);
+                        //dibujarTrazado(resultado.datos.msg);
 
                         //dibujar las paradas en esa ruta
-                        buscarParadas(id_ruta,radioTipo);
+                        //buscarParadas(id_ruta,radioTipo);
 
                         //Limpia los datos del formulario y lo oculta
-                        limpiar_datos_rutas();
+                        //limpiar_datos_rutas();
+
+                        /* Ext.MessageBox.show({
+                            title: 'Mensaje...',
+                            msg: 'Guardado correctamente...',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.INFORMATION
+                        });*/
+                        console.info(resultado.id);
+                        winNuevaRuta.close();
+                        ventanaPuntosRuta();
                     }
                 });
             }
-        },{
-            text: 'Cancelar',
-            handler: limpiar_datos_rutas
         }]
+       
     });
+
+    panelNuevaRuta = new Ext.Panel({
+        layout: {
+            type: 'vbox',
+            align : 'stretch',
+            pack  : 'start'
+        },
+        border: false,
+        items:[panelInfoRuta]
+    });
+
 });
 
-function buscarParadas(id_ruta,radioTipo){
-    /**
-     * Peticion de las paradas segun una ruta seleccionada
-     */    
-    Ext.Ajax.request({
-        url: 'core/php/core/RQ4_ParadasRuta.php',
-        method: 'POST',
-        success: function (result) {
-            var r = Ext.util.JSON.decode(result.responseText);
-            if(typeof r.datos != "undefined"){
-                /**
-                * Dibuja las paradas en el mapa
-                */
-                lienzosRecorridoHistorico(r.datos.coordenadas);
-            }
-        },
-        timeout: 1000,
-        params: {
-            id_ruta: id_ruta,
-            tipo: radioTipo
-        }
-    });
-}
-
 /**
-* Permite recargar el combo de nombres de rutas con nueva informacion
-* segun los parametros que se le envie en la url a traves de GET
+* Hace el cargado del combo box con un nuevo tipo de recorrido para que se
+* carguen las rutas de este.
 */
-function recargarComboRutas(panelRuta){
-    cbxBuscarRutas.reset();
-    radioTipo =  panelRuta.getForm().getValues()['rbTipo'];
-
-    if(typeof radioTipo!="undefined"){
-        urlBuscarRutas = phpComboRutas +"?op="+ radioTipo;
-        storeBuscarRutas.proxy.conn.url = urlBuscarRutas;
-        storeBuscarRutas.load();
+function recargarCbxNuevaRuta(panelRuta){
+    rbTipoRecorrido =  panelRuta.getForm().getValues()['rbTipo'];
+    cbxNuevaRuta.reset();
+    if(typeof rbTipoRecorrido!='undefined'){
+        urlNuevaRuta = phpComboRutas +"?op="+ rbTipoRecorrido;
+        storeCbxNuevaRuta.proxy.conn.url = urlNuevaRuta;
+        storeCbxNuevaRuta.load();
     }
 }
 
-/* oculta la venta y limpia los datos no guardados */
-function limpiar_datos_rutas(){
-    contBuscarRutas.getForm().reset();
-    winBuscarRutas.hide();
+/**
+ * Obtiene el ID de la ruta seleccionada en el combo box
+ */
+function seleccionarRutaCbx(){
+//idRuta = cbxNuevaRuta.getValue();
 }
 
 /**
  * Obtine el id y el nombre de las rutas de la BD
  */
-var storeBuscarRutas = new Ext.data.JsonStore({
+var storeCbxNuevaRuta = new Ext.data.JsonStore({
     autoDestroy: true,
-    url: urlBuscarRutas,
+    url: urlNuevaRuta,
     root: 'rutas',
     fields: ['id', 'name'],
     failure: function (form, action) {
@@ -168,15 +166,12 @@ var storeBuscarRutas = new Ext.data.JsonStore({
         });
     }
 });
-
-
 /**
  * Carga el combo con las rutas
  */
-var cbxBuscarRutas = new Ext.form.ComboBox({
-    store: storeBuscarRutas,
-    fieldLabel: 'Rutas',
-    hiddenName: 'idRutas',
+var cbxNuevaRuta = new Ext.form.ComboBox({
+    store: storeCbxNuevaRuta,
+    fieldLabel: 'Ingresar lugares de la nueva ruta',
     valueField: 'id',
     displayField: 'name',
     typeAhead: true,
@@ -184,37 +179,33 @@ var cbxBuscarRutas = new Ext.form.ComboBox({
     triggerAction: 'all',
     tpl: resultadoTplRutas,
     itemSelector: 'div.search-item',
-    emptyText:'Seleccionar ruta...',
+    emptyText:'Ingresar lugares de la nueva ruta...',
     allowBlank:false,
     resizable:true,
     minListWidth:300,
     selectOnFocus:true,
-    width: 455,
+    width: 455/*,
     listeners:{
-        'select': seleccionarRuta
-    }
+        'select': seleccionarRutaCbx
+    }*/
 });
 
-function seleccionarRuta(){
-    id_ruta = cbxBuscarRutas.getValue();
-}
-
 /**
- * Muestra la ventana para buscar una ruta
+ * Muestra la ventana para ingresar una nueva ruta
  * @return NO retorna valor
  */
-function ventanaBuscarRutas(){
-    if(!winBuscarRutas){
-        winBuscarRutas = new Ext.Window({
+function ventanaNuevaRuta(){
+    if(!winNuevaRuta){
+        winNuevaRuta = new Ext.Window({
             layout:'fit',
-            title:'Buscar Ruta',
+            title:'Nueva Ruta',
             resizable : false,
             width:500,
             height:180,
             closeAction:'hide',
             plain: false,
-            items: [contBuscarRutas]
+            items: [panelNuevaRuta]
         });
     }
-    winBuscarRutas.show(this);
+    winNuevaRuta.show(this);
 }
