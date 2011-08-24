@@ -24,46 +24,45 @@ Ext.onReady(function(){
         },{
             fieldLabel: 'Clave',
             name: 'txtClave',
+            id: 'txtClave',
             inputType: 'password',
-            allowBlank:false
+            allowBlank:false,
+            listeners: {
+                specialkey: function(f,e){
+                    if (e.getKey() == e.ENTER) {
+                        ingresarAdministrador();
+                    }
+                }
+            }
         }],
         buttons: [{
-            text: 'Enter',
+            text: 'Entrar',
             handler : function() {
-                formulario.getForm().submit({
-                    url : 'core/php/core/login/login.php',
-                    waitMsg : 'Ingresando al sistema...',
-                    failure: function (form, action) {
-                        Ext.MessageBox.show({
-                            title: 'Error al ingresar',
-                            msg: 'Error al ingresar, intentelo de nuevo...',
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.ERROR
-                        });
-                    },
-                    success: function (form, request) {
-                        Ext.MessageBox.show({
-                            title: 'Login...',
-                            msg: 'Ingresar al sistema...',
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.INFO
-                        });
-                        responseData = Ext.util.JSON.decode(request.response.responseText);
-                        console.info(responseData.cat_id);
-                        /*formCategories.getForm().load({
-                            url : 'formLoader.php',
-                            method: 'GET',
-                            params: {
-                                cat_id: responseData.cat_id
-                            },
-                            waitMsg : 'Espere por favor'
-                        });*/
-                    }
-                });
+                ingresarAdministrador()
             }
         }]
+        
     })
 });
+
+function ingresarAdministrador(){
+    formulario.getForm().submit({
+        url : 'core/php/core/login/login.php',
+        waitMsg : 'Ingresando al sistema...',
+        failure: function (form, action) {
+            Ext.get('txtClave').dom.value = '';
+            Ext.MessageBox.show({
+                title: 'Error al ingresar',
+                msg: 'Error al ingresar, intentelo de nuevo...',
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.ERROR
+            });
+        },
+        success: function (form, request) {
+           mostrarBotonAdministrador();
+        }
+    });
+}
 
 /**
   * Muestra la ventana para la autenticación de los usuarios

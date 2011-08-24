@@ -22,6 +22,8 @@
         <script type="text/javascript" src="core/js/gui/contenedorPrincipal.js">
         </script>
 
+        <script type="text/javascript" src="core/js/core/constantes.js">
+        </script>
         <!--Ventanas-->
 
         <script type="text/javascript" src="core/js/gui/ventanaBuscarRutas.js">
@@ -29,12 +31,16 @@
         <script type="text/javascript" src="core/js/gui/ventanaLocalizarParadaHora.js">
         </script>
         <script type="text/javascript" src="core/js/gui/RQ1_POPUP.js">
-        </script><!-- RQ 2 -->
+        </script>
+
+        <!-- RQ 2 -->
 
         <script type="text/javascript" src="core/js/core/RQ2_TrazarRuta.js">
         </script>
         <script type="text/javascript" src="core/js/core/LimpiarCapas.js">
-        </script><!--  RQ 3  -->
+        </script>
+
+        <!--  RQ 3  -->
 
         <script type="text/javascript" src="dll/js/action_popup_paradas.js">
         </script>
@@ -50,17 +56,18 @@
         <script type="text/javascript" src="dll/js/ext-js/ux/spinner/SpinnerStrategy.js">
         </script>
 
-        <script type="text/javascript" src="core/js/gui/ventanaNuevaRuta.js">
-        </script>
-        <script type="text/javascript" src="core/js/gui/login/ventanaLogin.js">
-        </script>
-        
         <!--  RQ1 TRATAMIENTO DE IMAGENES  -->
 
         <script type="text/javascript" src="dll/js/jquery/jquery.js">
         </script>
         <script type="text/javascript" src="dll/js/jquery/jquery.lightbox-0.5.js">
         </script>
+
+        <script type="text/javascript" src="core/js/gui/ventanaNuevaRuta_1.js">
+        </script>
+        <script type="text/javascript" src="core/js/gui/ventanaNuevaRuta.js">
+        </script>
+        <script type="text/javascript" src="core/js/gui/login/ventanaLogin.js"/>
         <script type='text/javascript'>
             $(function() {
                 $('.photo').lightBox();
