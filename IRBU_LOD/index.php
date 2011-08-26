@@ -24,6 +24,8 @@
 
         <script type="text/javascript" src="core/js/core/constantes.js">
         </script>
+        <script type="text/javascript" src="core/js/core/FuncionesComunes.js">
+        </script>
         <!--Ventanas-->
 
         <script type="text/javascript" src="core/js/gui/ventanaBuscarRutas.js">
@@ -63,10 +65,14 @@
         <script type="text/javascript" src="dll/js/jquery/jquery.lightbox-0.5.js">
         </script>
 
-        <script type="text/javascript" src="core/js/gui/ventanaNuevaRuta_1.js">
-        </script>
+
         <script type="text/javascript" src="core/js/gui/ventanaNuevaRuta.js">
         </script>
+        <script type="text/javascript" src="core/js/gui/ventanaHorasRuta.js">
+        </script>
+        <script type="text/javascript" src="core/js/gui/ventanaPuntosRuta.js">
+        </script>
+
         <script type="text/javascript" src="core/js/gui/login/ventanaLogin.js"/>
         <script type='text/javascript'>
             $(function() {

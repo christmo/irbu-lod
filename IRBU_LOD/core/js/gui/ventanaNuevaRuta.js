@@ -2,149 +2,211 @@
  * Permite desplegar la venta para buscar la ruta de los buses de la UTPL
  */
 
-var winPuntosRuta;
-var grid;
-var proxy;
+var winNuevaRuta;
+var panelNuevaRuta;
+var panelInfoRuta;
 
+//var idRuta;
+var rbTipoRecorrido='B';
+var urlNuevaRuta = phpComboRutas+"?op="+rbTipoRecorrido;
 
 Ext.onReady(function(){
+    
+    var nombreRuta;
+ 
+    panelInfoRuta = new Ext.FormPanel({
+        labelAlign: 'top',
+        frame:true,
+        bodyStyle:'padding:5px 5px 0',
+        labelWidth:60,
+        width: 500,
 
-    grid = new Ext.grid.GridPanel({
-        store: storePuntosRuta,
-        columns: [{
-            header: 'N\xFAmero',
-            width: 30,
-            dataIndex: 'numero'
-        },{
-            header: 'Longitud',
-            width: 60,
-            dataIndex: 'longitud'
-        },{
-            header: 'Latitud',
-            width: 60,
-            dataIndex: 'latitud'
-        },{
-            xtype: 'actioncolumn',
-            width: 15,
+        items: [{
+            columnWidth:1,
+            layout: 'form',
             items: [{
-                icon   : 'img/delete.gif',  // Use a URL in the icon config
-                tooltip: 'Eliminar Punto',
-                handler: function(grid, rowIndex, colIndex) {
-                    var rec = storePuntosRuta.getAt(rowIndex);
-                    //var selectedRow = grid.getSelectionModel().getSelected();
-                    storePuntosRuta.removeAt(rowIndex);
-                    
-                    console.info(rec.get('numero'));
-                    var puntoBorrar = lienzoRutas.getFeatureById(rec.get('numero'));
-                    lienzoRutas.eraseFeatures(puntoBorrar);
-
-                    //var puntoLinea = lienzoRecorridos.getFeatureById("trazado");
-
-                    //delete puntosLineaRuta[rowIndex];
-                    puntosLineaRuta.splice(rowIndex,1);
-
-                    console.info(puntosLineaRuta);
-
-                    var ruta = new OpenLayers.Geometry.LineString(puntosLineaRuta);
-                    //Estilo de Linea de Recorrido
-                    var style = {
-                        strokeColor: '#0000ff',
-                        strokeOpacity: 0.3,
-                        strokeWidth: 5
-                    };
-                    
-                    var lineFeature = lienzoRecorridos.getFeatureById( "trazado" );
-                    if (lineFeature != null){
-                        lineFeature.destroy();
+                xtype: 'radiogroup',
+                fieldLabel: 'Tipo de recorrido',
+                allowBlank:false,
+                items: [
+                {
+                    boxLabel: 'Baja de la UTPL',
+                    name: 'rbTipo',
+                    inputValue: 'B',
+                    //checked: true,
+                    listeners: {
+                        check: function (ctl, val) {
+                            //recargarCbxRutasNuevaRuta();
+                            recargarCbxNuevaRuta(panelInfoRuta);
+                        }
                     }
-
-                    lineFeature = new OpenLayers.Feature.Vector(ruta, null, style);
-                    lineFeature.id = "trazado";
-                    lienzoRecorridos.addFeatures([lineFeature]);
-                }
+                },{
+                    boxLabel: 'Sube a la UTPL',
+                    name: 'rbTipo',
+                    inputValue: 'R',
+                    listeners: {
+                        check: function (ctl, val) {
+                            //recargarCbxRutasNuevaRuta();
+                            recargarCbxNuevaRuta(panelInfoRuta);
+                        }
+                    }
+                },{
+                    boxLabel: 'Sube y baja de la UTPL',
+                    name: 'rbTipo',
+                    inputValue: 'BR',
+                    listeners: {
+                        check: function (ctl, val) {
+                            //recargarCbxRutasNuevaRuta();
+                            recargarCbxNuevaRuta(panelInfoRuta);
+                        }
+                    }
+                }]
             }]
+        },{
+            layout: 'form',
+            items: [
+            cbxNuevaRuta
+            ]
         }],
-        viewConfig: {
-            forceFit: true
-        },
-        //renderTo: ,
-        //title: 'Simple Ext JS Grid',
-        //width: 500,
-        autoScroll: true,
-        //autoHeight: true,
-        frame: true,
+
         buttons: [{
             text: 'Guardar',
             handler: function() {
-                //enviar los datos de la tabla a la base
+                nombreRuta=cbxNuevaRuta.getValue();
+                panelInfoRuta.getForm().submit({
+                    url : 'core/php/core/guardarRuta.php?nombreRuta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
+                    method:'POST',
+                    waitMsg : 'Guardando Ruta...',
+                    failure: function (form, action) {
+                        Ext.MessageBox.show({
+                            title: 'Error...',
+                            msg: 'Ruta ya guardada...',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR
+                        });
+                    },
+                    success: function (form, action) {
+                        var resultado = Ext.util.JSON.decode(action.response.responseText);
+
+                        //Limpia las capas antes de hacer una nueva consulta
+                        limpiarCapas();
+
+                        //dibujar la ruta en el mapa
+                        //dibujarTrazado(resultado.datos.msg);
+
+                        //dibujar las paradas en esa ruta
+                        //buscarParadas(id_ruta,radioTipo);
+
+                        //Limpia los datos del formulario y lo oculta
+                        //limpiar_datos_rutas();
+
+                        /* Ext.MessageBox.show({
+                            title: 'Mensaje...',
+                            msg: 'Guardado correctamente...',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.INFORMATION
+                        });*/
+                        console.info(resultado.id);
+                        winNuevaRuta.close();
+                        //ventanaPuntosRuta(resultado.id);
+                        ventanaHorasRuta(resultado.id);
+                    }
+                });
             }
         }]
+       
+    });
+
+    panelNuevaRuta = new Ext.Panel({
+        layout: {
+            type: 'vbox',
+            align : 'stretch',
+            pack  : 'start'
+        },
+        border: false,
+        items:[panelInfoRuta]
     });
 
 });
 
-
-var myData = [];
-
-// proxy = new Ext.data.MemoryProxy(puntosLatLonRutas);
-proxy = new Ext.data.MemoryProxy(myData);
-
 /**
- * Campos de la tabla de nueva ruta
- */
-var myReader = new Ext.data.ArrayReader({},
-    [{
-        name: 'numero'
-    },{
-        name: 'latitud',
-        type: 'float'
-    },{
-        name: 'longitud',
-        type: 'float'
-    }]);
-
-/**
- * Store para alamcenar los puntos que se van seleccionando para crear una
- * nueva ruta.
- */
-storePuntosRuta = new Ext.data.Store({
-    // data: myData,
-    autoDestroy: true,
-    reader: myReader,
-    proxy: proxy,
-    autoLoad: true,
-    listeners: {
-        load: function(obj,records){
-            //console.log(arguments);
-            Ext.each(records, function(rec){
-                //console.info('Ver:'+rec.get('latitud'));
-                //console.info(myData);
-                });
-        }
+* Hace el cargado del combo box con un nuevo tipo de recorrido para que se
+* carguen las rutas de este.
+*/
+function recargarCbxNuevaRuta(panelRuta){
+    rbTipoRecorrido =  panelRuta.getForm().getValues()['rbTipo'];
+    cbxNuevaRuta.reset();
+    if(typeof rbTipoRecorrido!='undefined'){
+        urlNuevaRuta = phpComboRutas +"?op="+ rbTipoRecorrido;
+        storeCbxNuevaRuta.proxy.conn.url = urlNuevaRuta;
+        storeCbxNuevaRuta.load();
     }
-});
-
-
-function limpiar_tabla_puntos(){
-    alert('salir y limpiar');
 }
 
 /**
-* Muestra la ventana para buscar una ruta
-* @return NO retorna valor
-*/
-function ventanaPuntosRuta(){
-    if(!winPuntosRuta){
-        winPuntosRuta = new Ext.Window({
-            layout:'fit',
-            title:'Nueva Ruta',
-            resizable : true,
-            width:350,
-            height:300,
-            closeAction:'hide',
-            plain: false,
-            items: [grid]
+ * Obtiene el ID de la ruta seleccionada en el combo box
+ */
+function seleccionarRutaCbx(){
+//idRuta = cbxNuevaRuta.getValue();
+}
+
+/**
+ * Obtine el id y el nombre de las rutas de la BD
+ */
+var storeCbxNuevaRuta = new Ext.data.JsonStore({
+    autoDestroy: true,
+    url: urlNuevaRuta,
+    root: 'rutas',
+    fields: ['id', 'name'],
+    failure: function (form, action) {
+        Ext.MessageBox.show({
+            title: 'Error...',
+            msg: 'No a ingresado correctamente vuelva a ingresar al sistema...',
+            buttons: Ext.MessageBox.OK,
+            icon: Ext.MessageBox.ERROR
         });
     }
-    winPuntosRuta.show(this);
+});
+/**
+ * Carga el combo con las rutas
+ */
+var cbxNuevaRuta = new Ext.form.ComboBox({
+    store: storeCbxNuevaRuta,
+    fieldLabel: 'Ingresar lugares de la nueva ruta',
+    valueField: 'id',
+    displayField: 'name',
+    typeAhead: true,
+    mode: 'local',
+    triggerAction: 'all',
+    tpl: resultadoTplRutas,
+    itemSelector: 'div.search-item',
+    emptyText:'Ingresar lugares de la nueva ruta...',
+    allowBlank:false,
+    resizable:true,
+    minListWidth:300,
+    selectOnFocus:true,
+    width: 455/*,
+    listeners:{
+        'select': seleccionarRutaCbx
+    }*/
+});
+
+/**
+ * Muestra la ventana para ingresar una nueva ruta
+ * @return NO retorna valor
+ */
+function ventanaNuevaRuta(){
+    if(!winNuevaRuta){
+        winNuevaRuta = new Ext.Window({
+            layout:'fit',
+            title:'Nueva Ruta',
+            resizable : false,
+            width:500,
+            height:187,
+            closeAction:'hide',
+            plain: false,
+            items: [panelNuevaRuta]
+        });
+    }
+    winNuevaRuta.show(this);
 }

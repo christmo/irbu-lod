@@ -56,7 +56,6 @@ function init(){
                 RQ3_getWin();
             }
 
-            //alert("X: "+aux.x+" Y: "+aux.y);
             var features = new Array();
             var pt = new OpenLayers.Geometry.Point(xpos,ypos);
             pt.transform( new OpenLayers.Projection( "EPSG:4326" ),
@@ -70,8 +69,8 @@ function init(){
             storePuntosRuta.add(new Ext.data.Record({
                 numero: contadorPuntos,
                 latitud: aux.x,
-                longitud: aux.y,
-                newRecord:true
+                longitud: aux.y
+                //newRecord:true
             }));
             /*fin store*/
             
