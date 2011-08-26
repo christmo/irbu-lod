@@ -94,10 +94,8 @@ Ext.onReady(function(){
                             recargarComboRutasParadas();
                         }
                     }
-                }
-                ]
-            }
-            ]
+                }]
+            }]
         },{
             layout:'column',
             items:[{
@@ -109,8 +107,7 @@ Ext.onReady(function(){
                 comboRutas
                 ]
             }]
-        }
-        ],
+        }],
 
         buttons: [{
             text: 'Graficar Paradas',
@@ -172,7 +169,6 @@ function recargarComboRutasParadas(){
     op = radioTipo;
 
     if(typeof radioTipo!="undefined"){
-        console.info(urlRutas);
         storeRutas.proxy.conn.url = urlRutas;
         storeRutas.load();
     }
