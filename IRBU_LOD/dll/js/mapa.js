@@ -12,6 +12,7 @@ var markerInicioFin;
 
 var contadorPuntos=0;
 var puntosLineaRuta;
+var booCapturarPuntosNuevaRuta=false;
 
 /**
  * Store para recoger los puntos de las rutas nuevas
@@ -19,11 +20,11 @@ var puntosLineaRuta;
 var storePuntosRuta;
 
 /* lista de puntos de una nueva ruta */
-var puntosLatLonRutas = new Array();
+//var puntosLatLonRutas;
 
 function init(){
     puntosLineaRuta = new Array();
-
+   // puntosLatLonRutas = new Array();
     capturarPosicion = false;
     
     OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
@@ -56,51 +57,51 @@ function init(){
                 RQ3_getWin();
             }
 
-            var features = new Array();
-            var pt = new OpenLayers.Geometry.Point(xpos,ypos);
-            pt.transform( new OpenLayers.Projection( "EPSG:4326" ),
-                new OpenLayers.Projection( "EPSG:900913" ) );
+            if(booCapturarPuntosNuevaRuta){
+                var features = new Array();
+                var pt = new OpenLayers.Geometry.Point(xpos,ypos);
+                pt.transform( new OpenLayers.Projection( "EPSG:4326" ),
+                    new OpenLayers.Projection( "EPSG:900913" ) );
 
-            contadorPuntos++;
-            /*poner puntos en la lista para una nueva ruta*/
-            puntosLatLonRutas[(contadorPuntos-1)]=new Array(contadorPuntos, aux.x, aux.y);
-            //console.info(puntosLatLonRutas);
-            /*Enviar al estore de la tabla de puntos de ruta*/
-            storePuntosRuta.add(new Ext.data.Record({
-                numero: contadorPuntos,
-                latitud: aux.x,
-                longitud: aux.y
-                //newRecord:true
-            }));
-            /*fin store*/
+                contadorPuntos++;
+
+                /*poner puntos en la lista para una nueva ruta*/
+                //puntosLatLonRutas[(contadorPuntos-1)]=new Array(contadorPuntos, aux.x, aux.y);
+                //console.info(puntosLatLonRutas);
+                /*Enviar al estore de la tabla de puntos de ruta*/
+                storePuntosRuta.add(new Ext.data.Record({
+                    numero: contadorPuntos,
+                    latitud: aux.x,
+                    longitud: aux.y
+                }));
             
-            var puntoRuta = new OpenLayers.Feature.Vector( pt, {
-                id : contadorPuntos
-            });
-            puntoRuta.id = contadorPuntos;
-            features.push(puntoRuta);
-            lienzoRutas.addFeatures(features);
+                var puntoRuta = new OpenLayers.Feature.Vector( pt, {
+                    id : contadorPuntos
+                });
+                puntoRuta.id = contadorPuntos;
+                features.push(puntoRuta);
+                lienzoRutas.addFeatures(features);
 
-            //-- linea
-            puntosLineaRuta.push(pt);
+                //-- linea
+                puntosLineaRuta.push(pt);
 
-            var ruta = new OpenLayers.Geometry.LineString(puntosLineaRuta);
-            //Estilo de Linea de Recorrido
-            var style = {
-                strokeColor: '#0000ff',
-                strokeOpacity: 0.3,
-                strokeWidth: 5
-            };
+                var ruta = new OpenLayers.Geometry.LineString(puntosLineaRuta);
+                //Estilo de Linea de Recorrido
+                var style = {
+                    strokeColor: '#0000ff',
+                    strokeOpacity: 0.3,
+                    strokeWidth: 5
+                };
 
-            var lineFeature = lienzoRecorridos.getFeatureById( "trazado" );
-            if (lineFeature != null){
-                lineFeature.destroy();
+                var lineFeature = lienzoRecorridos.getFeatureById( "trazado" );
+                if (lineFeature != null){
+                    lineFeature.destroy();
+                }
+
+                lineFeature = new OpenLayers.Feature.Vector(ruta, null, style);
+                lineFeature.id = "trazado";
+                lienzoRecorridos.addFeatures([lineFeature]);
             }
-
-            lineFeature = new OpenLayers.Feature.Vector(ruta, null, style);
-            lineFeature.id = "trazado";
-            lienzoRecorridos.addFeatures([lineFeature]);
-        //---
         }
     });
 
@@ -143,9 +144,8 @@ function init(){
 
     //Restringe la posibilidad de hacer zoom mas alla
     //de la zona de Loja
-    map.events.register('zoomend', this, function() {
-        if (map.getZoom() < 13)
-        {
+    map.events.register('zoomend', this, function(){
+        if (map.getZoom() < 13){
             map.zoomTo(13);
         }
     });
@@ -251,7 +251,6 @@ function cargarTrazoLineas(){
     /**
      * Capa para hacer el trazado de las lineas de una nueva ruta de bus
      */
-
     var pointLayer = new OpenLayers.Layer.Vector("Point Layer");
     var lineLayer = new OpenLayers.Layer.Vector("Line Layer");
     var polygonLayer = new OpenLayers.Layer.Vector("Polygon Layer");

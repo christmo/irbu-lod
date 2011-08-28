@@ -71,22 +71,32 @@ Ext.onReady(function(){
             xtype: 'tbbutton',
             cls: 'x-btn-text-icon',
             id: 'btnAdministrador',
-            icon: 'img/ayuda.png',
+            icon: 'img/config.png',
             text: 'Administrador',
             menu: [{
                 text: 'Rutas',
-                icon: 'img/ayuda.png',
+                icon: 'img/map.png',
                 menu: [{
                     text: 'Nueva Ruta',
                     id: 'btnNuevaRuta',
-                    icon: 'img/ayuda.png',
+                    icon: 'img/add.png',
                     handler: function(){
                         ventanaNuevaRuta();
                     }
                 },{
-                    text: 'Eliminar Ruta'
+                    text: 'Eliminar Ruta',
+                    id: 'btnEliminarRuta',
+                    icon: 'img/delete.gif',
+                    handler: function(){
+                        ventanaEliminarRuta();
+                    }
                 },{
-                    text: 'Editar Ruta'
+                    text: 'Editar Ruta',
+                    id: 'btnEditarRuta',
+                    icon: 'img/edit.png',
+                    handler: function(){
+                        ventanaEditarRuta();
+                    }
                 }]
             },{
                 text: 'Paradas',
@@ -111,7 +121,7 @@ Ext.onReady(function(){
             icon: 'img/ayuda.png',
             text: 'remover',
             handler: function(){
-               ventanaNuevaRuta();
+                ventanaNuevaRuta();
             }
         },'->',{
             xtype: 'tbbutton',
