@@ -31,19 +31,13 @@ Ext.onReady(function(){
                 tooltip: 'Eliminar Punto',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = storePuntosRuta.getAt(rowIndex);
-                    //var selectedRow = grid.getSelectionModel().getSelected();
                     storePuntosRuta.removeAt(rowIndex);
                     
                     console.info(rec.get('numero'));
                     var puntoBorrar = lienzoRutas.getFeatureById(rec.get('numero'));
                     lienzoRutas.eraseFeatures(puntoBorrar);
 
-                    //var puntoLinea = lienzoRecorridos.getFeatureById("trazado");
-
-                    //delete puntosLineaRuta[rowIndex];
                     puntosLineaRuta.splice(rowIndex,1);
-
-                    console.info(puntosLineaRuta);
 
                     var ruta = new OpenLayers.Geometry.LineString(puntosLineaRuta);
                     //Estilo de Linea de Recorrido
@@ -77,7 +71,6 @@ Ext.onReady(function(){
             text: 'Guardar',
             handler: function() {
                 //enviar los datos de la tabla a la base
-                console.info(getJsonOfStore(storePuntosRuta));
                 guardarPuntosRuta();
             }
         }]
@@ -95,8 +88,9 @@ function guardarPuntosRuta(){
         method: 'POST',
         success: function (result) {
             var r = Ext.util.JSON.decode(result.responseText);
-            console.info(r.id);
-            winPuntosRuta.close();
+            winPuntosRuta.hide();
+            reiniciarCapturaNuevaRuta();
+            booCapturarPuntosNuevaRuta=false;
         },
         timeout: 1000,
         params: {
@@ -108,7 +102,6 @@ function guardarPuntosRuta(){
 
 var myData = [];
 
-// proxy = new Ext.data.MemoryProxy(puntosLatLonRutas);
 proxy = new Ext.data.MemoryProxy(myData);
 
 /**
@@ -130,26 +123,26 @@ var myReader = new Ext.data.ArrayReader({},
  * nueva ruta.
  */
 storePuntosRuta = new Ext.data.Store({
-    // data: myData,
     autoDestroy: true,
     reader: myReader,
     proxy: proxy,
-    autoLoad: true,
-    listeners: {
+    autoLoad: true//,
+    /*listeners: {
         load: function(obj,records){
-            //console.log(arguments);
             Ext.each(records, function(rec){
                 //console.info('Ver:'+rec.get('latitud'));
-                //console.info(myData);
                 });
         }
-    }
+    }*/
 });
 
-
-function limpiar_tabla_puntos(){
-    alert('salir y limpiar');
-}
+/**
+ * Limpia la tabla de puntos y el mapa para recibir una nueva ruta
+ */
+/*function limpiar_tabla_puntos(){
+    storePuntosRuta.removeAll();
+    limpiarCapas();
+}*/
 
 /**
 * Muestra la ventana para buscar una ruta
@@ -169,5 +162,7 @@ function ventanaPuntosRuta(id){
         });
     }
     this.id_ruta = id;
+    booCapturarPuntosNuevaRuta=true;
+    reiniciarCapturaNuevaRuta();
     winPuntosRuta.show(this);
 }

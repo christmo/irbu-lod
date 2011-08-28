@@ -9,6 +9,7 @@
 function limpiarCapas(){
     limpiarCapaRecorridos();
     limpiarCapaParadas();
+    limpiarCapaNuevaRuta();
 }
 
 /**
@@ -35,4 +36,26 @@ function limpiarCapaParadas(){
  */
 function removerMarcas(){
     markerInicioFin.clearMarkers();
+}
+
+/**
+ * Quita el dibujado para la nueva ruta dentro del mapa
+ */
+function limpiarCapaNuevaRuta(){
+    lienzoRutas.destroyFeatures();
+}
+
+/**
+ * Permite configurar las variables para que inicie de nuevo el cargado de 
+ * puntos para una nueva ruta.
+ */
+function reiniciarCapturaNuevaRuta(){
+    contadorPuntos = 0;
+    contadorHoras = 1;
+    storePuntosRuta.removeAll();
+    
+    console.info(puntosLineaRuta.length);
+    puntosLineaRuta.splice(0,puntosLineaRuta.length);
+    
+    limpiarCapas();
 }

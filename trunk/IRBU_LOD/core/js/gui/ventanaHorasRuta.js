@@ -47,7 +47,6 @@ Ext.onReady(function(){
                 icon   : 'img/delete.gif',  // Use a URL in the icon config
                 tooltip: 'Eliminar Hora',
                 handler: function(grid, rowIndex, colIndex) {
-                    //var rec = storeHorasRuta.getAt(rowIndex);
                     storeHorasRuta.removeAt(rowIndex);
                 }
             }]
@@ -60,7 +59,6 @@ Ext.onReady(function(){
             text: 'Guardar',
             handler: function() {
                 //enviar los datos de la tabla a la base
-                console.info(getJsonOfStore(storeHorasRuta));
                 guardarHorasRuta();
             }
         }]
@@ -123,7 +121,8 @@ function guardarHorasRuta(){
         method: 'POST',
         success: function (result) {
             var r = Ext.util.JSON.decode(result.responseText);
-            winHorasRuta.close();
+            winHorasRuta.hide();
+            storeHorasRuta.removeAll();
             ventanaPuntosRuta(r.id);
         },
         timeout: 1000,

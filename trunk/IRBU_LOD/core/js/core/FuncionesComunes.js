@@ -13,7 +13,6 @@ function getJsonOfStore(store){
     for (var i = 0; i < records.length; i++) {
         datar.push(records[i].data);
     }
-    console.info(datar);
     jsonDataEncode = Ext.util.JSON.encode(datar);
 
     return jsonDataEncode;
