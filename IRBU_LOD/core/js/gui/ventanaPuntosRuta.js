@@ -27,7 +27,7 @@ Ext.onReady(function(){
             xtype: 'actioncolumn',
             width: 15,
             items: [{
-                icon   : 'img/delete.gif',  // Use a URL in the icon config
+                icon   : 'img/delete.png',  // Use a URL in the icon config
                 tooltip: 'Eliminar Punto',
                 handler: function(grid, rowIndex, colIndex) {
                     var rec = storePuntosRuta.getAt(rowIndex);

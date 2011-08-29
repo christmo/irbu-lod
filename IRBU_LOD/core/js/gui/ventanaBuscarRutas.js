@@ -90,7 +90,7 @@ Ext.onReady(function(){
 
                         //dibujar la ruta en el mapa
                         dibujarTrazado(resultado.datos.coordenadas);
-
+                        
                         //dibujar las paradas en esa ruta
                         buscarParadas(id_ruta,radioTipo);
 

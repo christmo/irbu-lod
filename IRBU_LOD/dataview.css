@@ -1,0 +1,21 @@
+.thumb-box  {
+    width: 100px;
+    padding: 5px;
+    text-align: center;
+    margin: 13px auto;
+    background: #ccd8e7;
+    border: 1px solid #99BBE8;
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    border-radius: .5em;
+}
+
+.thumb-box:hover {
+    background: #999999;
+    border-color: #999999;
+}
+
+.large-box {
+    width: 375px;
+    margin: 15px auto;
+}

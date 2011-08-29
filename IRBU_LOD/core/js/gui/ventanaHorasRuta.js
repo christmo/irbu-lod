@@ -44,7 +44,7 @@ Ext.onReady(function(){
             xtype: 'actioncolumn',
             width: 15,
             items: [{
-                icon   : 'img/delete.gif',  // Use a URL in the icon config
+                icon   : 'img/delete.png',  // Use a URL in the icon config
                 tooltip: 'Eliminar Hora',
                 handler: function(grid, rowIndex, colIndex) {
                     storeHorasRuta.removeAt(rowIndex);
