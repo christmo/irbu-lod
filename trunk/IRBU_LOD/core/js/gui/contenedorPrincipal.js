@@ -81,21 +81,30 @@ Ext.onReady(function(){
                     id: 'btnNuevaRuta',
                     icon: 'img/add.png',
                     handler: function(){
+                        Ext.getCmp('btnEliminarRuta').hide();
+                        Ext.getCmp('btnEditarRuta').hide();
+                        Ext.getCmp('btnGuardarRuta').show();
                         ventanaNuevaRuta();
                     }
                 },{
                     text: 'Eliminar Ruta',
                     id: 'btnEliminarRuta',
-                    icon: 'img/delete.gif',
+                    icon: 'img/delete.png',
                     handler: function(){
-                        ventanaEliminarRuta();
+                        Ext.getCmp('btnEliminarRuta').show();
+                        Ext.getCmp('btnGuardarRuta').hide();
+                        Ext.getCmp('btnEditarRuta').hide();
+                        ventanaNuevaRuta();
                     }
                 },{
                     text: 'Editar Ruta',
                     id: 'btnEditarRuta',
                     icon: 'img/edit.png',
                     handler: function(){
-                        ventanaEditarRuta();
+                        Ext.getCmp('btnEliminarRuta').hide();
+                        Ext.getCmp('btnGuardarRuta').hide();
+                        Ext.getCmp('btnEditarRuta').show();
+                        ventanaNuevaRuta();
                     }
                 }]
             },{
@@ -121,7 +130,7 @@ Ext.onReady(function(){
             icon: 'img/ayuda.png',
             text: 'remover',
             handler: function(){
-                ventanaNuevaRuta();
+                ventanaNuevaParada();
             }
         },'->',{
             xtype: 'tbbutton',

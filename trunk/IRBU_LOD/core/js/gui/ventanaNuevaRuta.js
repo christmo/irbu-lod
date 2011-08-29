@@ -66,7 +66,73 @@ Ext.onReady(function(){
         }],
 
         buttons: [{
+            text: 'Editar',
+            id: 'btnEditarRuta',
+            handler: function() {
+                nombreRuta=cbxNuevaRuta.getValue();
+                panelInfoRuta.getForm().submit({
+                    url : 'core/php/core/guardarRuta.php?nombreRuta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
+                    method:'POST',
+                    waitMsg : 'Guardando Ruta...',
+                    failure: function (form, action) {
+                        Ext.MessageBox.show({
+                            title: 'Error...',
+                            msg: 'Ruta ya guardada...',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR
+                        });
+                    },
+                    success: function (form, action) {
+                        var resultado = Ext.util.JSON.decode(action.response.responseText);
+
+                        //Limpia las capas antes de hacer una nueva consulta
+                        limpiarCapas();
+
+                        winNuevaRuta.hide();
+                        panelInfoRuta.getForm().reset();
+                        ventanaHorasRuta(resultado.id);
+                    }
+                });
+            }
+        },{
+            text: 'Eliminar',
+            id: 'btnEliminarRuta',
+            handler: function() {
+                nombreRuta=cbxNuevaRuta.getValue();
+                panelInfoRuta.getForm().submit({
+                    url : 'core/php/core/eliminarRuta.php?id_ruta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
+                    method:'POST',
+                    waitMsg : 'Guardando Ruta...',
+                    failure: function (form, action) {
+                        Ext.MessageBox.show({
+                            title: 'Error...',
+                            msg: 'Ruta no existe...',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.ERROR
+                        });
+                    },
+                    success: function (form, action) {
+                        var resultado = Ext.util.JSON.decode(action.response.responseText);
+
+
+                        Ext.MessageBox.show({
+                            title: 'Info...',
+                            msg: 'Ruta borrada correctamente...',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.INFO
+                        });
+                        
+                        //Limpia las capas antes de hacer una nueva consulta
+                        limpiarCapas();
+
+                        winNuevaRuta.hide();
+                        panelInfoRuta.getForm().reset();
+                    }
+                });
+            }
+        },{
             text: 'Guardar',
+            id: 'btnGuardarRuta',
             handler: function() {
                 nombreRuta=cbxNuevaRuta.getValue();
                 panelInfoRuta.getForm().submit({

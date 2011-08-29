@@ -5,6 +5,7 @@ require_once('../../../dll/php/conexionBD.php');
 extract($_POST);
 extract($_GET);
 
+//$consultaSql ="SELECT LON,LAT FROM COORDENADAS_GPS WHERE ID_RUTA = ".$id_ruta." ORDER BY ORDEN ASC";
 $consultaSql ="SELECT LON,LAT FROM COORDENADAS_GPS WHERE ID_RUTA = ".$id_ruta." ORDER BY ORDEN ASC";
 
 consulta($consultaSql);
