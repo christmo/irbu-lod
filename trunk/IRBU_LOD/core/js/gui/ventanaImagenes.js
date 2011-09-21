@@ -14,7 +14,7 @@ ImageChooser.prototype = {
     // cache data by image name for easy lookup
     lookup : {},
     
-    show : function(el, callback){
+    show : function(){
         if(!this.win){
             this.initTemplates();
 			
@@ -123,7 +123,7 @@ ImageChooser.prototype = {
                     width:500,
                     items: this.view,
                     tbar:[{
-                        text: 'Filter:'
+                        text: 'Filtro:'
                     },{
                         xtype: 'textfield',
                         id: 'filter',
@@ -213,9 +213,9 @@ ImageChooser.prototype = {
         }
 		
         this.reset();
-        this.win.show(el);
-        this.callback = callback;
-        this.animateTarget = el;
+        this.win.show();
+    //this.callback = callback;
+    //this.animateTarget = el;
     },
 	
     initTemplates : function(){
@@ -240,7 +240,8 @@ ImageChooser.prototype = {
             //'<b>Last Modified:</b>',
             //'<span>{dateString}</span>',
             '<b>Direcci\xF3n:</b>',
-            '<span>{direccion}</span>',
+            '<span id="txtDireccion">{direccion}</span>',
+           // '<input type="text" id="txtDireccion" value="{direccion}"></input>',
             '<b>Referencia:</b>',
             '<span>{referencia}</span>',
             '<b>Latitud:</b>',
@@ -249,7 +250,7 @@ ImageChooser.prototype = {
             '<span>{lon}</span>',
             '</div></tpl>',
             '</div>'
-            );
+        );
         this.detailsTemplate.compile();
     },
 	
@@ -267,6 +268,11 @@ ImageChooser.prototype = {
                 stopFx:true,
                 duration:.2
             });
+            
+            var dir = Ext.get('txtDireccion');
+            console.info(dir);
+            
+            
         }else{
             Ext.getCmp('ok-btn').disable();
             detailEl.update('');
@@ -297,15 +303,46 @@ ImageChooser.prototype = {
     editarParada: function(){
         var selNode = this.view.getSelectedNodes()[0];
         var data = this.lookup[selNode.id];
+        this.view.store.load();
         console.info(data.id);
     //alert('Editar Parada');  
     },
     
     eliminarParada:function(){
         var selNode = this.view.getSelectedNodes()[0];
-        var data = this.lookup[selNode.id];
-        Ext.
-        console.info(data.id);
+        if(selNode != undefined){
+            var data = this.lookup[selNode.id];
+        
+            Ext.Ajax.request({
+                url: 'core/php/core/eliminarParada.php',
+                method: 'post',
+                success: function (result) {
+                    var r = Ext.util.JSON.decode(result.responseText);
+                    if(typeof r.datos != "undefined"){
+                        /**
+                * Dibuja las paradas en el mapa
+                */
+                        //                    lienzosRecorridoHistorico(r.datos.coordenadas);
+                        console.info('Eliminado:'+r.datos.id);
+                    
+                    
+                    }
+                },
+                timeout: 1000,
+                params: {
+                    id_parada: data.id
+                }
+            });
+            this.view.store.load();
+            console.info(data.id);
+        }else{
+            Ext.MessageBox.show({
+                title: 'Error...',
+                msg: 'Seleccionar una imagen de una parada para eliminar...',
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.ERROR
+            });
+        }
     },
 	
     doCallback : function(){

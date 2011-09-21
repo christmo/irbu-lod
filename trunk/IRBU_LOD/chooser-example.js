@@ -6,13 +6,6 @@
  * http://extjs.com/license
  */
 
-/*
- * Ext JS Library 2.0
- * Copyright(c) 2006-2007, Ext JS, LLC.
- * licensing@extjs.com
- * 
- * http://extjs.com/license
- */
 
 Ext.onReady(function(){
     var chooser, btn;
@@ -30,8 +23,9 @@ Ext.onReady(function(){
         if(!chooser){
             chooser = new ImageChooser({
                 url:'get-images.php',
-                width:415, 
-                height:550
+                //width:415, 
+                width:720, 
+                height:500
             });
         }
         chooser.show(btn.getEl(), insertImage);

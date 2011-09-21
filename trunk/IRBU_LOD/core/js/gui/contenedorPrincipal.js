@@ -7,6 +7,8 @@ var isLogin = false;
 
 Ext.onReady(function(){
 
+var chooser;
+
     /**
      * Contenido del panel Central
      */
@@ -109,17 +111,25 @@ Ext.onReady(function(){
                 }]
             },{
                 text: 'Paradas',
-                icon: 'img/ayuda.png',
+                icon: 'img/stop.png',
                 menu: [{
                     text: 'Nueva Parada',
-                    icon: 'img/ayuda.png',
+                    icon: 'img/add.png',
                     handler: function(){
-                    //ventanaNuevaRuta();
+                        ventanaNuevaParada();
                     }
                 },{
-                    text: 'Eliminar Parada'
+                    text: 'Eliminar Parada',
+                    icon: 'img/delete.png',
+                    handler: function(){
+                    //ventanaNuevaParada();
+                    }
                 },{
-                    text: 'Editar Parada'
+                    text: 'Editar Parada',
+                    icon: 'img/edit.png',
+                    handler: function(){
+                    //ventanaNuevaParada();
+                    }
                 }]
             },{
                 text: 'Ayuda'
@@ -130,7 +140,15 @@ Ext.onReady(function(){
             icon: 'img/ayuda.png',
             text: 'remover',
             handler: function(){
-                ventanaNuevaParada();
+                if(!chooser){
+                    chooser = new ImageChooser({
+                        url:'core/php/core/get-images.php',
+                        //width:415, 
+                        width:720, 
+                        height:500
+                    });
+                }
+                chooser.show();
             }
         },'->',{
             xtype: 'tbbutton',

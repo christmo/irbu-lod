@@ -13,6 +13,7 @@ var markerInicioFin;
 var contadorPuntos=0;
 var puntosLineaRuta;
 var booCapturarPuntosNuevaRuta=false;
+var booCapturarPuntosNuevaParada=false;
 
 /**
  * Store para recoger los puntos de las rutas nuevas
@@ -24,7 +25,7 @@ var storePuntosRuta;
 
 function init(){
     puntosLineaRuta = new Array();
-   // puntosLatLonRutas = new Array();
+    // puntosLatLonRutas = new Array();
     capturarPosicion = false;
     
     OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {
@@ -101,6 +102,24 @@ function init(){
                 lineFeature = new OpenLayers.Feature.Vector(ruta, null, style);
                 lineFeature.id = "trazado";
                 lienzoRecorridos.addFeatures([lineFeature]);
+            }
+            
+            if(booCapturarPuntosNuevaParada){
+                limpiarCapaNuevaRuta();
+                var marca = new Array();
+                var punto = new OpenLayers.Geometry.Point(xpos,ypos);
+                punto.transform( new OpenLayers.Projection( "EPSG:4326" ),
+                    new OpenLayers.Projection( "EPSG:900913" ) );
+                    
+                var puntoParada = new OpenLayers.Feature.Vector( punto, {
+                    id : '1'
+                });
+                puntoParada.id = '1';
+                marca.push(puntoParada);
+                lienzoRutas.addFeatures(marca);
+                
+                Ext.get('latParada').dom.innerHTML = ypos;
+                Ext.get('lonParada').dom.innerHTML = xpos;
             }
         }
     });
