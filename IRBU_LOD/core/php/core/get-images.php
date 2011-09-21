@@ -1,10 +1,10 @@
 <?php
 
 session_start();
-require_once('dll/php/conexionBD.php');
+require_once('../../../dll/php/conexionBD.php');
 
 //$dir = "img/ori/";
-$dir = "img/datap/";
+$dir = "../../../img/datap/";
 //$dir_thumbs = "img/thumbs/";
 $dir_thumbs = "img/datap/";
 
@@ -26,7 +26,7 @@ while ($name = $d->read()) {
         'name' => $name,
         'size' => $size,
         'lastmod' => $lastmod,
-        'url' => $dir . $name,
+        'url' => $dir_thumbs . $name,
         'thumb_url' => $dir_thumbs . $thumb,
         'direccion' => $dato["DIRECCION"],
         'lat' => $dato["LAT"],

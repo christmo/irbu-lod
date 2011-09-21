@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+require_once('../../../dll/php/conexionBD.php');
 extract($_POST);
 
 // in ie should add image/pjpeg
@@ -137,9 +139,16 @@ $ori_dir = 'C:\\wamp\\www\\IRBU_LOD\\img\\ori\\';
 //$thumb_dir = 'img/thumbs/';
 $thumb_dir = 'C:\\wamp\\www\\IRBU_LOD\\img\\thumbs\\';
 
+$dir_img = 'C:\\wamp\\www\\IRBU_LOD\\img\\datap\\';
+
 $allowedType = array(
     'image/jpeg', 'image/pjpeg', 'image/png', 'image/gif', 'image/x-png'
 );
+
+$sql = "SELECT MAX(ID_PARADA)+1 AS ID_PARADA FROM PARADAS";
+consulta($sql);
+$dato = unicaFila();
+$id_parada = $dato["ID_PARADA"];
 
 $uploaded = 0;
 $failed = 0;
@@ -149,11 +158,12 @@ foreach ($_FILES['img']['name'] as $key => $img) {
         // max upload file is 500 KB
         if ($_FILES['img']['size'][$key] <= 500000) {
             // upload file
-            move_uploaded_file($_FILES['img']['tmp_name'][$key], $ori_dir . $_FILES['img']['name'][$key]);
+            //move_uploaded_file($_FILES['img']['tmp_name'][$key], $ori_dir . $_FILES['img']['name'][$key]);
+            $img_nom = $id_parada . substr($_FILES['img']['name'][$key], -4);
+            move_uploaded_file($_FILES['img']['tmp_name'][$key], $dir_img . $img_nom);
 
             // create thumbnail
-            createThumb($_FILES['img']['name'][$key], $ori_dir, $thumb_dir, $_FILES['img']['type'][$key]);
-
+            //createThumb($_FILES['img']['name'][$key], $ori_dir, $thumb_dir, $_FILES['img']['type'][$key]);
             // count how many files uploaded
             $uploaded++;
         } else {
@@ -163,7 +173,12 @@ foreach ($_FILES['img']['name'] as $key => $img) {
         $failed++;
     }
 }
-//move_uploaded_file($_FILES['img']['tmp_name'][0], $ori_dir . $_FILES['img']['name'][0]);
-move_uploaded_file($_FILES['img']['tmp_name'][0], $ori_dir . $_FILES['img']['name'][0]);
-echo '{success: true, failed: '.$failed.', uploaded: '.$uploaded.', type: "'.$_FILES['img']['type'][0].'"}';
+
+$dir_img = "img/datap/" . $img_nom;
+
+$consultaSql = "INSERT INTO PARADAS(ID_PARADA,DIRECCION,LAT,LON,REFERENCIA,DIR_IMG)
+VALUES($id_parada,'$dir',$lat,$lon,'$ref','$dir_img')";
+consulta($consultaSql);
+
+echo '{success: true, failed: ' . $failed . ', uploaded: ' . $uploaded . ', type: "' . $_FILES['img']['name'][0] . '"}';
 ?>

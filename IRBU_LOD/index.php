@@ -67,6 +67,11 @@
 
         <!-- Nueva Parada -->
         <script type="text/javascript" src="core/js/gui/ventanaNuevaParada.js"></script>
+        <script type="text/javascript" src="core/js/gui/ventanaEditarParada.js"></script>
+
+        <!--   Editar Paradas     -->
+        <link rel="stylesheet" type="text/css" href="css/chooser.css">
+        <script type="text/javascript" src="core/js/gui/ventanaImagenes.js"></script>
 
         <script type='text/javascript'>
             $(function() {
@@ -77,53 +82,53 @@
             div.c1 {position: absolute; bottom: 0px; right: 0px;}
             div.c2 {position: absolute; bottom: 0px; }
         </style>
-        
-           <style type="text/css">
-        body {
-            padding: 20px;
-            margin: 0 auto;
-        }
-        #container {
-            padding: 10px;
-            background: #e3e3e3;
-            border: 1px solid #d3d3d3;
-            margin: 0 auto;
-            width: 820px;
-        }
-        #left {
-            float: left;
-        }
-        #right {
-            float: right;
-        }
-        #right-bottom {
-            margin-top: 10px;
-        }
-        .clear {
-            clear: both;
-        }
-        .details {
-            padding: 10px;
-            font-family: "Arial";
-            font-size: 11px;
-        }
-        .details-info {
-            margin-top: 10px;
-        }
-        .details-info span {
-            display: block;
-        }
-        .details-info span a {
-            color: #0066cc;
-        }
-        .details-info span a:hover {
-            text-decoration: none;
-        }
-    </style>
+
+        <style type="text/css">
+            body {
+                padding: 20px;
+                margin: 0 auto;
+            }
+            #container {
+                padding: 10px;
+                background: #e3e3e3;
+                border: 1px solid #d3d3d3;
+                margin: 0 auto;
+                width: 820px;
+            }
+            #left {
+                float: left;
+            }
+            #right {
+                float: right;
+            }
+            #right-bottom {
+                margin-top: 10px;
+            }
+            .clear {
+                clear: both;
+            }
+            .details {
+                padding: 10px;
+                font-family: "Arial";
+                font-size: 11px;
+            }
+            .details-info {
+                margin-top: 10px;
+            }
+            .details-info span {
+                display: block;
+            }
+            .details-info span a {
+                color: #0066cc;
+            }
+            .details-info span a:hover {
+                text-decoration: none;
+            }
+        </style>
     </head>
     <body onload="init()">
         <div id="map"></div>
-<!--        <div class="c1"><a href='http://www.kradac.com'><img alt="www.kradac.com" src='img/datap/credits.png'></a></div>-->
+<!--        <div class="c1"><a href='http://www.kradac.com'><img alt="www.kradac.com" src='img/credits.png'></a></div>-->
 
         <div class="c2"><a href="http://validator.w3.org/check?uri=referer"><img
                     src="http://www.w3.org/Icons/valid-html401"

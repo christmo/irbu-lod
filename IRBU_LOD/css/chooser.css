@@ -61,7 +61,7 @@
 } 
 #img-chooser-view .x-view-over{
     border:1px solid #dddddd; 
-    background: #efefef url(css/ext-js/resources/images/default/grid/row-over.gif) repeat-x left top; 
+    background: #efefef url(../css/ext-js/resources/images/default/grid/row-over.gif) repeat-x left top; 
     padding: 4px; 
 }
 #img-chooser-view .x-view-selected{ 

@@ -23,6 +23,43 @@ Ext.onReady(function(){
         maxLength: 300,
         ancho:'100%'
     },{
+        xtype: 'container',
+        anchor: '100%',
+        layout:'column',
+        //labelAlign: 'top',
+        bodyStyle:'padding:5px 5px 0',
+        items:[{
+            xtype: 'container',
+            columnWidth:.5,
+            layout: 'form',
+            items: [{
+                //xtype:'textfield',
+                xtype: 'box',
+                autoEl: {
+                    cn: '0.0'
+                },
+                fieldLabel: 'Latitud',
+                editable: false,
+                id: 'latParada',
+                anchor:'90%'
+            }]
+        },{
+            xtype: 'container',
+            columnWidth:.5,
+            layout: 'form',
+            items: [{
+                //xtype:'textfield',
+                xtype: 'box',
+                autoEl: {
+                    cn: '0.0'
+                },
+                fieldLabel: 'Longitud',
+                editable: false,
+                id: 'lonParada',
+                anchor:'97%'
+            }]
+        }]
+    },{
         xtype: 'fileuploadfield',
         fieldLabel:'Imagen',
         allowBlank: false,
@@ -35,12 +72,12 @@ Ext.onReady(function(){
 
     var formPanel = new Ext.FormPanel({
         width: 300,
-        height: 170,
+        height: 190,
         frame: true,
         bodyStyle: 'padding: 6px',
         labeWidth: 40,
         fileUpload: true,
-        buttonAlign: 'center',
+        //buttonAlign: 'center',
         defaultType: 'textfield',
         defaults:{
             msgTarget: 'side',
@@ -48,33 +85,51 @@ Ext.onReady(function(){
         },
         items:campos,
        
-        buttons: [{
-            text: 'Subir',
-            handler: function() {
-                formPanel.getForm().submit({
-                    url: 'core/php/core/upload.php',
-                    waitMsg: 'Subiendo Imagen...',
-                    success: function(form, o) {
-                        console.info(o.response.responseText);
-                        /*obj = Ext.util.JSON.decode(o.response.responseText);
-                        if (obj.failed == '0' && obj.uploaded != '0') {
-                            Ext.Msg.alert('Success', 'All files uploaded');
-                        } else if (obj.uploaded == '0') {
-                            Ext.Msg.alert('Success', 'Nothing Uploaded');
-                        } else {
-                            Ext.Msg.alert('Success',
-                                obj.uploaded + ' files uploaded <br/>' +
-                                obj.failed + ' files failed to upload');
-                        }
-                        formPanel.getForm().reset();*/
-                    //store.load();
-                    }
-                });
-            }
-        }, {
+        buttons: [ {
             text: 'Limpiar',
             handler: function() {
                 formPanel.getForm().reset();
+                Ext.get('latParada').dom.innerHTML = '0.0';
+                Ext.get('lonParada').dom.innerHTML = '0.0';
+                booCapturarPuntosNuevaParada=false;
+            }
+        },{
+            text: 'Guardar',
+            id: 'btnGuardarParada',
+            handler: function() {
+                formPanel.getForm().submit({
+                    url: 'core/php/core/guardarParada.php',
+                    waitMsg: 'Subiendo Imagen...',
+                    params: {
+                        lon: Ext.get('lonParada').dom.innerHTML,
+                        lat: Ext.get('latParada').dom.innerHTML
+                    },
+                    success: function(form, o) {
+                        console.info(o.response.responseText);
+                        //obj = Ext.util.JSON.decode(o.response.responseText);
+                        Ext.MessageBox.show({
+                            title: 'Mensaje...',
+                            msg: 'Parada creada correctamente...',
+                            buttons: Ext.MessageBox.OK,
+                            icon: Ext.MessageBox.INFO
+                        });
+                        formPanel.getForm().reset();
+                        Ext.get('latParada').dom.innerHTML = '0.0';
+                        Ext.get('lonParada').dom.innerHTML = '0.0';
+                        booCapturarPuntosNuevaParada=true;
+                        
+                        limpiarCapaNuevaRuta();
+                    }
+                });
+            }
+        },{
+            text: 'Cancelar',
+            handler: function() {
+                formPanel.getForm().reset();
+                Ext.get('latParada').dom.innerHTML = '0.0';
+                Ext.get('lonParada').dom.innerHTML = '0.0';
+                booCapturarPuntosNuevaParada=false;
+                winNuevaParada.hide();
             }
         }]
     });
@@ -102,13 +157,14 @@ function ventanaNuevaParada(){
             title:'Nueva Parada',
             resizable : false,
             width:600,
-            height:200,
+            height:220,
             closeAction:'hide',
             plain: false,
             //html: '<img src="http://www.google.co.za/intl/en%5Fcom/images/logo%5Fplain.png" />'
             items: [panelNuevaParada]
         });
     }
+    booCapturarPuntosNuevaParada=true;
     winNuevaParada.show(this);
 }
 
