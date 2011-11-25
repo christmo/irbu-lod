@@ -106,6 +106,10 @@ Ext.onReady(function(){
     });
 });
 
+/**
+ * Busca las paradas de un recorrido dependiendo del ID de la ruta y del tipo
+ * de recorrido de esa ruta.
+ */
 function buscarParadas(id_ruta,radioTipo){
     /**
      * Peticion de las paradas segun una ruta seleccionada

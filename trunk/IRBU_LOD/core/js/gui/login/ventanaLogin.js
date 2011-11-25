@@ -71,14 +71,6 @@ function ingresarAdministrador(){
 function ventanaLogin(){
     if(!winLogin){
         winLogin = new Ext.Window({
-            /*layout:'fit',
-            title:'Nueva Ruta',
-            resizable : true,
-            width:350,
-            height:300,
-            closeAction:'hide',
-            plain: false,
-            items: [grid]*/
             layout: 'fit',
             title: 'Login',
             closeAction:'hide',

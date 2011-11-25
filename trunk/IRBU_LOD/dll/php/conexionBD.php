@@ -8,8 +8,8 @@ $Errno = 0;
 $Error = "";
 $BaseDatos = "irbudata";
 $Servidor = "localhost";
-$Usuario = "irbudata";
-$Clave = "irbudata";
+$Usuario = "root";
+$Clave = "";
 
 
 // Conectamos al servidor

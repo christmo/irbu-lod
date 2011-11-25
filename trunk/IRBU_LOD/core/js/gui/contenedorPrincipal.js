@@ -4,10 +4,8 @@
  */
 
 var isLogin = false;
-
+var ventanaImagenes;
 Ext.onReady(function(){
-
-var chooser;
 
     /**
      * Contenido del panel Central
@@ -122,13 +120,14 @@ var chooser;
                     text: 'Eliminar Parada',
                     icon: 'img/delete.png',
                     handler: function(){
-                    //ventanaNuevaParada();
+                        showVentanaImagenes(true);
                     }
                 },{
                     text: 'Editar Parada',
                     icon: 'img/edit.png',
                     handler: function(){
-                    //ventanaNuevaParada();
+                        //ventanaNuevaParada();
+                        showVentanaImagenes(false);
                     }
                 }]
             },{
@@ -140,7 +139,7 @@ var chooser;
             icon: 'img/ayuda.png',
             text: 'remover',
             handler: function(){
-                if(!chooser){
+                /*if(!chooser){
                     chooser = new ImageChooser({
                         url:'core/php/core/get-images.php',
                         //width:415, 
@@ -148,7 +147,9 @@ var chooser;
                         height:500
                     });
                 }
-                chooser.show();
+                chooser.show();*/
+                console.info('remover');
+                ventanaPuntosRuta(100)
             }
         },'->',{
             xtype: 'tbbutton',
@@ -182,8 +183,16 @@ var chooser;
             margins: '0 0 0 0'
         }]
     });
-
-    Ext.get('btnAdministrador').hide();
+    /**
+     * Visualiza el boton de administrador dependiendo de la cookie almacenada
+     * para no tener que estarse logueando a cada momento
+     */
+    var validar = getCookie("session");
+    if(validar=="true"){
+        mostrarBotonAdministrador();
+    }else{
+        ocultarBotonAdministrador();
+    }
 });
 
 /**
@@ -192,11 +201,15 @@ var chooser;
  */
 function mostrarBotonAdministrador(){
     Ext.get('btnAdministrador').show();
-    winLogin.hide();
-    formulario.getForm().reset();
-
+    if(winLogin!=null){
+        winLogin.hide();
+    }
+    if(formulario!=null){
+        formulario.getForm().reset();
+    }
     Ext.getCmp('btnLogin').setText('Salir');
-
+    Ext.getCmp('btnLogin').setIcon("img/salir.png");
+    document.cookie='session=true'
     isLogin = true;
 }
 
@@ -206,8 +219,50 @@ function mostrarBotonAdministrador(){
  */
 function ocultarBotonAdministrador(){
     Ext.get('btnAdministrador').hide();
-
     Ext.getCmp('btnLogin').setText('Ingresar');
-
+    Ext.getCmp('btnLogin').setIcon("img/login.png");
+    console.info(Ext.getCmp('btnLogin'));
+    document.cookie='session=false'
     isLogin = false;
+}
+
+/**
+ * Lee la cookie almacenada dependiendo del key que se envie
+ */
+function getCookie(name){
+    var cname = name + "=";               
+    var dc = document.cookie;             
+    if (dc.length > 0) {              
+        begin = dc.indexOf(cname);       
+        if (begin != -1) {           
+            begin += cname.length;       
+            end = dc.indexOf(";", begin);
+            if (end == -1) end = dc.length;
+            return unescape(dc.substring(begin, end));
+        } 
+    }
+    return null;
+}
+
+/**
+ * Muestra la ventana con las imagenes que se encuentran subidas de las paradas
+ * el parametro que se resive es para saber si se llamo por editar parada o
+ * eliminar parada, permite ocultar el otro boton
+ */
+function showVentanaImagenes(showBotonEliminar){
+    if(!ventanaImagenes){
+        ventanaImagenes = new ImageChooser({
+            url:'core/php/core/get-images.php',
+            width:720, 
+            height:500
+        });
+    }
+    ventanaImagenes.show();
+    if(showBotonEliminar==true){
+        Ext.getCmp('btnEditarParada').hide();
+        Ext.getCmp('btnEliminarParada').show();
+    }else{
+        Ext.getCmp('btnEditarParada').show();
+        Ext.getCmp('btnEliminarParada').hide();
+    }
 }

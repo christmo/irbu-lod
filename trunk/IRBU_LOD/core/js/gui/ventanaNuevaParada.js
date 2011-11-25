@@ -4,6 +4,7 @@
 
 var winNuevaParada;
 var panelNuevaParada;
+var frmPanelNuevaParada;
 
 Ext.onReady(function(){
 
@@ -70,7 +71,7 @@ Ext.onReady(function(){
         name: 'img[]'
     }];
 
-    var formPanel = new Ext.FormPanel({
+     frmPanelNuevaParada = new Ext.FormPanel({
         width: 300,
         height: 190,
         frame: true,
@@ -81,23 +82,21 @@ Ext.onReady(function(){
         defaultType: 'textfield',
         defaults:{
             msgTarget: 'side',
-            anchor: '-10'
+            anchor: '-5'
         },
         items:campos,
        
         buttons: [ {
             text: 'Limpiar',
             handler: function() {
-                formPanel.getForm().reset();
-                Ext.get('latParada').dom.innerHTML = '0.0';
-                Ext.get('lonParada').dom.innerHTML = '0.0';
-                booCapturarPuntosNuevaParada=false;
+                resetFormularioNuevaParada();
+                booCapturarPuntosNuevaParada=true;
             }
         },{
             text: 'Guardar',
             id: 'btnGuardarParada',
             handler: function() {
-                formPanel.getForm().submit({
+                frmPanelNuevaParada.getForm().submit({
                     url: 'core/php/core/guardarParada.php',
                     waitMsg: 'Subiendo Imagen...',
                     params: {
@@ -113,21 +112,15 @@ Ext.onReady(function(){
                             buttons: Ext.MessageBox.OK,
                             icon: Ext.MessageBox.INFO
                         });
-                        formPanel.getForm().reset();
-                        Ext.get('latParada').dom.innerHTML = '0.0';
-                        Ext.get('lonParada').dom.innerHTML = '0.0';
+                        resetFormularioNuevaParada();
                         booCapturarPuntosNuevaParada=true;
-                        
-                        limpiarCapaNuevaRuta();
                     }
                 });
             }
         },{
             text: 'Cancelar',
             handler: function() {
-                formPanel.getForm().reset();
-                Ext.get('latParada').dom.innerHTML = '0.0';
-                Ext.get('lonParada').dom.innerHTML = '0.0';
+                resetFormularioNuevaParada();
                 booCapturarPuntosNuevaParada=false;
                 winNuevaParada.hide();
             }
@@ -141,7 +134,7 @@ Ext.onReady(function(){
             pack  : 'start'
         },
         border: false,
-        items:[formPanel]
+        items:[frmPanelNuevaParada]
     });
 
 });
@@ -168,3 +161,12 @@ function ventanaNuevaParada(){
     winNuevaParada.show(this);
 }
 
+/**
+ * Limpia la ventana para recivir nuevos datos
+ */
+function resetFormularioNuevaParada(){
+    frmPanelNuevaParada.getForm().reset();
+    Ext.get('latParada').dom.innerHTML = '0.0';
+    Ext.get('lonParada').dom.innerHTML = '0.0';
+    limpiarCapaNuevaRuta();
+}

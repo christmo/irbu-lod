@@ -5,6 +5,7 @@
  * 
  * http://extjs.com/license
  */
+var view;
  
 var ImageChooser = function(config){
     this.config = config;
@@ -48,7 +49,7 @@ ImageChooser.prototype = {
                 listeners: {
                     'load': {
                         fn:function(){
-                            this.view.select(0);
+                            view.select(0);                            
                         }, 
                         scope:this, 
                         single:true
@@ -77,7 +78,7 @@ ImageChooser.prototype = {
                 return data;
             };
 			
-            this.view = new Ext.DataView({
+            view = new Ext.DataView({
                 tpl: this.thumbTemplate,
                 singleSelect: true,
                 overClass:'x-view-over',
@@ -89,10 +90,6 @@ ImageChooser.prototype = {
                         fn:this.showDetails, 
                         scope:this, 
                         buffer:100
-                    },
-                    'dblclick'       : {
-                        fn:this.doCallback, 
-                        scope:this
                     },
                     'loadexception'  : {
                         fn:this.onLoadException, 
@@ -121,7 +118,7 @@ ImageChooser.prototype = {
                     region: 'center',
                     autoScroll: true,
                     width:500,
-                    items: this.view,
+                    items: view,
                     tbar:[{
                         text: 'Filtro:'
                     },{
@@ -158,9 +155,9 @@ ImageChooser.prototype = {
                         store: new Ext.data.SimpleStore({
                             fields: ['name', 'desc'],
                             data : [
-                            ['name', 'Name'],
-                            ['size', 'File Size'],
-                            ['lastmod', 'Last Modified']
+                            ['direccion', 'Direcci\xF3n'],
+                            ['size', 'Peso Imagen'],
+                            ['lastmod', 'Modificado']
                             ]
                         }),
                         listeners: {
@@ -190,11 +187,11 @@ ImageChooser.prototype = {
                     scope: this
                 },{
                     id: 'ok-btn',
-                    text: 'OK',
-                    handler: this.doCallback,
+                    text: 'Actualizar',
+                    handler: this.actualizarImagenes,
                     scope: this
                 },{
-                    text: 'Cancel',
+                    text: 'Salir',
                     handler: function(){
                         this.win.hide();
                     },
@@ -232,30 +229,23 @@ ImageChooser.prototype = {
         this.detailsTemplate = new Ext.XTemplate(
             '<div class="details">',
             '<tpl for=".">',
-            '<img src="{url}"><div class="details-info">',
-            //'<b>Image Name:</b>',
-            //'<span>{name}</span>',
-            //'<b>Size:</b>',
-            //'<span>{sizeString}</span>',
-            //'<b>Last Modified:</b>',
-            //'<span>{dateString}</span>',
+            '<img id="imgParada" src="{url}"><div class="details-info">',
             '<b>Direcci\xF3n:</b>',
-            '<span id="txtDireccion">{direccion}</span>',
-           // '<input type="text" id="txtDireccion" value="{direccion}"></input>',
+            '<span id="txtDireccion" class="editText">{direccion}</span>',
             '<b>Referencia:</b>',
-            '<span>{referencia}</span>',
+            '<span id="txtReferencia" class="editText">{referencia}</span>',
             '<b>Latitud:</b>',
-            '<span>{lat}</span>',
+            '<span id="txtLat" class="editText">{lat}</span>',
             '<b>Longitud:</b>',
-            '<span>{lon}</span>',
+            '<span id="txtLon" class="editText">{lon}</span>',
             '</div></tpl>',
             '</div>'
-        );
+            );
         this.detailsTemplate.compile();
     },
 	
     showDetails : function(){
-        var selNode = this.view.getSelectedNodes();
+        var selNode = view.getSelectedNodes();
         var detailEl = Ext.getCmp('img-detail-panel').body;
         if(selNode && selNode.length > 0){
             selNode = selNode[0];
@@ -268,11 +258,6 @@ ImageChooser.prototype = {
                 stopFx:true,
                 duration:.2
             });
-            
-            var dir = Ext.get('txtDireccion');
-            console.info(dir);
-            
-            
         }else{
             Ext.getCmp('ok-btn').disable();
             detailEl.update('');
@@ -281,35 +266,55 @@ ImageChooser.prototype = {
 	
     filter : function(){
         var filter = Ext.getCmp('filter');
-        this.view.store.filter('name', filter.getValue());
-        this.view.select(0);
+        view.store.filter('direccion', filter.getValue());
+        view.select(0);
     },
 	
     sortImages : function(){
         var v = Ext.getCmp('sortSelect').getValue();
-        this.view.store.sort(v, v == 'name' ? 'asc' : 'desc');
-        this.view.select(0);
+        view.store.sort(v, v == 'direccion' ? 'asc' : 'desc');
+        view.select(0);
     },
 	
     reset : function(){
         if(this.win.rendered){
             Ext.getCmp('filter').reset();
-            this.view.getEl().dom.scrollTop = 0;
+            view.getEl().dom.scrollTop = 0;
         }
-        this.view.store.clearFilter();
-        this.view.select(0);
+        view.store.clearFilter();
+        actualizarImagenesCargadas();
+        //view.select(0);
     },
     
     editarParada: function(){
-        var selNode = this.view.getSelectedNodes()[0];
-        var data = this.lookup[selNode.id];
-        this.view.store.load();
-        console.info(data.id);
-    //alert('Editar Parada');  
+        var selNode = view.getSelectedNodes()[0];
+        if(selNode != undefined){
+            var data = this.lookup[selNode.id];
+            var dir = Ext.get('txtDireccion');
+            var ref = Ext.get('txtReferencia');
+            var lat = Ext.get('txtLat');
+            var lon = Ext.get('txtLon');
+            ventanaEditarParada(
+                data.id,
+                dir.dom.innerHTML,
+                ref.dom.innerHTML,
+                lon.dom.innerHTML,
+                lat.dom.innerHTML,
+                Ext.get('imgParada').dom.src
+                );
+            this.win.hide();
+        }else{
+            Ext.MessageBox.show({
+                title: 'Error...',
+                msg: 'Seleccionar una imagen de una parada para editarla...',
+                buttons: Ext.MessageBox.OK,
+                icon: Ext.MessageBox.ERROR
+            });
+        }
     },
     
     eliminarParada:function(){
-        var selNode = this.view.getSelectedNodes()[0];
+        var selNode = view.getSelectedNodes()[0];
         if(selNode != undefined){
             var data = this.lookup[selNode.id];
         
@@ -317,24 +322,14 @@ ImageChooser.prototype = {
                 url: 'core/php/core/eliminarParada.php',
                 method: 'post',
                 success: function (result) {
-                    var r = Ext.util.JSON.decode(result.responseText);
-                    if(typeof r.datos != "undefined"){
-                        /**
-                * Dibuja las paradas en el mapa
-                */
-                        //                    lienzosRecorridoHistorico(r.datos.coordenadas);
-                        console.info('Eliminado:'+r.datos.id);
-                    
-                    
-                    }
+                    //var r = Ext.util.JSON.decode(result.responseText);
+                    actualizarImagenesCargadas();
                 },
                 timeout: 1000,
                 params: {
                     id_parada: data.id
                 }
             });
-            this.view.store.load();
-            console.info(data.id);
         }else{
             Ext.MessageBox.show({
                 title: 'Error...',
@@ -345,20 +340,12 @@ ImageChooser.prototype = {
         }
     },
 	
-    doCallback : function(){
-        var selNode = this.view.getSelectedNodes()[0];
-        var callback = this.callback;
-        var lookup = this.lookup;
-        this.win.hide(this.animateTarget, function(){
-            if(selNode && callback){
-                var data = lookup[selNode.id];
-                callback(data);
-            }
-        });
+    actualizarImagenes: function(){
+        actualizarImagenesCargadas();
     },
 	
     onLoadException : function(v,o){
-        this.view.getEl().update('<div style="padding:10px;">Error cargando las imagenes, intentar nuevamente...</div>'); 
+        view.getEl().update('<div style="padding:10px;">Error cargando las imagenes, intentar nuevamente...</div>'); 
     }
 };
 
@@ -368,3 +355,13 @@ String.prototype.ellipse = function(maxLength){
     }
     return this;
 };
+
+/**
+ * Recargar las imagenes de la lista de paradas
+ */
+function actualizarImagenesCargadas(){
+    if(view!=null){
+        view.store.load();
+        view.select(0);
+    }
+}

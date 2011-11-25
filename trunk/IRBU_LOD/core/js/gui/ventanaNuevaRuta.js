@@ -1,5 +1,5 @@
 /* 
- * Permite desplegar la venta para buscar la ruta de los buses de la UTPL
+ * Permite desplegar la venta para ingresar una nueva ruta
  */
 
 var winNuevaRuta;

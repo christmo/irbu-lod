@@ -2,11 +2,9 @@
 
 session_start();
 require_once('../../../dll/php/conexionBD.php');
+require_once('../../../dll/php/constantes.php');
 
-//$dir = "img/ori/";
-$dir = "../../../img/datap/";
-//$dir_thumbs = "img/thumbs/";
-$dir_thumbs = "img/datap/";
+$dir = "../../../".$src_img_paradas;
 
 $images = array();
 $d = dir($dir);
@@ -15,10 +13,9 @@ while ($name = $d->read()) {
         continue;
     $size = filesize($dir . $name);
     $lastmod = filemtime($dir . $name) * 1000;
-    //$thumb = "thumb_" . $name;
     $thumb = $name;
 
-    $consulta = "SELECT DIRECCION,LAT,LON,REFERENCIA,ID_PARADA FROM PARADAS WHERE DIR_IMG='" . $dir_thumbs . $thumb . "'";
+    $consulta = "SELECT DIRECCION,LAT,LON,REFERENCIA,ID_PARADA FROM PARADAS WHERE DIR_IMG='" . $src_img_paradas . $thumb . "'";
     consulta($consulta);
     $dato = unicaFila();
 
@@ -26,8 +23,8 @@ while ($name = $d->read()) {
         'name' => $name,
         'size' => $size,
         'lastmod' => $lastmod,
-        'url' => $dir_thumbs . $name,
-        'thumb_url' => $dir_thumbs . $thumb,
+        'url' => $src_img_paradas . $name,
+        'thumb_url' => $src_img_paradas . $thumb,
         'direccion' => $dato["DIRECCION"],
         'lat' => $dato["LAT"],
         'lon' => $dato["LON"],
