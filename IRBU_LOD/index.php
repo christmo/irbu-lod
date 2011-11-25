@@ -1,3 +1,9 @@
+<?php
+//Comprobar si la sesión ya fue iniciada
+if (!isset($_SESSION)) {
+    session_start();
+}
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
@@ -15,7 +21,8 @@
         <link rel='stylesheet' type='text/css' href='dll/js/openlayers/theme/default/style.css'>
         <link rel="stylesheet" type="text/css" href="css/jquery.lightbox-0.5.css" media="screen">
 
-        <script type='text/javascript' src='dll/js/openlayers/lib/OpenLayers.js'></script>
+<!--        <script type='text/javascript' src='dll/js/openlayers/lib/OpenLayers.js'></script>-->
+        <script type='text/javascript' src='dll/js/openlayers/OpenLayers.js'></script>
         <script type='text/javascript' src='dll/js/osm/OpenStreetMap.js'></script>
         <script type='text/javascript' src='dll/js/mapa.js'></script>
         <script type="text/javascript" src="dll/js/ext-js/adapter/ext/ext-base.js"></script>
@@ -134,4 +141,15 @@
                     src="http://www.w3.org/Icons/valid-html401"
                     alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></div>
     </body>
+
+    <?php
+//    if ($_SESSION["sesion"] == true) {
+//        echo '<script type="text/javascript">
+//               var validar = getCookie("session");
+//                if(validar=="true"){
+//                    mostrarBotonAdministrador();
+//                }
+//          </script>';
+//    }
+    ?>
 </html>

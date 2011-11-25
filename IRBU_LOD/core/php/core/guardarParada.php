@@ -2,11 +2,12 @@
 
 session_start();
 require_once('../../../dll/php/conexionBD.php');
+require_once('../../../dll/php/constantes.php');
 extract($_POST);
 
 // in ie should add image/pjpeg
 
-function createThumb($img_file, $ori_path, $thumb_path, $img_type) {
+/*function createThumb($img_file, $ori_path, $thumb_path, $img_type) {
 
     // get the image source
     $path = $ori_path;
@@ -133,13 +134,12 @@ function createThumb($img_file, $ori_path, $thumb_path, $img_type) {
             break;
     }
 }
-
+*/
 //$ori_dir = 'img/ori/';
-$ori_dir = 'C:\\wamp\\www\\IRBU_LOD\\img\\ori\\';
+//$ori_dir = 'C:\\wamp\\www\\IRBU_LOD\\img\\ori\\';
 //$thumb_dir = 'img/thumbs/';
-$thumb_dir = 'C:\\wamp\\www\\IRBU_LOD\\img\\thumbs\\';
+//$thumb_dir = 'C:\\wamp\\www\\IRBU_LOD\\img\\thumbs\\';
 
-$dir_img = 'C:\\wamp\\www\\IRBU_LOD\\img\\datap\\';
 
 $allowedType = array(
     'image/jpeg', 'image/pjpeg', 'image/png', 'image/gif', 'image/x-png'
@@ -174,7 +174,7 @@ foreach ($_FILES['img']['name'] as $key => $img) {
     }
 }
 
-$dir_img = "img/datap/" . $img_nom;
+$dir_img = $src_img_paradas . $img_nom;
 
 $consultaSql = "INSERT INTO PARADAS(ID_PARADA,DIRECCION,LAT,LON,REFERENCIA,DIR_IMG)
 VALUES($id_parada,'$dir',$lat,$lon,'$ref','$dir_img')";

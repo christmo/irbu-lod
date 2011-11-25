@@ -16,13 +16,13 @@ Ext.onReady(function(){
             width: 30,
             dataIndex: 'numero'
         },{
-            header: 'Longitud',
-            width: 60,
-            dataIndex: 'longitud'
-        },{
             header: 'Latitud',
             width: 60,
             dataIndex: 'latitud'
+        },{
+            header: 'Longitud',
+            width: 60,
+            dataIndex: 'longitud'
         },{
             xtype: 'actioncolumn',
             width: 15,
@@ -89,7 +89,7 @@ function guardarPuntosRuta(){
         success: function (result) {
             var r = Ext.util.JSON.decode(result.responseText);
             winPuntosRuta.hide();
-            reiniciarCapturaNuevaRuta();
+            limpiarCapas();
             booCapturarPuntosNuevaRuta=false;
         },
         timeout: 1000,
@@ -127,7 +127,7 @@ storePuntosRuta = new Ext.data.Store({
     reader: myReader,
     proxy: proxy,
     autoLoad: true//,
-    /*listeners: {
+/*listeners: {
         load: function(obj,records){
             Ext.each(records, function(rec){
                 //console.info('Ver:'+rec.get('latitud'));
@@ -163,6 +163,6 @@ function ventanaPuntosRuta(id){
     }
     this.id_ruta = id;
     booCapturarPuntosNuevaRuta=true;
-    reiniciarCapturaNuevaRuta();
+    limpiarCapas();
     winPuntosRuta.show(this);
 }

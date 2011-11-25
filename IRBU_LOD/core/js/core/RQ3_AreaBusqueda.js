@@ -47,7 +47,7 @@ function dibujarPerimetro(m) {
 }
 
 /**
- * Paradas 
+ * Dibuja las paradas
  */
 function lienzosRecorridoHistorico(coordPuntos){
     var features = new Array();
@@ -62,8 +62,8 @@ function lienzosRecorridoHistorico(coordPuntos){
         pt.transform( new OpenLayers.Projection( "EPSG:4326" ),
             new OpenLayers.Projection( "EPSG:900913" ) );
 
-        //    0          1       2    3        4         5       6
-        //ID_PARADA, DIRECCION, LAT, LON, REFERENCIA, DIR_IMG, ORDEN
+        //    0       1    2      3          4          5       6
+        //ID_PARADA, LON, LAT,DIRECCION, REFERENCIA, DIR_IMG, ORDEN
 
         var puntoMap = new OpenLayers.Feature.Vector( pt, {
             idBD : col[0],
