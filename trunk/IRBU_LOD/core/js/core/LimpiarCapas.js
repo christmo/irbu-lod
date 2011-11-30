@@ -54,7 +54,5 @@ function limpiarCapturaNuevaRuta(){
     contadorPuntos = 0;
     contadorHoras = 1;
     storePuntosRuta.removeAll();
-    
-    console.info(puntosLineaRuta.length);
     puntosLineaRuta.splice(0,puntosLineaRuta.length);
 }

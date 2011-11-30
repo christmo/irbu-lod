@@ -71,6 +71,7 @@ if (!isset($_SESSION)) {
         <script type="text/javascript" src="core/js/gui/ventanaNuevaRuta.js"></script>
         <script type="text/javascript" src="core/js/gui/ventanaHorasRuta.js"></script>
         <script type="text/javascript" src="core/js/gui/ventanaPuntosRuta.js"></script>
+        <script type="text/javascript" src="core/js/gui/ventanaParadasRuta.js"></script>
 
         <!-- Nueva Parada -->
         <script type="text/javascript" src="core/js/gui/ventanaNuevaParada.js"></script>
@@ -142,14 +143,4 @@ if (!isset($_SESSION)) {
                     alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></div>
     </body>
 
-    <?php
-//    if ($_SESSION["sesion"] == true) {
-//        echo '<script type="text/javascript">
-//               var validar = getCookie("session");
-//                if(validar=="true"){
-//                    mostrarBotonAdministrador();
-//                }
-//          </script>';
-//    }
-    ?>
 </html>

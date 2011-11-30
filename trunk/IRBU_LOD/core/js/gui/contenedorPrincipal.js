@@ -1,6 +1,7 @@
 /* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Contenedor Principal:
+ * En este archivo se hace el maquetado de todo el menú de opciones asi como
+ * se ubica el mapa en la parte inferior de la ventana
  */
 
 var isLogin = false;
@@ -11,100 +12,101 @@ Ext.onReady(function(){
      * Contenido del panel Central
      */
     var barraHerramientas = {
-        id: 'content-panel',
-        region: 'north', // this is what makes this panel into a region
-        // within the containing layout
-        layout: 'card',
-        margins: '0 0 0 0',
-        activeItem: 0,
-        border: false,
+        id          : 'content-panel',
+        region      : 'north',
+        layout      : 'card',
+        margins     : '0 0 0 0',
+        activeItem  : 0,
+        border      : false,
         tbar: [{
-            xtype: 'tbbutton',
-            cls: 'x-btn-text-icon',
-            icon: 'img/buscar.png',
-            text: 'Parada mas Cercana',
+            xtype   : 'tbbutton',
+            cls     : 'x-btn-text-icon',
+            icon    : 'img/buscar.png',
+            text    : 'Parada mas Cercana',
             handler: function(){
                 capturarPuntoReferencia();
-            //ventanaNuevaRuta();
             }
         },'-',{
-            xtype: 'tbbutton',
-            cls: 'x-btn-text-icon',
-            icon: 'img/buscar1.png',
-            text: 'Buscar ruta',
+            xtype   : 'tbbutton',
+            cls     : 'x-btn-text-icon',
+            icon    : 'img/buscar1.png',
+            text    : 'Buscar ruta',
             handler: function(){
                 ventanaBuscarRutas();
             }
         },'-',{
-            xtype: 'tbbutton',
-            cls: 'x-btn-text-icon',
-            icon: 'img/buscar2.png',
-            text: 'Paradas por hora y sector',
+            xtype   : 'tbbutton',
+            cls     : 'x-btn-text-icon',
+            icon    : 'img/buscar2.png',
+            text    : 'Paradas por hora y sector',
             handler: function(){
                 ventanaLocalizarParadaHora();
             }
         },'-',{
-            xtype: 'tbbutton',
-            cls: 'x-btn-text-icon',
-            icon: 'img/limpiar.png',
-            text: 'Limpiar Mapa',
+            xtype   : 'tbbutton',
+            cls     : 'x-btn-text-icon',
+            icon    : 'img/limpiar.png',
+            text    : 'Limpiar Mapa',
             handler: function(){
                 limpiarCapas();
             }
         },'-',{
-            xtype: 'tbbutton',
-            cls: 'x-btn-text-icon',
-            icon: 'img/pantalla.png',
-            text: 'Pantalla Completa',
+            xtype   : 'tbbutton',
+            cls     : 'x-btn-text-icon',
+            icon    : 'img/pantalla.png',
+            text    : 'Pantalla Completa',
             handler: function(){
                 window.open ("http://www.utpl.edu.ec/irbu/","IRBU");
             }
         },'-',{
-            xtype: 'tbbutton',
-            cls: 'x-btn-text-icon',
-            icon: 'img/ayuda.png',
-            text: 'Ayuda',
+            xtype   : 'tbbutton',
+            cls     : 'x-btn-text-icon',
+            icon    : 'img/ayuda.png',
+            text    : 'Ayuda',
             handler: function(){
                 window.open ("img/ayuda.pdf","Ayuda KRADAC...");
             }
         },'-',{
-            xtype: 'tbbutton',
-            cls: 'x-btn-text-icon',
-            id: 'btnAdministrador',
-            icon: 'img/config.png',
-            text: 'Administrador',
+            xtype   : 'tbbutton',
+            cls     : 'x-btn-text-icon',
+            id      : 'btnAdministrador',
+            icon    : 'img/config.png',
+            text    : 'Administrador',
             menu: [{
                 text: 'Rutas',
                 icon: 'img/map.png',
                 menu: [{
                     text: 'Nueva Ruta',
-                    id: 'btnNuevaRuta',
+                    id  : 'btnNuevaRuta',
                     icon: 'img/add.png',
                     handler: function(){
                         Ext.getCmp('btnEliminarRuta').hide();
                         Ext.getCmp('btnEditarRuta').hide();
                         Ext.getCmp('btnGuardarRuta').show();
                         ventanaNuevaRuta();
+                        Ext.getCmp('vtnNuevaRuta').setTitle('Nueva Ruta...');
                     }
                 },{
                     text: 'Eliminar Ruta',
-                    id: 'btnEliminarRuta',
+                    id  : 'btnEliminarRuta',
                     icon: 'img/delete.png',
                     handler: function(){
                         Ext.getCmp('btnEliminarRuta').show();
                         Ext.getCmp('btnGuardarRuta').hide();
                         Ext.getCmp('btnEditarRuta').hide();
                         ventanaNuevaRuta();
+                        Ext.getCmp('vtnNuevaRuta').setTitle('Eliminar Ruta...');
                     }
                 },{
                     text: 'Editar Ruta',
-                    id: 'btnEditarRuta',
+                    id  : 'btnEditarRuta',
                     icon: 'img/edit.png',
                     handler: function(){
                         Ext.getCmp('btnEliminarRuta').hide();
                         Ext.getCmp('btnGuardarRuta').hide();
                         Ext.getCmp('btnEditarRuta').show();
                         ventanaNuevaRuta();
+                        Ext.getCmp('vtnNuevaRuta').setTitle('Editar Ruta...');
                     }
                 }]
             },{
@@ -126,7 +128,6 @@ Ext.onReady(function(){
                     text: 'Editar Parada',
                     icon: 'img/edit.png',
                     handler: function(){
-                        //ventanaNuevaParada();
                         showVentanaImagenes(false);
                     }
                 }]
@@ -134,29 +135,19 @@ Ext.onReady(function(){
                 text: 'Ayuda'
             }]
         },'-',{
-            xtype: 'tbbutton',
-            cls: 'x-btn-text-icon',
-            icon: 'img/ayuda.png',
-            text: 'remover',
+            xtype   : 'tbbutton',
+            cls     : 'x-btn-text-icon',
+            icon    : 'img/ayuda.png',
+            text    : 'remover',
             handler: function(){
-                /*if(!chooser){
-                    chooser = new ImageChooser({
-                        url:'core/php/core/get-images.php',
-                        //width:415, 
-                        width:720, 
-                        height:500
-                    });
-                }
-                chooser.show();*/
                 console.info('remover');
-                ventanaPuntosRuta(100)
             }
         },'->',{
-            xtype: 'tbbutton',
-            cls: 'x-btn-text-icon',
-            icon: 'img/login.png',
-            text: 'Ingresar',
-            id: 'btnLogin',
+            xtype   : 'tbbutton',
+            cls     : 'x-btn-text-icon',
+            icon    : 'img/login.png',
+            text    : 'Ingresar',
+            id      : 'btnLogin',
             handler: function(){
                 if(!isLogin){
                     ventanaLogin();
@@ -171,16 +162,16 @@ Ext.onReady(function(){
     var viewport = new Ext.Viewport({
         layout: 'border',
         items: [
-        barraHerramientas,
+            barraHerramientas,
         {
-            region: 'center',
-            contentEl: 'map',
-            split: false,
-            height: 100,
-            minSize: 100,
-            maxSize: 200,
-            collapsible: false,
-            margins: '0 0 0 0'
+            region      : 'center',
+            contentEl   : 'map',
+            split       : false,
+            height      : 100,
+            minSize     : 100,
+            maxSize     : 200,
+            collapsible : false,
+            margins     : '0 0 0 0'
         }]
     });
     /**
@@ -221,7 +212,6 @@ function ocultarBotonAdministrador(){
     Ext.get('btnAdministrador').hide();
     Ext.getCmp('btnLogin').setText('Ingresar');
     Ext.getCmp('btnLogin').setIcon("img/login.png");
-    console.info(Ext.getCmp('btnLogin'));
     document.cookie='session=false'
     isLogin = false;
 }
@@ -252,9 +242,9 @@ function getCookie(name){
 function showVentanaImagenes(showBotonEliminar){
     if(!ventanaImagenes){
         ventanaImagenes = new ImageChooser({
-            url:'core/php/core/get-images.php',
-            width:720, 
-            height:500
+            url     : 'core/php/core/get-images.php',
+            width   : 720, 
+            height  : 500
         });
     }
     ventanaImagenes.show();

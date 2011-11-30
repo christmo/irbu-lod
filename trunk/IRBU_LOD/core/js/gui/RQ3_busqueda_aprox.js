@@ -20,56 +20,51 @@ Ext.onReady(function(){
 
     var etiqueta = new Ext.form.Label({
         html : 'metros',
-        width:30
+        width: 30
     });
 
     var RQ3_meters = new Ext.ux.form.Spinner({
-        id: 'meters',
-        value: 100,
-        width:60,
-        labelSeparator: '', // Elimina los dos puntos delante de la etiqueta
+        id              : 'meters',
+        value           : 100,
+        width           : 60,
+        labelSeparator  : '', // Elimina los dos puntos delante de la etiqueta
         strategy: new Ext.ux.form.Spinner.NumberStrategy({
-            minValue:100,
-            maxValue:1000,
-            incrementValue:100
+            minValue        : 100,
+            maxValue        : 1000,
+            incrementValue  : 100
         }),
-        vtype:'validador'
+        vtype           : 'validador'
     });
 
     RQ3Panel = new Ext.FormPanel({
-        labelAlign: 'top',
-        frame:true,
-        bodyStyle:'padding:1px 0px 0 60px',  //bodyStyle:'padding:5px 5px 0 ',
-        labelWidth:150,
+        labelAlign  : 'top',
+        frame       : true,
+        bodyStyle   : 'padding:1px 0px 0 60px',  //bodyStyle:'padding:5px 5px 0 ',
+        labelWidth  : 150,
         items: [
-        RQ3_meters,
-        etiqueta
+            RQ3_meters,
+            etiqueta
         ],
-        buttonAlign: 'center',
+        buttonAlign : 'center',
         buttons: [{
             text: 'Localizar',
             handler: function() {
-
                 var cantMeters = RQ3_meters.getValue();
-
                 if (validMeters) {
-
                     limpiarCapas();
-
                     RQ3Panel.getForm().submit({
-                        url : 'core/php/core/RQ3_paradas_cercanas.php?x='+xpos+'&y='+ypos,
-                        method:'POST',
+                        url     : 'core/php/core/RQ3_paradas_cercanas.php?x='+xpos+'&y='+ypos,
+                        method  : 'POST',
                         waitMsg : 'Buscando...',
                         failure: function (form, action) {
                             Ext.MessageBox.show({
-                                title: 'Error',
-                                msg: 'Ups... Datos no encontrados',
-                                buttons: Ext.MessageBox.OK,
-                                icon: Ext.MessageBox.ERROR
+                                title   : 'Error',
+                                msg     : 'Ups... Datos no encontrados',
+                                buttons : Ext.MessageBox.OK,
+                                icon    : Ext.MessageBox.ERROR
                             });
                         },
                         success: function (form, action) {
-
                             var resultado = Ext.util.JSON.decode(action.response.responseText);
                             var datos = resultado.datos.coordenadas;
                             lienzosRecorridoHistorico(datos);
@@ -79,16 +74,16 @@ Ext.onReady(function(){
                     });
                 }else {
                     Ext.MessageBox.show({
-                        title: 'Revise la distancia',
-                        msg: 'El valor máximo permitido <br /> es 1000 metros',
-                        buttons: Ext.MessageBox.OK,
-                        icon: Ext.MessageBox.ERROR
+                        title   : 'Revise la distancia',
+                        msg     : 'El valor máximo permitido <br /> es 1000 metros',
+                        buttons : Ext.MessageBox.OK,
+                        icon    : Ext.MessageBox.ERROR
                     });
                 }
             }
         },{
-            text: 'Cancelar',
-            handler: RQ3_limpiar_win
+            text        : 'Cancelar',
+            handler     : RQ3_limpiar_win
         }]
     });
 });
@@ -105,14 +100,14 @@ function RQ3_limpiar_win(){
 function RQ3_getWin(){
     if(!RQ3Win){
         RQ3Win = new Ext.Window({
-            layout:'fit',
-            title:'Parada mas Cercana',
-            resizable : true,
-            width:195,
-            height:155,
-            closeAction:'hide',
-            plain: false,
-            items: [RQ3Panel]
+            layout      : 'fit',
+            title       : 'Parada mas Cercana',
+            resizable   : true,
+            width       : 195,
+            height      : 155,
+            closeAction : 'hide',
+            plain       : false,
+            items       : [RQ3Panel]
         });
     }
     RQ3Win.show(this);
@@ -124,10 +119,10 @@ function RQ3_getWin(){
  */
 function capturarPuntoReferencia() {
     Ext.MessageBox.show({
-        title: 'Ubicacion',
-        msg: 'Presiona OK y Selecciona <br />un punto en el mapa ',
-        buttons: Ext.MessageBox.OK,
-        icon: Ext.MessageBox.INFO
+        title   : 'Ubicacion',
+        msg     : 'Presiona OK y Selecciona <br />un punto en el mapa ',
+        buttons : Ext.MessageBox.OK,
+        icon    : Ext.MessageBox.INFO
     });
     capturarPosicion = true;
 }
