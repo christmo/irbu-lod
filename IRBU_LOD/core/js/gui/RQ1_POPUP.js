@@ -44,14 +44,14 @@ function RQ2_PopUP_getWin(idP){
 
     if(!RQ2PopUpWin){
         RQ2PopUpWin = new Ext.Window({
-            layout:'fit',
-            title:'<center>Informacion Parada</center>',
-            resizable : true,
-            width : 425,
-            height : 200,
+            layout      : 'fit',
+            title       : '<center>Informacion Parada</center>',
+            resizable   : true,
+            width       : 425,
+            height      : 200,
             closeAction : 'hide',
-            plain : false,
-            items : [RQ2PopUpPanel]
+            plain       : false,
+            items       : [RQ2PopUpPanel]
         });
     }
     RQ2PopUpWin.show(this);
@@ -67,17 +67,16 @@ Ext.onReady(function(){
         name: 'NOMBRE'
     },{
         name: 'HORA'
-    }
-    ]);
+    }]);
 
     //Define Store
     strInfoParada = new Ext.data.Store({
         proxy: new Ext.data.HttpProxy({
-            url: 'php/monitoreo/infoParada.php',
-            method: 'POST'
+            url     : 'php/monitoreo/infoParada.php',
+            method  : 'POST'
         }),
-        reader: new Ext.data.JsonReader({},metadataInfoParada),
-        remoteSort: false
+        reader      : new Ext.data.JsonReader({},metadataInfoParada),
+        remoteSort  : false
     });
 
     // Crear Grid
@@ -85,41 +84,35 @@ Ext.onReady(function(){
         store: strInfoParada,
         columns: [
         {
-            id:'tipoPopUp',
-            header: 'SENTIDO',
-            width: 52,
-            //sortable: true,
-            renderer: formatSentido,
-            dataIndex: 'TIPO'
-        },
-        {
-            header: '<center>RUTA</center>',
-            width: 247,
-            //sortable: true,
-            dataIndex: 'NOMBRE'
-        },
-        {
-            header: '<center>HORA</center>',
-            width: 75,
-            //sortable: true,
-            renderer: formatHora,
-            dataIndex: 'HORA'
-        }
-        ],
-        stripeRows: true,
-        height: 150,
-        width: 400,
-        stateful: true,
-        stateId: 'grdInfoParada'
+            id          : 'tipoPopUp',
+            header      : 'SENTIDO',
+            width       : 52,
+            renderer    : formatSentido,
+            dataIndex   : 'TIPO'
+        },{
+            header      : '<center>RUTA</center>',
+            width       : 247,
+            dataIndex   : 'NOMBRE'
+        },{
+            header      : '<center>HORA</center>',
+            width       : 75,
+            renderer    : formatHora,
+            dataIndex   : 'HORA'
+        }],
+        stripeRows  : true,
+        height      : 150,
+        width       : 400,
+        stateful    : true,
+        stateId     : 'grdInfoParada'
     });
     
     RQ2PopUpPanel = new Ext.FormPanel({
-        labelAlign: 'top',
-        frame:true,
-        bodyStyle:'padding: 0px 0px 0 0px',  //bodyStyle:'padding:5px 5px 0 ',
-        labelWidth:150,
+        labelAlign  : 'top',
+        frame       :true,
+        bodyStyle   :'padding: 0px 0px 0 0px',  //bodyStyle:'padding:5px 5px 0 ',
+        labelWidth  :150,
         items: [
-        grdInfoParada
+            grdInfoParada
         ]
     });
     

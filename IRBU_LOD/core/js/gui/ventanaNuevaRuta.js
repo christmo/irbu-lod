@@ -1,5 +1,5 @@
 /* 
- * Permite desplegar la venta para ingresar una nueva ruta
+ * Permite desplegar la ventana para ingresar una nueva ruta
  */
 
 var winNuevaRuta;
@@ -14,44 +14,43 @@ Ext.onReady(function(){
     var nombreRuta;
  
     panelInfoRuta = new Ext.FormPanel({
-        labelAlign: 'top',
-        frame:true,
-        bodyStyle:'padding:5px 5px 0',
-        labelWidth:60,
-        width: 500,
+        labelAlign  : 'top',
+        frame       : true,
+        bodyStyle   : 'padding:5px 5px 0',
+        labelWidth  : 60,
+        width       : 500,
 
         items: [{
-            columnWidth:1,
-            layout: 'form',
+            columnWidth : 1,
+            layout      : 'form',
             items: [{
-                xtype: 'radiogroup',
-                fieldLabel: 'Tipo de recorrido',
-                allowBlank:false,
+                xtype       : 'radiogroup',
+                fieldLabel  : 'Tipo de recorrido',
+                allowBlank  :false,
                 items: [
                 {
-                    boxLabel: 'Baja de la UTPL',
-                    name: 'rbTipo',
-                    inputValue: 'B',
-                    //checked: true,
-                    listeners: {
+                    boxLabel    : 'Baja de la UTPL',
+                    name        : 'rbTipo',
+                    inputValue  : 'B',
+                    listeners   : {
                         check: function (ctl, val) {
                             recargarCbxNuevaRuta(panelInfoRuta);
                         }
                     }
                 },{
-                    boxLabel: 'Sube a la UTPL',
-                    name: 'rbTipo',
-                    inputValue: 'R',
-                    listeners: {
+                    boxLabel    : 'Sube a la UTPL',
+                    name        : 'rbTipo',
+                    inputValue  : 'R',
+                    listeners   : {
                         check: function (ctl, val) {
                             recargarCbxNuevaRuta(panelInfoRuta);
                         }
                     }
                 },{
-                    boxLabel: 'Sube y baja de la UTPL',
-                    name: 'rbTipo',
-                    inputValue: 'BR',
-                    listeners: {
+                    boxLabel    : 'Sube y baja de la UTPL',
+                    name        : 'rbTipo',
+                    inputValue  : 'BR',
+                    listeners   : {
                         check: function (ctl, val) {
                             recargarCbxNuevaRuta(panelInfoRuta);
                         }
@@ -59,27 +58,27 @@ Ext.onReady(function(){
                 }]
             }]
         },{
-            layout: 'form',
-            items: [
-            cbxNuevaRuta
+            layout  : 'form',
+            items   : [
+                cbxNuevaRuta
             ]
         }],
 
         buttons: [{
-            text: 'Editar',
-            id: 'btnEditarRuta',
-            handler: function() {
-                nombreRuta=cbxNuevaRuta.getValue();
+            text    : 'Editar',
+            id      : 'btnEditarRuta',
+            handler : function() {
+                nombreRuta = cbxNuevaRuta.getValue();
                 panelInfoRuta.getForm().submit({
-                    url : 'core/php/core/guardarRuta.php?nombreRuta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
-                    method:'POST',
-                    waitMsg : 'Guardando Ruta...',
-                    failure: function (form, action) {
+                    url     : 'core/php/core/guardarRuta.php?nombreRuta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
+                    method  : 'POST',
+                    waitMsg : 'Editando Ruta...',
+                    failure : function (form, action) {
                         Ext.MessageBox.show({
-                            title: 'Error...',
-                            msg: 'Ruta ya guardada...',
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.ERROR
+                            title   : 'Error...',
+                            msg     : 'Ruta ya guardada...',
+                            buttons : Ext.MessageBox.OK,
+                            icon    : Ext.MessageBox.ERROR
                         });
                     },
                     success: function (form, action) {
@@ -100,26 +99,25 @@ Ext.onReady(function(){
             handler: function() {
                 nombreRuta=cbxNuevaRuta.getValue();
                 panelInfoRuta.getForm().submit({
-                    url : 'core/php/core/eliminarRuta.php?id_ruta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
-                    method:'POST',
-                    waitMsg : 'Guardando Ruta...',
-                    failure: function (form, action) {
+                    url     : 'core/php/core/eliminarRuta.php?id_ruta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
+                    method  :'POST',
+                    waitMsg : 'Eliminando Ruta...',
+                    failure : function (form, action) {
                         Ext.MessageBox.show({
-                            title: 'Error...',
-                            msg: 'Ruta no existe...',
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.ERROR
+                            title   : 'Error...',
+                            msg     : 'Ruta no existe...',
+                            buttons : Ext.MessageBox.OK,
+                            icon    : Ext.MessageBox.ERROR
                         });
                     },
                     success: function (form, action) {
-                        var resultado = Ext.util.JSON.decode(action.response.responseText);
-
+                        //var resultado = Ext.util.JSON.decode(action.response.responseText);
 
                         Ext.MessageBox.show({
-                            title: 'Info...',
-                            msg: 'Ruta borrada correctamente...',
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.INFO
+                            title   : 'Info...',
+                            msg     : 'Ruta borrada correctamente...',
+                            buttons : Ext.MessageBox.OK,
+                            icon    : Ext.MessageBox.INFO
                         });
                         
                         //Limpia las capas antes de hacer una nueva consulta
@@ -131,20 +129,20 @@ Ext.onReady(function(){
                 });
             }
         },{
-            text: 'Guardar',
-            id: 'btnGuardarRuta',
+            text    : 'Guardar',
+            id      : 'btnGuardarRuta',
             handler: function() {
                 nombreRuta=cbxNuevaRuta.getValue();
                 panelInfoRuta.getForm().submit({
-                    url : 'core/php/core/guardarRuta.php?nombreRuta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
-                    method:'POST',
+                    url     : 'core/php/core/guardarRuta.php?nombreRuta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
+                    method  : 'POST',
                     waitMsg : 'Guardando Ruta...',
-                    failure: function (form, action) {
+                    failure : function (form, action) {
                         Ext.MessageBox.show({
-                            title: 'Error...',
-                            msg: 'Ruta ya guardada...',
-                            buttons: Ext.MessageBox.OK,
-                            icon: Ext.MessageBox.ERROR
+                            title   : 'Error...',
+                            msg     : 'Ruta ya guardada...',
+                            buttons : Ext.MessageBox.OK,
+                            icon    : Ext.MessageBox.ERROR
                         });
                     },
                     success: function (form, action) {
@@ -165,7 +163,7 @@ Ext.onReady(function(){
 
     panelNuevaRuta = new Ext.Panel({
         layout: {
-            type: 'vbox',
+            type  : 'vbox',
             align : 'stretch',
             pack  : 'start'
         },
@@ -193,16 +191,16 @@ function recargarCbxNuevaRuta(panelRuta){
  * Obtine el id y el nombre de las rutas de la BD
  */
 var storeCbxNuevaRuta = new Ext.data.JsonStore({
-    autoDestroy: true,
-    url: urlNuevaRuta,
-    root: 'rutas',
-    fields: ['id', 'name'],
+    autoDestroy : true,
+    url         : urlNuevaRuta,
+    root        : 'rutas',
+    fields      : ['id', 'name'],
     failure: function (form, action) {
         Ext.MessageBox.show({
-            title: 'Error...',
-            msg: 'No a ingresado correctamente vuelva a ingresar al sistema...',
-            buttons: Ext.MessageBox.OK,
-            icon: Ext.MessageBox.ERROR
+            title   : 'Error...',
+            msg     : 'No a ingresado correctamente vuelva a ingresar al sistema...',
+            buttons : Ext.MessageBox.OK,
+            icon    : Ext.MessageBox.ERROR
         });
     }
 });
@@ -211,21 +209,21 @@ var storeCbxNuevaRuta = new Ext.data.JsonStore({
  * Carga el combo con las rutas
  */
 var cbxNuevaRuta = new Ext.form.ComboBox({
-    store: storeCbxNuevaRuta,
-    fieldLabel: 'Ingresar lugares de la nueva ruta',
-    valueField: 'id',
-    displayField: 'name',
-    typeAhead: true,
-    mode: 'local',
-    triggerAction: 'all',
-    tpl: resultadoTplRutas,
-    itemSelector: 'div.search-item',
-    emptyText:'Ingresar lugares de la nueva ruta...',
-    allowBlank:false,
-    resizable:true,
-    minListWidth:300,
-    selectOnFocus:true,
-    width: 455
+    store           : storeCbxNuevaRuta,
+    fieldLabel      : 'Ingresar lugares de la nueva ruta',
+    valueField      : 'id',
+    displayField    : 'name',
+    typeAhead       : true,
+    mode            : 'local',
+    triggerAction   : 'all',
+    tpl             : resultadoTplRutas,
+    itemSelector    : 'div.search-item',
+    emptyText       : 'Ingresar lugares de la nueva ruta...',
+    allowBlank      : false,
+    resizable       : true,
+    minListWidth    : 300,
+    selectOnFocus   : true,
+    width           : 455
 });
 
 /**
@@ -235,15 +233,17 @@ var cbxNuevaRuta = new Ext.form.ComboBox({
 function ventanaNuevaRuta(){
     if(!winNuevaRuta){
         winNuevaRuta = new Ext.Window({
-            layout:'fit',
-            title:'Nueva Ruta',
-            resizable : false,
-            width:500,
-            height:187,
-            closeAction:'hide',
-            plain: false,
-            items: [panelNuevaRuta]
+            layout      : 'fit',
+            title       : 'Nueva Ruta',
+            id          : 'vtnNuevaRuta',
+            resizable   : false,
+            width       : 500,
+            height      : 187,
+            closeAction : 'hide',
+            plain       : false,
+            items       : [panelNuevaRuta]
         });
     }
+    panelInfoRuta.getForm().reset();
     winNuevaRuta.show(this);
 }

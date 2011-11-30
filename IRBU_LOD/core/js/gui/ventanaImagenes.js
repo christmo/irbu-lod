@@ -18,31 +18,30 @@ ImageChooser.prototype = {
     show : function(){
         if(!this.win){
             this.initTemplates();
-			
             this.store = new Ext.data.JsonStore({
-                url: this.config.url,
-                root: 'images',
+                url     : this.config.url,
+                root    : 'images',
                 fields: [
-                'name', 
-                'url',
+                    'name', 
+                    'url',
                 {
-                    name:'size', 
+                    name: 'size', 
                     type: 'float'
                 },{
-                    name:'lastmod', 
-                    type:'date', 
-                    dateFormat:'timestamp'
+                    name        :'lastmod', 
+                    type        :'date', 
+                    dateFormat  :'timestamp'
                 },
                 'direccion',
                 'referencia',
                 {
-                    name:'lon', 
+                    name: 'lon', 
                     type: 'float'
                 },{
-                    name:'lat', 
+                    name: 'lat', 
                     type: 'float'
                 },{
-                    name:'id', 
+                    name: 'id', 
                     type: 'int'
                 }
                 ],
@@ -51,8 +50,8 @@ ImageChooser.prototype = {
                         fn:function(){
                             view.select(0);                            
                         }, 
-                        scope:this, 
-                        single:true
+                        scope   : this, 
+                        single  : true
                     }
                 }
             });
@@ -79,21 +78,21 @@ ImageChooser.prototype = {
             };
 			
             view = new Ext.DataView({
-                tpl: this.thumbTemplate,
+                tpl         : this.thumbTemplate,
                 singleSelect: true,
-                overClass:'x-view-over',
+                overClass   : 'x-view-over',
                 itemSelector: 'div.thumb-wrap',
-                emptyText : '<div style="padding:10px;">No hay imagenes que coincidan con ese filtro...</div>',
-                store: this.store,
+                emptyText   : '<div style="padding:10px;">No hay imagenes que coincidan con ese filtro...</div>',
+                store       : this.store,
                 listeners: {
                     'selectionchange': {
-                        fn:this.showDetails, 
-                        scope:this, 
-                        buffer:100
+                        fn      : this.showDetails, 
+                        scope   : this, 
+                        buffer  : 100
                     },
                     'loadexception'  : {
-                        fn:this.onLoadException, 
-                        scope:this
+                        fn      : this.onLoadException, 
+                        scope   : this
                     },
                     'beforeselect'   : {
                         fn:function(view){
@@ -101,31 +100,31 @@ ImageChooser.prototype = {
                         }
                     }
                 },
-                prepareData: formatData.createDelegate(this)
+                prepareData : formatData.createDelegate(this)
             });
 		    
             var cfg = {
-                title: 'Lista de Paradas...',
-                id: 'img-chooser-dlg',
-                layout: 'border',
-                minWidth: 500,
-                minHeight: 300,
-                modal: true,
-                closeAction: 'hide',
-                border: false,
+                title       : 'Lista de Paradas...',
+                id          : 'img-chooser-dlg',
+                layout      : 'border',
+                minWidth    : 500,
+                minHeight   : 300,
+                modal       : true,
+                closeAction : 'hide',
+                border      : false,
                 items:[{
-                    id: 'img-chooser-view',
-                    region: 'center',
-                    autoScroll: true,
-                    width:500,
-                    items: view,
+                    id          : 'img-chooser-view',
+                    region      : 'center',
+                    autoScroll  : true,
+                    width       : 500,
+                    items       : view,
                     tbar:[{
                         text: 'Filtro:'
                     },{
-                        xtype: 'textfield',
-                        id: 'filter',
-                        selectOnFocus: true,
-                        width: 100,
+                        xtype           : 'textfield',
+                        id              : 'filter',
+                        selectOnFocus   : true,
+                        width           : 100,
                         listeners: {
                             'render': {
                                 fn:function(){
@@ -141,20 +140,20 @@ ImageChooser.prototype = {
                     }, ' ', '-', {
                         text: 'Ordenar Por:'
                     }, {
-                        id: 'sortSelect',
-                        xtype: 'combo',
-                        typeAhead: true,
-                        triggerAction: 'all',
-                        width: 100,
-                        editable: false,
-                        mode: 'local',
-                        displayField: 'desc',
-                        valueField: 'name',
-                        lazyInit: false,
-                        value: 'name',
+                        id              : 'sortSelect',
+                        xtype           : 'combo',
+                        typeAhead       : true,
+                        triggerAction   : 'all',
+                        width           : 100,
+                        editable        : false,
+                        mode            : 'local',
+                        displayField    : 'desc',
+                        valueField      : 'name',
+                        lazyInit        : false,
+                        value           : 'name',
                         store: new Ext.data.SimpleStore({
-                            fields: ['name', 'desc'],
-                            data : [
+                            fields  : ['name', 'desc'],
+                            data    : [
                             ['direccion', 'Direcci\xF3n'],
                             ['size', 'Peso Imagen'],
                             ['lastmod', 'Modificado']
@@ -162,40 +161,40 @@ ImageChooser.prototype = {
                         }),
                         listeners: {
                             'select': {
-                                fn:this.sortImages, 
-                                scope:this
+                                fn      : this.sortImages, 
+                                scope   : this
                             }
                         }
                     }]
                 },{
-                    id: 'img-detail-panel',
-                    region: 'east',
-                    split: true,
-                    width: 370,
+                    id      : 'img-detail-panel',
+                    region  : 'east',
+                    split   : true,
+                    width   : 370,
                     minWidth: 370,
                     maxWidth: 370
                 }],
                 buttons: [{
-                    id:'btnEliminarParada',
-                    text: 'Eliminar',
-                    handler: this.eliminarParada,
-                    scope: this
+                    id      : 'btnEliminarParada',
+                    text    : 'Eliminar',
+                    handler : this.eliminarParada,
+                    scope   : this
                 },{
-                    id:'btnEditarParada',
-                    text: 'Editar',
-                    handler: this.editarParada,
-                    scope: this
+                    id      : 'btnEditarParada',
+                    text    : 'Editar',
+                    handler : this.editarParada,
+                    scope   : this
                 },{
-                    id: 'ok-btn',
-                    text: 'Actualizar',
-                    handler: this.actualizarImagenes,
-                    scope: this
+                    id      : 'ok-btn',
+                    text    : 'Actualizar',
+                    handler : this.actualizarImagenes,
+                    scope   : this
                 },{
-                    text: 'Salir',
+                    text    : 'Salir',
                     handler: function(){
                         this.win.hide();
                     },
-                    scope: this
+                    scope   : this
                 }],
                 keys: {
                     key: 27, // Esc key
@@ -319,23 +318,23 @@ ImageChooser.prototype = {
             var data = this.lookup[selNode.id];
         
             Ext.Ajax.request({
-                url: 'core/php/core/eliminarParada.php',
-                method: 'post',
+                url     : 'core/php/core/eliminarParada.php',
+                method  : 'post',
                 success: function (result) {
                     //var r = Ext.util.JSON.decode(result.responseText);
                     actualizarImagenesCargadas();
                 },
-                timeout: 1000,
+                timeout : 1000,
                 params: {
                     id_parada: data.id
                 }
             });
         }else{
             Ext.MessageBox.show({
-                title: 'Error...',
-                msg: 'Seleccionar una imagen de una parada para eliminar...',
-                buttons: Ext.MessageBox.OK,
-                icon: Ext.MessageBox.ERROR
+                title   : 'Error...',
+                msg     : 'Seleccionar una imagen de una parada para eliminar...',
+                buttons : Ext.MessageBox.OK,
+                icon    : Ext.MessageBox.ERROR
             });
         }
     },

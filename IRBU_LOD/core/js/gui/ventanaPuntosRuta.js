@@ -12,17 +12,17 @@ Ext.onReady(function(){
     grid = new Ext.grid.GridPanel({
         store: storePuntosRuta,
         columns: [{
-            header: 'N\xFAmero',
-            width: 30,
-            dataIndex: 'numero'
+            header      : 'N\xFAmero',
+            width       : 30,
+            dataIndex   : 'numero'
         },{
-            header: 'Latitud',
-            width: 60,
-            dataIndex: 'latitud'
+            header      : 'Latitud',
+            width       : 60,
+            dataIndex   : 'latitud'
         },{
-            header: 'Longitud',
-            width: 60,
-            dataIndex: 'longitud'
+            header      : 'Longitud',
+            width       : 60,
+            dataIndex   : 'longitud'
         },{
             xtype: 'actioncolumn',
             width: 15,
@@ -42,9 +42,9 @@ Ext.onReady(function(){
                     var ruta = new OpenLayers.Geometry.LineString(puntosLineaRuta);
                     //Estilo de Linea de Recorrido
                     var style = {
-                        strokeColor: '#0000ff',
-                        strokeOpacity: 0.3,
-                        strokeWidth: 5
+                        strokeColor     : '#0000ff',
+                        strokeOpacity   : 0.3,
+                        strokeWidth     : 5
                     };
                     
                     var lineFeature = lienzoRecorridos.getFeatureById( "trazado" );
@@ -61,14 +61,10 @@ Ext.onReady(function(){
         viewConfig: {
             forceFit: true
         },
-        //renderTo: ,
-        //title: 'Simple Ext JS Grid',
-        //width: 500,
-        autoScroll: true,
-        //autoHeight: true,
-        frame: true,
+        autoScroll  : true,
+        frame       : true,
         buttons: [{
-            text: 'Guardar',
+            text    : 'Guardar',
             handler: function() {
                 //enviar los datos de la tabla a la base
                 guardarPuntosRuta();
@@ -84,18 +80,19 @@ Ext.onReady(function(){
  */
 function guardarPuntosRuta(){
     Ext.Ajax.request({
-        url: 'core/php/core/guardarPuntosRuta.php',
-        method: 'POST',
+        url     : 'core/php/core/guardarPuntosRuta.php',
+        method  : 'POST',
         success: function (result) {
             var r = Ext.util.JSON.decode(result.responseText);
             winPuntosRuta.hide();
             limpiarCapas();
             booCapturarPuntosNuevaRuta=false;
+            ventanaParadasRuta(r.id);
         },
-        timeout: 1000,
+        timeout : 1000,
         params: {
-            puntos: getJsonOfStore(storePuntosRuta),
-            id_ruta: id_ruta
+            puntos  : getJsonOfStore(storePuntosRuta),
+            id_ruta : id_ruta
         }
     });
 }
@@ -123,17 +120,10 @@ var myReader = new Ext.data.ArrayReader({},
  * nueva ruta.
  */
 storePuntosRuta = new Ext.data.Store({
-    autoDestroy: true,
-    reader: myReader,
-    proxy: proxy,
-    autoLoad: true//,
-/*listeners: {
-        load: function(obj,records){
-            Ext.each(records, function(rec){
-                //console.info('Ver:'+rec.get('latitud'));
-                });
-        }
-    }*/
+    autoDestroy : true,
+    reader      : myReader,
+    proxy       : proxy,
+    autoLoad    : true
 });
 
 /**
@@ -151,14 +141,14 @@ storePuntosRuta = new Ext.data.Store({
 function ventanaPuntosRuta(id){
     if(!winPuntosRuta){
         winPuntosRuta = new Ext.Window({
-            layout:'fit',
-            title:'Nueva Ruta',
-            resizable : true,
-            width:350,
-            height:300,
-            closeAction:'hide',
-            plain: false,
-            items: [grid]
+            layout      : 'fit',
+            title       : 'Nueva Ruta',
+            resizable   : true,
+            width       : 350,
+            height      : 300,
+            closeAction : 'hide',
+            plain       : false,
+            items       : [grid]
         });
     }
     this.id_ruta = id;
