@@ -8,21 +8,13 @@ Header("content-type: application/x-javascript");
 
 $salida = "{failure:true}";
 
-//if (isset($id_ruta)) {
-//    $consultaSql = "SELECT P.ID_PARADA,P.DIRECCION,P.DIR_IMG 
-//        FROM PARADAS P, RUTA_PARADA RP 
-//        WHERE P.ID_PARADA=RP.ID_PARADA 
-//        AND ID_RUTA=$id_ruta 
-//        ORDER BY ORDEN";
-//} else {
-    $consultaSql = "SELECT ID_PARADA,DIRECCION,DIR_IMG FROM PARADAS ORDER BY DIRECCION";
-//}
+$consultaSql = "SELECT ID_PARADA,DIRECCION,DIR_IMG FROM PARADAS ORDER BY DIRECCION";
 
 consulta($consultaSql);
 $resulset = variasFilas();
 
-//$salida = "{\"paradas\": [";
-$salida = "stcCallback1001([";
+$salida = "{\"paradas\": [";
+//$salida = "stcCallback1001([";
 
 for ($i = 0; $i < count($resulset); $i++) {
     $fila = $resulset[$i];
@@ -37,8 +29,8 @@ for ($i = 0; $i < count($resulset); $i++) {
     }
 }
 
-$salida .="]);";
-//$salida .="]}";
+//$salida .="]);";
+$salida .="]}";
 
 echo $salida;
 ?>
