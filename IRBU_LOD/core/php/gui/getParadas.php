@@ -17,8 +17,8 @@ $consultaSql = "SELECT P.ID_PARADA,P.DIRECCION,P.DIR_IMG
 consulta($consultaSql);
 $resulset = variasFilas();
 
-//$salida = "{\"paradas\": [";
-$salida = "stcCallback1001([";
+$salida = "{\"paradas\": [";
+//$salida = "stcCallback1001([";
 
 for ($i = 0; $i < count($resulset); $i++) {
     $fila = $resulset[$i];
@@ -33,8 +33,8 @@ for ($i = 0; $i < count($resulset); $i++) {
     }
 }
 
-$salida .="]);";
-//$salida .="]}";
+//$salida .="]);";
+$salida .="]}";
 
 echo $salida;
 ?>

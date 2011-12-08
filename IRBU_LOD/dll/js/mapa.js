@@ -64,7 +64,7 @@ function init(){
                 RQ3_getWin();
             }
 
-            //-if(booCapturarPuntosNuevaRuta){
+            if(booCapturarPuntosNuevaRuta){
             var features = new Array();
             var pt = new OpenLayers.Geometry.Point(xpos,ypos);
             pt.transform( new OpenLayers.Projection( "EPSG:4326" ),
@@ -171,7 +171,7 @@ function init(){
             dibujarLineaRuta();
 
             //permitirArrastrarPuntosRutas();
-            //-}
+            }
             
             if(booCapturarPuntosNuevaParada||booCapturarPuntosEditarParada){
                 dibujarPuntoLienzoRutas(xpos, ypos, '1');

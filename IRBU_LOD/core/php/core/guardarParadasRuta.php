@@ -8,9 +8,11 @@ extract($_POST);
 $json = json_decode($paradas, true);
 
 if (count($json) > 0) {
+    $sql = "DELETE FROM RUTA_PARADA WHERE ID_RUTA=$id_ruta";
+    consulta($sql);
     for ($i = 0; $i < count($json); $i++) {
         $sql = "INSERT INTO RUTA_PARADA
-                VALUES($id_ruta,". $json[$i]["id"] . ",". $json[$i]["numero"] . ")";
+                VALUES($id_ruta," . $json[$i]["id"] . "," . $json[$i]["numero"] . ")";
         consulta($sql);
     }
     $salida = "{success:true,id:$id_ruta}";
