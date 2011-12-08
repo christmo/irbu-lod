@@ -2,21 +2,17 @@
 
 require_once('../../../dll/php/conexionBD.php');
 
-//extract($_POST);
-//extract($_GET);
+extract($_POST);
+extract($_GET);
 Header("content-type: application/x-javascript");
 
 $salida = "{failure:true}";
 
-//if (isset($id_ruta)) {
-//    $consultaSql = "SELECT P.ID_PARADA,P.DIRECCION,P.DIR_IMG 
-//        FROM PARADAS P, RUTA_PARADA RP 
-//        WHERE P.ID_PARADA=RP.ID_PARADA 
-//        AND ID_RUTA=$id_ruta 
-//        ORDER BY ORDEN";
-//} else {
-    $consultaSql = "SELECT ID_PARADA,DIRECCION,DIR_IMG FROM PARADAS ORDER BY DIRECCION";
-//}
+$consultaSql = "SELECT P.ID_PARADA,P.DIRECCION,P.DIR_IMG 
+        FROM PARADAS P, RUTA_PARADA RP 
+        WHERE P.ID_PARADA=RP.ID_PARADA 
+        AND ID_RUTA=$id_ruta 
+        ORDER BY ORDEN";
 
 consulta($consultaSql);
 $resulset = variasFilas();

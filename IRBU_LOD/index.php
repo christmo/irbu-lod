@@ -72,6 +72,7 @@ if (!isset($_SESSION)) {
         <script type="text/javascript" src="core/js/gui/ventanaHorasRuta.js"></script>
         <script type="text/javascript" src="core/js/gui/ventanaPuntosRuta.js"></script>
         <script type="text/javascript" src="core/js/gui/ventanaParadasRuta.js"></script>
+        <script type="text/javascript" src="core/js/gui/ventanaEditarRuta.js"></script>
 
         <!-- Nueva Parada -->
         <script type="text/javascript" src="core/js/gui/ventanaNuevaParada.js"></script>

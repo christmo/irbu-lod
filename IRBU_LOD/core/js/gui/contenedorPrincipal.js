@@ -81,10 +81,11 @@ Ext.onReady(function(){
                     icon: 'img/add.png',
                     handler: function(){
                         Ext.getCmp('btnEliminarRuta').hide();
-                        Ext.getCmp('btnEditarRuta').hide();
+//                        Ext.getCmp('btnEditarRuta').hide();
                         Ext.getCmp('btnGuardarRuta').show();
                         ventanaNuevaRuta();
                         Ext.getCmp('vtnNuevaRuta').setTitle('Nueva Ruta...');
+                        Ext.getCmp('comboRutas').label.update('Ingresar lugares de la nueva ruta:');
                     }
                 },{
                     text: 'Eliminar Ruta',
@@ -93,20 +94,21 @@ Ext.onReady(function(){
                     handler: function(){
                         Ext.getCmp('btnEliminarRuta').show();
                         Ext.getCmp('btnGuardarRuta').hide();
-                        Ext.getCmp('btnEditarRuta').hide();
+//                        Ext.getCmp('btnEditarRuta').hide();
                         ventanaNuevaRuta();
                         Ext.getCmp('vtnNuevaRuta').setTitle('Eliminar Ruta...');
+                        Ext.getCmp('comboRutas').label.update('Seleccione los lugares de la ruta a eliminar:');
                     }
                 },{
                     text: 'Editar Ruta',
                     id  : 'btnEditarRuta',
                     icon: 'img/edit.png',
                     handler: function(){
-                        Ext.getCmp('btnEliminarRuta').hide();
-                        Ext.getCmp('btnGuardarRuta').hide();
-                        Ext.getCmp('btnEditarRuta').show();
-                        ventanaNuevaRuta();
-                        Ext.getCmp('vtnNuevaRuta').setTitle('Editar Ruta...');
+//                        Ext.getCmp('btnEliminarRuta').hide();
+//                        Ext.getCmp('btnGuardarRuta').hide();
+//                        Ext.getCmp('btnEditarRuta').show();
+                        ventanaEditarRuta();
+                        //Ext.getCmp('vtnNuevaRuta').setTitle('Editar Ruta...');
                     }
                 }]
             },{
@@ -140,7 +142,10 @@ Ext.onReady(function(){
             icon    : 'img/ayuda.png',
             text    : 'remover',
             handler: function(){
-                console.info('remover');
+                //console.info('remover');
+//                ventanaPuntosRuta(59,true);
+                //ventanaHorasRuta(1, true);
+                ventanaParadasRuta(59,true);
             }
         },'->',{
             xtype   : 'tbbutton',
@@ -162,7 +167,7 @@ Ext.onReady(function(){
     var viewport = new Ext.Viewport({
         layout: 'border',
         items: [
-            barraHerramientas,
+        barraHerramientas,
         {
             region      : 'center',
             contentEl   : 'map',

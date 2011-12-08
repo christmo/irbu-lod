@@ -8,6 +8,9 @@ extract($_POST);
 $json = json_decode($puntos, true);
 
 if (count($json) > 0) {
+    $consultaSql = "DELETE FROM COORDENADAS_GPS WHERE ID_RUTA=$id_ruta";
+    consulta($consultaSql);
+
     for ($i = 0; $i < count($json); $i++) {
         $sql = "INSERT INTO COORDENADAS_GPS(ID_RUTA,LON,LAT,ORDEN) 
         VALUES($id_ruta," . $json[$i]["longitud"] . "," . $json[$i]["latitud"] . "," . ($i + 1) . ")";

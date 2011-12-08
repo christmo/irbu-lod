@@ -9,6 +9,7 @@ var spiner;
 var proxy;
 var id_ruta;
 var contadorHoras=1;
+var storeHorasRuta;
 
 Ext.onReady(function(){
 
@@ -24,6 +25,25 @@ Ext.onReady(function(){
         }),
         allowBlank  : false,
         emptyText   : 'Hora de recorrido...'
+    });
+    
+    storeHorasRuta = new Ext.data.JsonStore({
+        autoDestroy : true,
+        url         : "core/php/gui/getHorasRuta.php",
+        root        : 'horas',
+        fields      : ['numero', 'hora'],
+        timeout : 1000,
+        params: {
+            id_ruta : id_ruta
+        },
+        failure: function (form, action) {
+            Ext.MessageBox.show({
+                title   : 'Error...',
+                msg     : 'No a ingresado correctamente vuelva a ingresar al sistema...',
+                buttons : Ext.MessageBox.OK,
+                icon    : Ext.MessageBox.ERROR
+            });
+        }
     });
     
     grid = new Ext.grid.GridPanel({
@@ -88,11 +108,21 @@ Ext.onReady(function(){
                 buttonAlign : 'right',
                 cls:"x-btn-text-icon",
                 handler: function() {
-                    storeHorasRuta.add(new Ext.data.Record({
-                        numero  : contadorHoras,
-                        hora    : spiner.getValue()
-                    }));
-                    contadorHoras++;
+                    var hora = spiner.getValue()+":00";
+                    if(ingersarHora(hora)){
+                        storeHorasRuta.add(new Ext.data.Record({
+                            numero  : contadorHoras,
+                            hora    : hora
+                        }));
+                        contadorHoras++;
+                    }else{
+                        Ext.MessageBox.show({
+                            title   : 'Error...',
+                            msg     : 'Esa hora ya se encuentra en la lista...',
+                            buttons : Ext.MessageBox.OK,
+                            icon    : Ext.MessageBox.ERROR
+                        });
+                    }
                 }
             }]
         },{
@@ -103,13 +133,25 @@ Ext.onReady(function(){
                 labelWidth  : 60,
                 labelAlign  : 'top',
                 items: [
-                    grid
+                grid
                 ]
             }]
         }]
     });
 
 });
+
+/**
+ * Valida si la hora ya esta ingresada en la lista para no ponerla nuevamente
+ */
+function ingersarHora(hora){
+    var existe = storeHorasRuta.find('hora',hora);
+    if(existe==-1){
+        return true;
+    }else{
+        return false;
+    }
+}
 
 /**
  * Permite guardar los puntos que se recolecten para la nueva ruta dentro del
@@ -123,7 +165,7 @@ function guardarHorasRuta(){
             var r = Ext.util.JSON.decode(result.responseText);
             winHorasRuta.hide();
             storeHorasRuta.removeAll();
-            ventanaPuntosRuta(r.id);
+            ventanaPuntosRuta(r.id,true);
         },
         timeout : 1000,
         params: {
@@ -133,38 +175,12 @@ function guardarHorasRuta(){
     });
 }
 
-var myData = [];
-
-proxy = new Ext.data.MemoryProxy(myData);
-
-/**
- * Campos de la tabla de nueva ruta
- */
-var myReader = new Ext.data.ArrayReader({},
-    [{
-        name: 'numero'
-    },{
-        name: 'hora',
-        type: 'time'
-    }]);
-
-/**
- * Store para alamcenar los puntos que se van seleccionando para crear una
- * nueva ruta.
- */
-storeHorasRuta = new Ext.data.Store({
-    autoDestroy : true,
-    reader      : myReader,
-    proxy       : proxy,
-    autoLoad    : true
-});
-
-
 /**
 * Muestra la ventana para buscar una ruta
-* @return NO retorna valor
+* @param id de la ruta
+* @param cargar si tiene que llenar el store con datos o no true=cargar
 */
-function ventanaHorasRuta(id){
+function ventanaHorasRuta(id,cargar){
     if(!winHorasRuta){
         winHorasRuta = new Ext.Window({
             layout      : 'fit',
@@ -178,5 +194,10 @@ function ventanaHorasRuta(id){
         });
     }
     this.id_ruta = id;
+    if(cargar){
+        storeHorasRuta.proxy.conn.url = "core/php/gui/getHorasRuta.php?id_ruta="+id;
+        storeHorasRuta.load();
+    }
+ 
     winHorasRuta.show(this);
 }

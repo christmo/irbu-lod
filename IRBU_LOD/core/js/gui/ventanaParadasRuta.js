@@ -23,16 +23,16 @@ Ext.onReady(function(){
         root          : '',
         autoLoad      : true,
         fields        : [{
-            name : 'numero',    
+            name    : 'numero',    
             mapping : 'numero'
         },{
-            name : 'id',    
+            name    : 'id',    
             mapping : 'id'
         },{
-            name : 'direccion',  
+            name    : 'direccion',  
             mapping : 'direccion'
         },{
-            name : 'url_img', 
+            name    : 'url_img', 
             mapping : 'url_img'
         }]
     };
@@ -70,17 +70,76 @@ Ext.onReady(function(){
                 beforeshow: function updateTipBody(tip) {
                     var i      = listaParadas.getView().findRowIndex(tip.triggerElement);
                     var record = listaParadas.getStore().getAt(i);
-                    var dir = procesarTextoDireccion(record.get('direccion'));
+                    var dir    = procesarTextoDireccion(record.get('direccion'));
                     tip.body.dom.innerHTML = "Direcci\xF3n:<br/>"+dir+'<br/>'+'<img src="'+record.get('url_img')+'" width=220 height=160 />';
                 }
             }
         });
     });
                 
-    var storeParadasSelecionadas = Ext.apply({}, {
-        proxy    : null,
-        autoLoad : false
-    }, remoteJsonStore);
+    //    storeParadasSelecionadas = Ext.apply({}, {
+    //        proxy    : null,
+    //        autoLoad : false
+    //    }, remoteJsonStore);
+    
+//    var remoteProxyParadasId = new Ext.data.ScriptTagProxy({
+//        url : 'core/php/gui/listaParadas.php',
+//        params: {
+//            id_ruta : id_ruta_vpr
+//        }
+//    });
+//    
+//    var storeParadasSelecionadas = {
+//        xtype         : 'jsonstore',
+//        proxy         : remoteProxyParadasId,
+//        root          : '',
+//        autoLoad      : true,
+//        fields        : [{
+//            name    : 'numero',    
+//            mapping : 'numero'
+//        },{
+//            name    : 'id',    
+//            mapping : 'id'
+//        },{
+//            name    : 'direccion',  
+//            mapping : 'direccion'
+//        },{
+//            name    : 'url_img', 
+//            mapping : 'url_img'
+//        }]
+//    };
+
+        storeParadasSelecionadas = new Ext.data.JsonStore({
+            autoDestroy : true,
+            //autoLoad    : true,
+            url         : "core/php/gui/getParadas.php",
+            root        : '',
+            fields      : [{
+                name    : 'numero',    
+                mapping : 'numero'
+            },{
+                name    : 'id',    
+                mapping : 'id'
+            },{
+                name    : 'direccion',  
+                mapping : 'direccion'
+            },{
+                name    : 'url_img', 
+                mapping : 'url_img'
+            }],
+            timeout : 1000,
+            params: {
+                id_ruta : id_ruta_vpr
+            },
+            failure: function (form, action) {
+                Ext.MessageBox.show({
+                    title   : 'Error...',
+                    msg     : 'Precione F5 para actualizar la p\xE1gina...',
+                    buttons : Ext.MessageBox.OK,
+                    icon    : Ext.MessageBox.ERROR
+                });
+            }
+        });
 
     listaParadasSeleccionadas = new Ext.grid.GridPanel({
         title            : 'Paradas para esta ruta...',
@@ -115,7 +174,7 @@ Ext.onReady(function(){
                 beforeshow: function updateTipBody(tip) {
                     var i      = listaParadasSeleccionadas.getView().findRowIndex(tip.triggerElement);
                     var record = listaParadasSeleccionadas.getStore().getAt(i);
-                    var dir = procesarTextoDireccion(record.get('direccion'));
+                    var dir    = procesarTextoDireccion(record.get('direccion'));
                     tip.body.dom.innerHTML = "Direcci\xF3n:<br/>"+dir+'<br/>'+'<img src="'+record.get('url_img')+'" width=220 height=160 />';
                 }
             }
@@ -128,12 +187,12 @@ Ext.onReady(function(){
             flex    : 1,
             frame   : false
         },
-        layoutConfig : {
+        layoutConfig: {
             align   : 'stretch'
         },
         items : [
-            listaParadas,
-            listaParadasSeleccionadas
+        listaParadas,
+        listaParadasSeleccionadas
         ],
        
         buttons: [{
@@ -143,7 +202,7 @@ Ext.onReady(function(){
             }
         },{
             text: 'Guardar',
-            id: 'btnGuardarParada',
+            id  : 'btnGuardarParada',
             handler: function() {
                 frmPanelParadasRuta.getForm().submit({
                     url     : 'core/php/core/guardarParadasRuta.php',
@@ -174,9 +233,10 @@ Ext.onReady(function(){
 
 /**
  * Muestra la ventana para ingresar una nueva parada
- * @return NO retorna valor
+ * @param id_ruta de la ruta
+ * @param cargar si tiene que llenar el store con datos o no true=cargar
  */
-function ventanaParadasRuta(id_ruta){
+function ventanaParadasRuta(id_ruta,cargar){
     id_ruta_vpr = id_ruta;
     if(!winParadasRuta){
         winParadasRuta = new Ext.Window({
@@ -192,6 +252,11 @@ function ventanaParadasRuta(id_ruta){
     }
     winParadasRuta.show(this);
     efectoDragAndDropListas();
+    
+    if(cargar){
+        listaParadasSeleccionadas.store.proxy.conn.url = "core/php/gui/listaParadas.php?id_ruta="+id_ruta_vpr;
+        listaParadasSeleccionadas.store.load();
+    }
 }
 
 /**
@@ -253,7 +318,7 @@ function efectoDragAndDropListas(){
             var grid        = this.grid;
             var srcGrid     = ddSrc.view.grid;
             var destStore   = grid.store;
-            var tgtIndex = this.tgtIndex;
+            var tgtIndex    = this.tgtIndex;
             var records     = ddSrc.dragData.selections;
 
             this.clearDDStyles();
