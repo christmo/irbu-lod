@@ -6,8 +6,36 @@ var winPuntosRuta;
 var grid;
 var proxy;
 var id_ruta;
+var storePuntosRuta;
 
 Ext.onReady(function(){
+
+    storePuntosRuta = new Ext.data.JsonStore({
+        autoDestroy : true,
+        url         : "core/php/gui/getPuntosRuta.php",
+        root        : 'puntos',
+        fields      : [{
+            name: 'numero'
+        },{
+            name: 'latitud',
+            type: 'float'
+        },{
+            name: 'longitud',
+            type: 'float'
+        }],
+        timeout : 1000,
+        params: {
+            id_ruta : id_ruta
+        },
+        failure: function (form, action) {
+            Ext.MessageBox.show({
+                title   : 'Error...',
+                msg     : 'Precione F5 para actualizar la p\xE1gina...',
+                buttons : Ext.MessageBox.OK,
+                icon    : Ext.MessageBox.ERROR
+            });
+        }
+    });
 
     grid = new Ext.grid.GridPanel({
         store: storePuntosRuta,
@@ -33,28 +61,16 @@ Ext.onReady(function(){
                     var rec = storePuntosRuta.getAt(rowIndex);
                     storePuntosRuta.removeAt(rowIndex);
                     
-                    console.info(rec.get('numero'));
                     var puntoBorrar = lienzoRutas.getFeatureById(rec.get('numero'));
                     lienzoRutas.eraseFeatures(puntoBorrar);
-
                     puntosLineaRuta.splice(rowIndex,1);
-
-                    var ruta = new OpenLayers.Geometry.LineString(puntosLineaRuta);
-                    //Estilo de Linea de Recorrido
-                    var style = {
-                        strokeColor     : '#0000ff',
-                        strokeOpacity   : 0.3,
-                        strokeWidth     : 5
-                    };
-                    
-                    var lineFeature = lienzoRecorridos.getFeatureById( "trazado" );
-                    if (lineFeature != null){
-                        lineFeature.destroy();
-                    }
-
-                    lineFeature = new OpenLayers.Feature.Vector(ruta, null, style);
-                    lineFeature.id = "trazado";
-                    lienzoRecorridos.addFeatures([lineFeature]);
+                    lienzoRutas.features.splice(rowIndex,1);
+                    /**
+                     * Dibuja la linea que une los puntos de la ruta despues de
+                     * eliminar lo que no sirven
+                     */
+                    dibujarLineaRuta();
+                    storePuntosRuta.commitChanges();
                 }
             }]
         }],
@@ -87,7 +103,7 @@ function guardarPuntosRuta(){
             winPuntosRuta.hide();
             limpiarCapas();
             booCapturarPuntosNuevaRuta=false;
-            ventanaParadasRuta(r.id);
+            ventanaParadasRuta(r.id,true);
         },
         timeout : 1000,
         params: {
@@ -97,48 +113,32 @@ function guardarPuntosRuta(){
     });
 }
 
-var myData = [];
-
-proxy = new Ext.data.MemoryProxy(myData);
-
 /**
- * Campos de la tabla de nueva ruta
+ * Permite cargar los puntos desde la base  para que sean editados en la interfaz
  */
-var myReader = new Ext.data.ArrayReader({},
-    [{
-        name: 'numero'
-    },{
-        name: 'latitud',
-        type: 'float'
-    },{
-        name: 'longitud',
-        type: 'float'
-    }]);
+function cargarPuntosRuta(id_ruta){
+    Ext.Ajax.request({
+        url     : 'core/php/gui/getPuntosRuta.php',
+        method  : 'POST',
+        success: function (result) {
+            var datos = Ext.util.JSON.decode(result.responseText);
+//            console.info(datos.puntos.length);
+            dibujarPuntosLineaRutaEditar(datos);
+        },
+        timeout : 1000,
+        params: {
+            id_ruta : id_ruta
+        }
+    });
+}
 
 /**
- * Store para alamcenar los puntos que se van seleccionando para crear una
- * nueva ruta.
- */
-storePuntosRuta = new Ext.data.Store({
-    autoDestroy : true,
-    reader      : myReader,
-    proxy       : proxy,
-    autoLoad    : true
-});
-
-/**
- * Limpia la tabla de puntos y el mapa para recibir una nueva ruta
- */
-/*function limpiar_tabla_puntos(){
-    storePuntosRuta.removeAll();
-    limpiarCapas();
-}*/
-
-/**
-* Muestra la ventana para buscar una ruta
-* @return NO retorna valor
+* Muestra la ventana de la lista de puntos que dibujan una ruta para ser ingresados
+* o editados dependiendo del parametro de carga de datos
+* @param id de la ruta
+* @param cargar si tiene que llenar el store con datos o no true=cargar
 */
-function ventanaPuntosRuta(id){
+function ventanaPuntosRuta(id,cargar){
     if(!winPuntosRuta){
         winPuntosRuta = new Ext.Window({
             layout      : 'fit',
@@ -152,6 +152,11 @@ function ventanaPuntosRuta(id){
         });
     }
     this.id_ruta = id;
+    if(cargar){
+        storePuntosRuta.proxy.conn.url = "core/php/gui/getPuntosRuta.php?id_ruta="+id;
+        storePuntosRuta.load();
+    }
+    cargarPuntosRuta(id);
     booCapturarPuntosNuevaRuta=true;
     limpiarCapas();
     winPuntosRuta.show(this);

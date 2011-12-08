@@ -13,7 +13,7 @@ function formatHora(horaF) {
  */
 function formatSentido(sentidoLetra) {
     if (sentidoLetra == 'B') {
-       return '<center>Baja</center>'
+        return '<center>Baja</center>'
     }else if (sentidoLetra == 'R') {
         return '<center>Sube</center>'
     }else if (sentidoLetra == 'BR') {
@@ -47,8 +47,8 @@ function RQ2_PopUP_getWin(idP){
             layout      : 'fit',
             title       : '<center>Informacion Parada</center>',
             resizable   : true,
-            width       : 425,
-            height      : 200,
+            width       : 525,
+            height      : 300,
             closeAction : 'hide',
             plain       : false,
             items       : [RQ2PopUpPanel]
@@ -86,12 +86,12 @@ Ext.onReady(function(){
         {
             id          : 'tipoPopUp',
             header      : 'SENTIDO',
-            width       : 52,
+            width       : 55,
             renderer    : formatSentido,
             dataIndex   : 'TIPO'
         },{
             header      : '<center>RUTA</center>',
-            width       : 247,
+            width       : 357,
             dataIndex   : 'NOMBRE'
         },{
             header      : '<center>HORA</center>',
@@ -100,19 +100,28 @@ Ext.onReady(function(){
             dataIndex   : 'HORA'
         }],
         stripeRows  : true,
-        height      : 150,
-        width       : 400,
+        //        height      : 150,
+        //        width       : 400,
         stateful    : true,
         stateId     : 'grdInfoParada'
     });
     
     RQ2PopUpPanel = new Ext.FormPanel({
-        labelAlign  : 'top',
-        frame       :true,
-        bodyStyle   :'padding: 0px 0px 0 0px',  //bodyStyle:'padding:5px 5px 0 ',
-        labelWidth  :150,
+        //        labelAlign  : 'top',
+        //        frame       :true,
+        //        bodyStyle   :'padding: 0px 0px 0 0px',  //bodyStyle:'padding:5px 5px 0 ',
+        //        labelWidth  :150,
+
+        layout   : 'hbox',
+        defaults : {
+            flex    : 1,
+            frame   : false
+        },
+        layoutConfig: {
+            align   : 'stretch'
+        },
         items: [
-            grdInfoParada
+        grdInfoParada
         ]
     });
     
