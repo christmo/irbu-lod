@@ -189,7 +189,7 @@ Ext.onReady(function(){
                         //var obj = Ext.util.JSON.decode(o.response.responseText);
                         resetFormularioParadasRuta();
                         winParadasRuta.hide();
-                        
+                        activarArrastradoPuntos(false);
                     }
                 });
             }
