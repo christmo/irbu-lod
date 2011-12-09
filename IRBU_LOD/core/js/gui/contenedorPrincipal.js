@@ -136,18 +136,20 @@ Ext.onReady(function(){
             },{
                 text: 'Ayuda'
             }]
-        },'-',{
-            xtype   : 'tbbutton',
-            cls     : 'x-btn-text-icon',
-            icon    : 'img/ayuda.png',
-            text    : 'remover',
-            handler: function(){
-                //console.info('remover');
-//                ventanaPuntosRuta(59,true);
-                //ventanaHorasRuta(1, true);
-                ventanaParadasRuta(59,true);
-            }
-        },'->',{
+        },
+//        '-',{
+//            xtype   : 'tbbutton',
+//            cls     : 'x-btn-text-icon',
+//            icon    : 'img/ayuda.png',
+//            text    : 'remover',
+//            handler: function(){
+//                //console.info('remover');
+////                ventanaPuntosRuta(59,true);
+//                //ventanaHorasRuta(1, true);
+//                ventanaParadasRuta(59,true);
+//            }
+//        },
+        '->',{
             xtype   : 'tbbutton',
             cls     : 'x-btn-text-icon',
             icon    : 'img/login.png',

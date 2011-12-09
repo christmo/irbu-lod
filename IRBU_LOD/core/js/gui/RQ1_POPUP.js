@@ -86,7 +86,7 @@ Ext.onReady(function(){
         {
             id          : 'tipoPopUp',
             header      : 'SENTIDO',
-            width       : 55,
+            width       : 58,
             renderer    : formatSentido,
             dataIndex   : 'TIPO'
         },{

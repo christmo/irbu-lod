@@ -24,7 +24,7 @@ var puntosRutaSeleccionados;
  * Store para recoger los puntos de las rutas nuevas
  */
 var storePuntosRuta;
-
+var dragPuntosRuta;
 /* lista de puntos de una nueva ruta */
 //var puntosLatLonRutas;
 
@@ -320,13 +320,25 @@ function cargarCapas() {
  */
 function permitirArrastrarPuntosRutas(){
     //--Add a drag feature control to move features around.
-    var dragFeature = new OpenLayers.Control.DragFeature(lienzoRutas, {
+    dragPuntosRuta = new OpenLayers.Control.DragFeature(lienzoRutas, {
         // onStart: iniciarArrastre,
         onDrag      : arrastrar,
         onComplete  : finalizarArrastre
     });
-    map.addControl(dragFeature);
-    dragFeature.activate();
+    map.addControl(dragPuntosRuta);
+    activarArrastradoPuntos(true);
+}
+
+/**
+ * permite activar el arrastre de los features dentro del lienzo de Rutas
+ * @param activar boolean 
+ */
+function activarArrastradoPuntos(activar){
+    if(activar){
+        dragPuntosRuta.activate();
+    }else{
+        dragPuntosRuta.deactivate();
+    }
 }
 
 /**
