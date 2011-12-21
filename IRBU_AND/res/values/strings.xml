@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, IRBUActivity!</string>
+    <string name="app_name">IRBU</string>
+    <string name="txtBajaUTPL">Baja de la UTPL</string>
+    <string name="txtSubeUTPL">Sube a la UTPL</string>
+    <string name="txtSubeBajaUTPL">Sube y baja de la UTPL</string>
+    <string name="txtTituloTipoRecorrido">Seleccionar un tipo de recorrido:</string>
+    <string name="txtTituloHora">Seleccionar la hora del recorrido:</string>
+    <string name="btnBuscar">Buscar</string>
+    <string name="btnCancelar">Cancelar</string>
+    <string name="txtTitutloApp">(Información de Rutas de los Buses de la UTPL)</string>
+    <string name="txtMapa">Mapa</string>
+    <string name="txtBuscarRuta">Buscar ruta</string>
+    <string name="txtBuscarRutaHoraSector">Buscar ruta por hora</string>
+    <string name="txtListaRutas">Lista de Rutas</string>
+    <string name="txtAyuda">Ayuda</string>
+
+</resources>
