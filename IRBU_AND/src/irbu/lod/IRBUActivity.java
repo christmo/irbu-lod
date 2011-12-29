@@ -1,7 +1,9 @@
 package irbu.lod;
 
+import irbu.lod.mapa.ViewMapaActivity;
 import irbu.lod.modulos.BuscarRutaActivity;
 import irbu.lod.modulos.BuscarRutaHoraActivity;
+import irbu.lod.modulos.InfoParadasActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,18 +37,21 @@ public class IRBUActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btnMapa:
-//			Intent mapa = new Intent(Mapa.class);
+			Intent mapa = new Intent(this, ViewMapaActivity.class);
+			startActivity(mapa);
 			break;
 		case R.id.btnBuscarRuta:
-			Intent buscarRuta = new Intent(this,BuscarRutaActivity.class);
+			Intent buscarRuta = new Intent(this, BuscarRutaActivity.class);
 			startActivity(buscarRuta);
 			break;
 		case R.id.btnBuscarRutaHora:
-			Intent buscarRutaHora = new Intent(this,BuscarRutaHoraActivity.class);
+			Intent buscarRutaHora = new Intent(this,
+					BuscarRutaHoraActivity.class);
 			startActivity(buscarRutaHora);
 			break;
 		case R.id.btnAyuda:
-
+			 Intent mapa1 = new Intent(this,InfoParadasActivity.class);
+			 startActivity(mapa1);
 			break;
 		default:
 			break;

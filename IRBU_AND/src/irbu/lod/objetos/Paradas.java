@@ -1,6 +1,9 @@
 package irbu.lod.objetos;
 
-public class Paradas {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Paradas implements Parcelable{
 
 	private int idParada;
 	private double lon;
@@ -28,6 +31,15 @@ public class Paradas {
 		this.dir = dir;
 		this.ref = ref;
 		this.urlImg = urlImg;
+	}
+	
+	private Paradas(Parcel in){
+		this.idParada = in.readInt();
+		this.lon = in.readDouble();
+		this.lat = in.readDouble();
+		this.dir = in.readString();
+		this.ref = in.readString();
+		this.urlImg = in.readString();
 	}
 
 	public int getIdParada() {
@@ -76,6 +88,30 @@ public class Paradas {
 
 	public void setUrlImg(String urlImg) {
 		this.urlImg = urlImg;
+	}
+
+	public static final Parcelable.Creator<Paradas> CREATOR = new Parcelable.Creator<Paradas>() {
+		public Paradas createFromParcel(Parcel in) {
+			return new Paradas(in);
+		}
+
+		public Paradas[] newArray(int size) {
+			return new Paradas[size];
+		}
+	};
+	
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(idParada);
+		dest.writeDouble(lon);
+		dest.writeDouble(lat);
+		dest.writeString(dir);
+		dest.writeString(ref);
+		dest.writeString(urlImg);
 	}
 
 }

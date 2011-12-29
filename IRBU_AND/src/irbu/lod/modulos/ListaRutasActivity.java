@@ -1,6 +1,7 @@
 package irbu.lod.modulos;
 
 import irbu.lod.R;
+import irbu.lod.mapa.ViewMapaActivity;
 import irbu.lod.objetos.ConsultarServer;
 import irbu.lod.objetos.Paradas;
 import irbu.lod.objetos.Puntos;
@@ -15,6 +16,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -61,48 +63,69 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 		Ruta ruta = (Ruta) l.getItemAtPosition(position);
 
 		Toast.makeText(this, ruta.getNombreRuta(), Toast.LENGTH_LONG).show();
-		
-		dibujarRuta(ruta.getIdRuta());
-		dibujarParadas(ruta.getIdRuta());
+
+		ArrayList<Puntos> listaPuntos;
+		ArrayList<Paradas> listaParadas;
+		int idRuta = ruta.getIdRuta();
+		try {
+			Intent mapa = new Intent(this, ViewMapaActivity.class);
+			listaPuntos = new ConsultarServer().getPuntosRuta(idRuta);
+			listaParadas = new ConsultarServer().getParadasRuta(idRuta,
+					strTipoRuta);
+			mapa.putParcelableArrayListExtra("listaPuntos", listaPuntos);
+			mapa.putParcelableArrayListExtra("listaParadas", listaParadas);
+			startActivity(mapa);
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+//		dibujarRuta(ruta.getIdRuta());
+//		dibujarParadas(ruta.getIdRuta());
 	}
 
 	/**
 	 * Obtiene los puntos de la linea para ser dibujada en el mapa
+	 * 
 	 * @param idRuta
 	 */
-	private void dibujarRuta(int idRuta) {
-		try {
-			ArrayList<Puntos> listaPuntos = new ConsultarServer().getPuntosRuta(idRuta);
-			for (Puntos puntos : listaPuntos) {
-				Log.d("lat",""+puntos.getLat()+" "+puntos.getIdPunto());
-			}
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
+//	private void dibujarRuta(int idRuta) {
+//		try {
+//			ArrayList<Puntos> listaPuntos = new ConsultarServer()
+//					.getPuntosRuta(idRuta);
+//			for (Puntos puntos : listaPuntos) {
+//				Log.d("lat", "" + puntos.getLat() + " " + puntos.getIdPunto());
+//			}
+//		} catch (SocketException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+
 	/**
 	 * Obtiene las paradas de una ruta para ser dibujada en el mapa
+	 * 
 	 * @param idRuta
 	 */
-	private void dibujarParadas(int idRuta) {
-		try {
-			ArrayList<Paradas> listaParadas = new ConsultarServer().getParadasRuta(idRuta,strTipoRuta);
-			for (Paradas paradas : listaParadas) {
-				Log.d("lat",""+paradas.getLat()+" "+paradas.getDir());
-			}
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	private void dibujarParadas(int idRuta) {
+//		try {
+//			ArrayList<Paradas> listaParadas = new ConsultarServer()
+//					.getParadasRuta(idRuta, strTipoRuta);
+//			for (Paradas paradas : listaParadas) {
+//				Log.d("lat", "" + paradas.getLat() + " " + paradas.getDir());
+//			}
+//		} catch (SocketException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 	public class IconListViewAdapter extends ArrayAdapter<Ruta> {
 
@@ -141,12 +164,16 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
-			pd.dismiss();
-			if (msg.what == 0) {
+			if (msg.what == 0) { // carga valida
 				setListAdapter(m_adapter);
-			} else if (msg.what == 1) {
+			} else if (msg.what == 1) { // error al cargar
 				mensajeErrorConexion();
 			}
+			/**
+			 * TODO: Error cuando se cambia de orientacion la pantalla varias
+			 * veces
+			 */
+			pd.dismiss();
 		}
 	};
 
@@ -156,11 +183,12 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 			 * Cargar la lista de rutas dependiendo del parametro que se envie
 			 */
 			if (isHora) {
-				listaRutas = new ConsultarServer().getRutasServer(strTipoRuta,strHora);
+				listaRutas = new ConsultarServer().getRutasServer(strTipoRuta,
+						strHora);
 			} else {
 				listaRutas = new ConsultarServer().getRutasServer(strTipoRuta);
 			}
-			handler.sendEmptyMessage(0);
+			handler.sendEmptyMessage(0); // enviar carga valida
 		} catch (SocketException e) {
 			msgNoServerConnection();
 		} catch (IOException e1) {
@@ -180,7 +208,7 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	 */
 	private void msgNoServerConnection() {
 		Log.e("ListaRutas", "No se puede conectar al servidor...");
-		handler.sendEmptyMessage(1);
+		handler.sendEmptyMessage(1); // enviar error al cargar
 	}
 
 	/**
