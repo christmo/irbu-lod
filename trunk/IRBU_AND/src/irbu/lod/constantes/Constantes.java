@@ -15,32 +15,38 @@ public class Constantes {
 	 */
 	public static final String IP_SERVER = "10.0.2.2";
 	public static final String PUERTO_SERVER = "8080";
-	public static final String URL_SERVER = "http://"+IP_SERVER+":"+PUERTO_SERVER;
+	
+	/**
+	 * URL del servidor uniendo la ip y el puerto del host remoto
+	 */
+	public static final String URL_SERVER = "http://"+IP_SERVER+":"+PUERTO_SERVER+"/";
+	
+	/**
+	 * Nombre del proyecto en el host remoto o servidor
+	 */
+	public static final String NOMBRE_PROYECTO = "irbu/";
 	
 	/**
 	 * URL para buscar las paradas solo con el tipo de recorrido
 	 * @params op = Tipo de Recorrido (B,R,BR)
 	 */
-	public static final String URL_RUTAS = URL_SERVER+"/irbu/core/php/gui/comboRutas.php";
+	public static final String URL_RUTAS = URL_SERVER+NOMBRE_PROYECTO+"core/php/gui/comboRutas.php";
 	/**
 	 * URL para buscar las rutas filtradas por hora
 	 * @params op = Tipo de Recorrido (B,R,BR)
 	 * @params hora = Hora de la ruta
 	 */
-	public static final String URL_RUTAS_HORA = URL_SERVER+"/irbu/core/php/gui/comboRutasHora.php";
+	public static final String URL_RUTAS_HORA = URL_SERVER+NOMBRE_PROYECTO+"core/php/gui/comboRutasHora.php";
 
 	/**
 	 * URL para obtener los puntos de la ruta para el dibujado en el mapa
 	 * @params id_ruta
 	 */
-	public static final String URL_PUNTOS_RUTAS = URL_SERVER+"/irbu/core/php/core/RQ2_TrazadoRutas.php";
+	public static final String URL_PUNTOS_RUTAS = URL_SERVER+NOMBRE_PROYECTO+"core/php/core/RQ2_TrazadoRutas.php";
 	
 	/**
 	 * URL para obtener la informacion de las paradas de un ruta determinada
 	 * @params id_ruta
 	 */
-	public static final String URL_PARADAS_RUTAS = URL_SERVER+"/irbu/core/php/core/RQ4_ParadasRuta.php";
-	
-	
-	
+	public static final String URL_PARADAS_RUTAS = URL_SERVER+NOMBRE_PROYECTO+"core/php/core/RQ4_ParadasRuta.php";
 }

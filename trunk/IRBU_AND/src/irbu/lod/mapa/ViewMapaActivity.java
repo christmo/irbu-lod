@@ -1,11 +1,11 @@
 package irbu.lod.mapa;
 
 import irbu.lod.R;
+import irbu.lod.modulos.InfoParadasActivity;
 import irbu.lod.objetos.Paradas;
 import irbu.lod.objetos.Puntos;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import org.osmdroid.DefaultResourceProxyImpl;
 import org.osmdroid.tileprovider.util.CloudmadeUtil;
@@ -22,12 +22,12 @@ import org.osmdroid.views.overlay.SimpleLocationOverlay;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -49,22 +49,47 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-
-	private MapView mOsmv;
-	private ItemizedOverlay<OverlayItem> mMyLocationOverlay;
-	private SimpleLocationOverlay mMyLocationSimpleOverlay;
+	/**
+	 * Vista del mapa de OSM
+	 */
+	private MapView osmMapa;
 	private DefaultResourceProxyImpl mResourceProxy;
 	/**
-	 * Controller to interact with view
+	 * Manejador de Localizacion permite activar el gps y comprobar su estado
+	 */
+	private LocationManager lmgr;
+	/**
+	 * Lista de iconos de las paradas para colocarlas sobre el mapa
+	 */
+	private ItemizedOverlay<OverlayItem> listaIconosParadasOverlay;
+	/**
+	 * Dibujo de la posicion actual del gps sobre el mapa
+	 */
+	private SimpleLocationOverlay posicionActualOverlay;
+	/**
+	 * Control sobre las acciones en el mapa
 	 */
 	private MapController osmViewController;
 	/*
-	 * Create a static ItemizedOverlay showing a some Markers on some cities.
+	 * Lista de puntos de las paradas como Markers sobre el mapa
 	 */
-	public ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-	private LocationManager lmgr;
-	private PathOverlay pathOverlay;
+	public ArrayList<OverlayItem> puntosParadasItems = new ArrayList<OverlayItem>();
+	/**
+	 * Une los puntos con una linea para mostrar la ruta del recorrido
+	 */
+	private PathOverlay lineaOverlay;
+	/**
+	 * Muestra la barra de escala sobre el mapa
+	 */
 	private ScaleBarOverlay mScaleBarOverlay;
+	/**
+	 * Lista de paradas del sercorrido seleccionado a dibujar
+	 */
+	private ArrayList<Paradas> paradas;
+	/**
+	 * Lista de puntos que conforman la linea a dibujar
+	 */
+	private ArrayList<Puntos> puntosLinea;
 
 	// ===========================================================
 	// Constructors
@@ -74,10 +99,8 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ArrayList<Puntos> puntosLinea = getIntent()
-				.getParcelableArrayListExtra("listaPuntos");
-		ArrayList<Paradas> paradas = getIntent().getParcelableArrayListExtra(
-				"listaParadas");
+		puntosLinea = getIntent().getParcelableArrayListExtra("listaPuntos");
+		paradas = getIntent().getParcelableArrayListExtra("listaParadas");
 
 		mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 
@@ -85,16 +108,25 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 
 		CloudmadeUtil.retrieveCloudmadeKey(getApplicationContext());
 
-		this.mOsmv = new MapView(this, 256);
-		rl.addView(this.mOsmv, new RelativeLayout.LayoutParams(
+		this.osmMapa = new MapView(this, 256);
+		rl.addView(this.osmMapa, new RelativeLayout.LayoutParams(
 				LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
 
-		osmViewController = mOsmv.getController();
+		osmViewController = osmMapa.getController();
+
+		/* Configuracion Inicial Mapa Loja */
+		{
+			double latIni = -3.997368;
+			double lonIni = -79.200975;
+
+			osmViewController.setZoom(14);
+			osmViewController.setCenter(new GeoPoint(latIni, lonIni));
+		}
 
 		/* Scale Bar Overlay */
 		{
 			this.mScaleBarOverlay = new ScaleBarOverlay(this, mResourceProxy);
-			this.mOsmv.getOverlays().add(mScaleBarOverlay);
+			this.osmMapa.getOverlays().add(mScaleBarOverlay);
 			// Scale bar tries to draw as 1-inch, so to put it in the top
 			// center, set x offset to
 			// half screen width, minus half an inch.
@@ -109,20 +141,20 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 			 * Create a static Overlay showing a single location. (Gets updated
 			 * in onLocationChanged(Location loc)!
 			 */
-			this.mMyLocationSimpleOverlay = new SimpleLocationOverlay(this,
+			this.posicionActualOverlay = new SimpleLocationOverlay(this,
 					mResourceProxy);
-			this.mOsmv.getOverlays().add(mMyLocationSimpleOverlay);
+			this.osmMapa.getOverlays().add(posicionActualOverlay);
 		}
 		/* Dibujar Ruta */
 		{
-			this.pathOverlay = new PathOverlay(Color.BLUE, mResourceProxy);
+			this.lineaOverlay = new PathOverlay(Color.BLUE, mResourceProxy);
 			if (puntosLinea != null) {
 				for (Puntos p : puntosLinea) {
-					pathOverlay.addPoint((int) (p.getLat() * 1e6),
+					lineaOverlay.addPoint((int) (p.getLat() * 1e6),
 							(int) (p.getLon() * 1e6));
 				}
 			}
-			this.mOsmv.getOverlays().add(pathOverlay);
+			this.osmMapa.getOverlays().add(lineaOverlay);
 		}
 
 		/* ZoomControls */
@@ -169,22 +201,18 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 				}
 			});
 		}
-		/* Itemized Overlay */
+		/* Dibujar paradas en el mapa */
 		{
-			double latIni = -3.97733;
-			double lonIni = -79.20484;
-
-			osmViewController.setZoom(15);
-			osmViewController.setCenter(new GeoPoint(latIni, lonIni));
 			if (paradas != null) {
 				for (Paradas p : paradas) {
 					GeoPoint punto = new GeoPoint(p.getLat(), p.getLon());
-					items.add(new OverlayItem(p.getDir(), p.getRef(), punto));
+					puntosParadasItems.add(new OverlayItem(p.getDir(), p
+							.getRef(), punto));
 				}
 			}
 			/* OnTapListener for the Markers, shows a simple Toast. */
-			this.mMyLocationOverlay = new ItemizedIconOverlay<OverlayItem>(
-					items,
+			this.listaIconosParadasOverlay = new ItemizedIconOverlay<OverlayItem>(
+					puntosParadasItems,
 					new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 						public boolean onItemSingleTapUp(final int index,
 								final OverlayItem item) {
@@ -198,33 +226,26 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 
 						public boolean onItemLongPress(final int index,
 								final OverlayItem item) {
-							Toast.makeText(
+							Intent infoParada = new Intent(
 									ViewMapaActivity.this,
-									"Item '" + item.mDescription + "' (index="
-											+ index + ") got long pressed",
-									Toast.LENGTH_LONG).show();
+									InfoParadasActivity.class);
+							infoParada.putExtra("parada", paradas.get(index));
+							startActivity(infoParada);
 							return false;
 						}
 					}, mResourceProxy);
-			this.mOsmv.getOverlays().add(this.mMyLocationOverlay);
+			this.osmMapa.getOverlays().add(this.listaIconosParadasOverlay);
 		}
 
 		/* MiniMap */
 		{
 			MinimapOverlay miniMapOverlay = new MinimapOverlay(this,
-					mOsmv.getTileRequestCompleteHandler());
-			this.mOsmv.getOverlays().add(miniMapOverlay);
+					osmMapa.getTileRequestCompleteHandler());
+			this.osmMapa.getOverlays().add(miniMapOverlay);
 		}
 
 		this.setContentView(rl);
-		// createOverlays();
 		activarGPS();
-	}
-
-	@Override
-	protected void onPause() {
-		pathOverlay.clearPath();
-		super.onPause();
 	}
 
 	// ===========================================================
@@ -250,27 +271,27 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 			double lastLat = -3.97733;
 			double lastLon = -79.20484;
 			GeoPoint punto = new GeoPoint(lastLat, lastLon);
-			items.add(new OverlayItem("Terminal", "Loja", punto));
-			this.mOsmv.getController().zoomIn();
-			this.mOsmv.invalidate();
+			puntosParadasItems.add(new OverlayItem("Terminal", "Loja", punto));
+			this.osmMapa.getController().zoomIn();
+			this.osmMapa.invalidate();
 			return true;
 
 		case MENU_ZOOMOUT_ID:
-			this.mOsmv.getController().zoomOut();
+			this.osmMapa.getController().zoomOut();
 			return true;
 		}
 		return false;
 	}
 
+	/**
+	 * Se ejcuta cuando se captura una nueva posicion de GPS
+	 */
 	public void onLocationChanged(Location location) {
 		if (location != null) {
-			Log.d("LAT", "" + location.getLatitude());
-			Log.d("LON", "" + location.getLongitude());
 			GeoPoint punto = new GeoPoint(location);
-			this.mMyLocationSimpleOverlay.setLocation(punto);
+			this.posicionActualOverlay.setLocation(punto);
 			osmViewController.animateTo(punto);
 			osmViewController.setCenter(punto);
-//			dibujarPunto(location.getLatitude(), location.getLongitude());
 		}
 	}
 
@@ -286,15 +307,15 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+	/**
+	 * Activa el GPS para que comience a recibir las tramas para poner la posicion
+	 * actual del usuario
+	 */
 	public void activarGPS() {
 		lmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, this);
 	}
 
-//	public void dibujarPunto(double lat, double lon) {
-//		pathOverlay.addPoint((int) (lat * 1e6), (int) (lon * 1e6));
-//		this.mOsmv.invalidate();
-//	}
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================

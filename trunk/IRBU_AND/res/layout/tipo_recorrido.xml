@@ -9,7 +9,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="15dp"
-        android:text="@string/txtTituloTipoRecorrido" />
+        android:text="@string/txtTituloTipoRecorrido" 
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
     <RadioGroup
         android:id="@+id/rgTipoRecorrido"
