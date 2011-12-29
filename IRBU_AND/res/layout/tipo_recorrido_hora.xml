@@ -20,7 +20,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="@string/txtTituloTipoRecorrido" />
+                android:text="@string/txtTituloTipoRecorrido" 
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
@@ -65,7 +66,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="@string/txtTituloHora" />
+                android:text="@string/txtTituloHora" 
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
 
             <TimePicker
                 android:id="@+id/tpHora"
