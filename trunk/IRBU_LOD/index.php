@@ -81,6 +81,9 @@ if (!isset($_SESSION)) {
         <!--   Editar Paradas     -->
         <link rel="stylesheet" type="text/css" href="css/chooser.css">
         <script type="text/javascript" src="core/js/gui/ventanaImagenes.js"></script>
+        
+        <!--   Usuarios     -->
+        <script type="text/javascript" src="core/js/gui/ventanaUsuarios.js"></script>
 
         <script type='text/javascript'>
             $(function() {

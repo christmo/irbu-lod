@@ -81,7 +81,7 @@ Ext.onReady(function(){
                     icon: 'img/add.png',
                     handler: function(){
                         Ext.getCmp('btnEliminarRuta').hide();
-//                        Ext.getCmp('btnEditarRuta').hide();
+                        //                        Ext.getCmp('btnEditarRuta').hide();
                         Ext.getCmp('btnGuardarRuta').show();
                         ventanaNuevaRuta();
                         Ext.getCmp('vtnNuevaRuta').setTitle('Nueva Ruta...');
@@ -94,7 +94,7 @@ Ext.onReady(function(){
                     handler: function(){
                         Ext.getCmp('btnEliminarRuta').show();
                         Ext.getCmp('btnGuardarRuta').hide();
-//                        Ext.getCmp('btnEditarRuta').hide();
+                        //                        Ext.getCmp('btnEditarRuta').hide();
                         ventanaNuevaRuta();
                         Ext.getCmp('vtnNuevaRuta').setTitle('Eliminar Ruta...');
                         Ext.getCmp('comboRutas').label.update('Seleccione los lugares de la ruta a eliminar:');
@@ -104,11 +104,11 @@ Ext.onReady(function(){
                     id  : 'btnEditarRuta',
                     icon: 'img/edit.png',
                     handler: function(){
-//                        Ext.getCmp('btnEliminarRuta').hide();
-//                        Ext.getCmp('btnGuardarRuta').hide();
-//                        Ext.getCmp('btnEditarRuta').show();
+                        //                        Ext.getCmp('btnEliminarRuta').hide();
+                        //                        Ext.getCmp('btnGuardarRuta').hide();
+                        //                        Ext.getCmp('btnEditarRuta').show();
                         ventanaEditarRuta();
-                        //Ext.getCmp('vtnNuevaRuta').setTitle('Editar Ruta...');
+                    //Ext.getCmp('vtnNuevaRuta').setTitle('Editar Ruta...');
                     }
                 }]
             },{
@@ -134,21 +134,27 @@ Ext.onReady(function(){
                     }
                 }]
             },{
+                text: 'Usuarios',
+                icon: 'img/user.png',
+                handler: function(){
+                    showVentanaUsuarios();
+                }
+            },{
                 text: 'Ayuda'
             }]
         },
-//        '-',{
-//            xtype   : 'tbbutton',
-//            cls     : 'x-btn-text-icon',
-//            icon    : 'img/ayuda.png',
-//            text    : 'remover',
-//            handler: function(){
-//                //console.info('remover');
-////                ventanaPuntosRuta(59,true);
-//                //ventanaHorasRuta(1, true);
-//                ventanaParadasRuta(59,true);
-//            }
-//        },
+        //        '-',{
+        //            xtype   : 'tbbutton',
+        //            cls     : 'x-btn-text-icon',
+        //            icon    : 'img/ayuda.png',
+        //            text    : 'remover',
+        //            handler: function(){
+        //                //console.info('remover');
+        ////                ventanaPuntosRuta(59,true);
+        //                //ventanaHorasRuta(1, true);
+        //                ventanaParadasRuta(59,true);
+        //            }
+        //        },
         '->',{
             xtype   : 'tbbutton',
             cls     : 'x-btn-text-icon',
