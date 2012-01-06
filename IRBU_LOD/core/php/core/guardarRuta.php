@@ -14,7 +14,8 @@ if (is_numeric($nombreRuta)) {
     $dato = unicaFila();
     $id_ruta = $dato["ID_RUTA"];
 
-    $consultaSql = "INSERT INTO RUTAS(ID_RUTA,TIPO,NOMBRE) VALUES($id_ruta,'$radioTipo','$nombreRuta')";
+    $consultaSql = "INSERT INTO RUTAS(ID_RUTA,TIPO,NOMBRE) 
+                    VALUES($id_ruta,'$radioTipo','".utf8_decode($nombreRuta)."')";
     consulta($consultaSql);
     $salida = "{success:true,id:$id_ruta}";
 }

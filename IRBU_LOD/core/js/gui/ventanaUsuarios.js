@@ -108,7 +108,7 @@ Ext.onReady(function(){
                     }
                 },{
                     text    : 'Eliminar',
-                    id      : 'btnEliminarRuta',
+                    id      : 'btnEliminarUsuario',
                     handler: function() {
                         eliminarUsuario();
                     }

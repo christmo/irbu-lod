@@ -77,38 +77,31 @@ Ext.onReady(function(){
                 icon: 'img/map.png',
                 menu: [{
                     text: 'Nueva Ruta',
-                    id  : 'btnNuevaRuta',
                     icon: 'img/add.png',
                     handler: function(){
-                        Ext.getCmp('btnEliminarRuta').hide();
-                        //                        Ext.getCmp('btnEditarRuta').hide();
+                        Ext.getCmp('comboRutas').emptyText='Ingresar lugares de la nueva ruta...';
                         Ext.getCmp('btnGuardarRuta').show();
+                        Ext.getCmp('btnEliminarRuta').hide();
                         ventanaNuevaRuta();
                         Ext.getCmp('vtnNuevaRuta').setTitle('Nueva Ruta...');
                         Ext.getCmp('comboRutas').label.update('Ingresar lugares de la nueva ruta:');
                     }
                 },{
                     text: 'Eliminar Ruta',
-                    id  : 'btnEliminarRuta',
                     icon: 'img/delete.png',
                     handler: function(){
+                        Ext.getCmp('comboRutas').emptyText='Seleccionar ruta a eliminar...';
                         Ext.getCmp('btnEliminarRuta').show();
                         Ext.getCmp('btnGuardarRuta').hide();
-                        //                        Ext.getCmp('btnEditarRuta').hide();
                         ventanaNuevaRuta();
                         Ext.getCmp('vtnNuevaRuta').setTitle('Eliminar Ruta...');
                         Ext.getCmp('comboRutas').label.update('Seleccione los lugares de la ruta a eliminar:');
                     }
                 },{
                     text: 'Editar Ruta',
-                    id  : 'btnEditarRuta',
                     icon: 'img/edit.png',
                     handler: function(){
-                        //                        Ext.getCmp('btnEliminarRuta').hide();
-                        //                        Ext.getCmp('btnGuardarRuta').hide();
-                        //                        Ext.getCmp('btnEditarRuta').show();
                         ventanaEditarRuta();
-                    //Ext.getCmp('vtnNuevaRuta').setTitle('Editar Ruta...');
                     }
                 }]
             },{

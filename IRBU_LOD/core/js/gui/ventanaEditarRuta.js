@@ -260,7 +260,7 @@ var storeCbxEditarRuta= new Ext.data.JsonStore({
  */
 var cbxEditarRuta = new Ext.form.ComboBox({
     store           : storeCbxEditarRuta,
-    fieldLabel      : 'Ingresar lugares de la nueva ruta',
+    fieldLabel      : 'Ingresar lugares de la ruta a editar',
     valueField      : 'id',
     displayField    : 'name',
     typeAhead       : true,
@@ -268,7 +268,7 @@ var cbxEditarRuta = new Ext.form.ComboBox({
     triggerAction   : 'all',
     tpl             : resultadoTplRutas,
     itemSelector    : 'div.search-item',
-    emptyText       : 'Ingresar lugares de la nueva ruta...',
+    emptyText       : 'Ingresar lugares de la ruta a editar...',
     allowBlank      : false,
     resizable       : true,
     minListWidth    : 300,

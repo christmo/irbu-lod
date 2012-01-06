@@ -177,7 +177,7 @@ foreach ($_FILES['img']['name'] as $key => $img) {
 $dir_img = $src_img_paradas . $img_nom;
 
 $consultaSql = "INSERT INTO PARADAS(ID_PARADA,DIRECCION,LAT,LON,REFERENCIA,DIR_IMG)
-VALUES($id_parada,'$dir',$lat,$lon,'$ref','$dir_img')";
+VALUES($id_parada,'".utf8_decode($dir)."',$lat,$lon,'".utf8_decode($ref)."','$dir_img')";
 consulta($consultaSql);
 
 echo '{success: true, failed: ' . $failed . ', uploaded: ' . $uploaded . ', type: "' . $_FILES['img']['name'][0] . '"}';
