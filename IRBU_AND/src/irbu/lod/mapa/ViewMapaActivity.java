@@ -37,7 +37,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class ViewMapaActivity extends Activity implements LocationListener {
+public class ViewMapaActivity extends Activity implements LocationListener  {
 
 	// ===========================================================
 	// Constants
@@ -99,6 +99,8 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+	
+		
 		puntosLinea = getIntent().getParcelableArrayListExtra("listaPuntos");
 		paradas = getIntent().getParcelableArrayListExtra("listaParadas");
 
@@ -304,6 +306,10 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 	}
 
+	public void run() {
+		
+	}
+	
 	// ===========================================================
 	// Methods
 	// ===========================================================

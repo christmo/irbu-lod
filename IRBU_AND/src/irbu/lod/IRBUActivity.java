@@ -3,7 +3,8 @@ package irbu.lod;
 import irbu.lod.mapa.ViewMapaActivity;
 import irbu.lod.modulos.BuscarRutaActivity;
 import irbu.lod.modulos.BuscarRutaHoraActivity;
-import irbu.lod.modulos.InfoParadasActivity;
+import irbu.lod.modulos.LoginEvaActivity;
+import irbu.lod.objetos.LoginFormPost;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -50,7 +51,8 @@ public class IRBUActivity extends Activity implements OnClickListener {
 			startActivity(buscarRutaHora);
 			break;
 		case R.id.btnAyuda:
-			 Intent mapa1 = new Intent(this,InfoParadasActivity.class);
+			new LoginFormPost().loginFormUTPL("cfmora", "12345");
+			 Intent mapa1 = new Intent(this,LoginEvaActivity.class);
 			 startActivity(mapa1);
 			break;
 		default:
