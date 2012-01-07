@@ -37,6 +37,8 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	private String strTipoRuta;
 	private String strHora;
 	private boolean isHora;
+	private int idRuta;
+	private Intent mapa;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +55,7 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 			isHora = false;
 		}
 		pd = ProgressDialog.show(ListaRutasActivity.this, "",
-				"Loading. Please wait...", true);
+				"Cargando Datos...", true);
 		Thread thread = new Thread(this);
 		thread.start();
 	}
@@ -61,71 +63,10 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		Ruta ruta = (Ruta) l.getItemAtPosition(position);
-
+		idRuta = ruta.getIdRuta();
 		Toast.makeText(this, ruta.getNombreRuta(), Toast.LENGTH_LONG).show();
-
-		ArrayList<Puntos> listaPuntos;
-		ArrayList<Paradas> listaParadas;
-		int idRuta = ruta.getIdRuta();
-		try {
-			Intent mapa = new Intent(this, ViewMapaActivity.class);
-			listaPuntos = new ConsultarServer().getPuntosRuta(idRuta);
-			listaParadas = new ConsultarServer().getParadasRuta(idRuta,
-					strTipoRuta);
-			mapa.putParcelableArrayListExtra("listaPuntos", listaPuntos);
-			mapa.putParcelableArrayListExtra("listaParadas", listaParadas);
-			startActivity(mapa);
-		} catch (SocketException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-//		dibujarRuta(ruta.getIdRuta());
-//		dibujarParadas(ruta.getIdRuta());
+		cargarDatosParaMapa();
 	}
-
-	/**
-	 * Obtiene los puntos de la linea para ser dibujada en el mapa
-	 * 
-	 * @param idRuta
-	 */
-//	private void dibujarRuta(int idRuta) {
-//		try {
-//			ArrayList<Puntos> listaPuntos = new ConsultarServer()
-//					.getPuntosRuta(idRuta);
-//			for (Puntos puntos : listaPuntos) {
-//				Log.d("lat", "" + puntos.getLat() + " " + puntos.getIdPunto());
-//			}
-//		} catch (SocketException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
-
-	/**
-	 * Obtiene las paradas de una ruta para ser dibujada en el mapa
-	 * 
-	 * @param idRuta
-	 */
-//	private void dibujarParadas(int idRuta) {
-//		try {
-//			ArrayList<Paradas> listaParadas = new ConsultarServer()
-//					.getParadasRuta(idRuta, strTipoRuta);
-//			for (Paradas paradas : listaParadas) {
-//				Log.d("lat", "" + paradas.getLat() + " " + paradas.getDir());
-//			}
-//		} catch (SocketException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	}
 
 	public class IconListViewAdapter extends ArrayAdapter<Ruta> {
 
@@ -168,6 +109,8 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 				setListAdapter(m_adapter);
 			} else if (msg.what == 1) { // error al cargar
 				mensajeErrorConexion();
+			} else if (msg.what == 2) {
+				startActivity(mapa);
 			}
 			/**
 			 * TODO: Error cuando se cambia de orientacion la pantalla varias
@@ -200,6 +143,43 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 		} catch (NullPointerException e) {
 			msgNoServerConnection();
 		}
+	}
+
+	/**
+	 * Carga los datos como extras para enviarlos al mapa para que sean
+	 * dibujados.
+	 */
+	private void cargarDatosParaMapa() {
+		pd = ProgressDialog.show(ListaRutasActivity.this, "",
+				"Cargando Datos...", true);
+
+		Thread hiloDibujar = new Thread(new Runnable() {
+
+			public void run() {
+				ArrayList<Puntos> listaPuntos;
+				ArrayList<Paradas> listaParadas;
+
+				try {
+					mapa = new Intent(ListaRutasActivity.this,
+							ViewMapaActivity.class);
+					listaPuntos = new ConsultarServer().getPuntosRuta(idRuta);
+					listaParadas = new ConsultarServer().getParadasRuta(idRuta,
+							strTipoRuta);
+					mapa.putParcelableArrayListExtra("listaPuntos", listaPuntos);
+					mapa.putParcelableArrayListExtra("listaParadas",
+							listaParadas);
+
+					handler.sendEmptyMessage(2);
+
+				} catch (SocketException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+
+		hiloDibujar.start();
 	}
 
 	/**

@@ -15,9 +15,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class InfoParadasActivity extends Activity {
 
@@ -32,26 +31,42 @@ public class InfoParadasActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.info_parada);
 
-		Button bt3 = (Button) findViewById(R.id.get_imagebt);
-		bt3.setOnClickListener(getImgListener);
-		imView = (ImageView) findViewById(R.id.imview);
-	}
+//		Paradas parada = getIntent().getParcelableExtra("parada");
+		Paradas parada = (Paradas) getIntent().getExtras().get("parada");
 
-	View.OnClickListener getImgListener = new View.OnClickListener() {
-
-		public void onClick(View view) {
-			Paradas parada = (Paradas) getIntent().getExtras().get("parada");
-			// int i = r.nextInt(4);
-			String url = urlHostRemoto + parada.getUrlImg();
-			downloadFile(url);
-			// downloadFile(urlHostRemoto + i + ".jpg");
-			Log.i("URL IMG", url);
+		TextView txtDireccion = (TextView) findViewById(R.id.txtDireccion);
+		TextView txtReferencia = (TextView) findViewById(R.id.txtReferencia);
+		TextView txtLatitud = (TextView) findViewById(R.id.txtLatitud);
+		TextView txtLongitud = (TextView) findViewById(R.id.txtLongitud);
+		try {
+			txtDireccion.setText(parada.getDir());
+		} catch (NullPointerException e) {
+			txtDireccion.setText("");
+		}
+		try {
+			txtReferencia.setText(parada.getRef());
+		} catch (NullPointerException e) {
+			txtReferencia.setText("");
+		}
+		try {
+			txtLatitud.setText("" + parada.getLat());
+		} catch (NullPointerException e) {
+			txtLatitud.setText("");
+		}
+		try {
+			txtLongitud.setText("" + parada.getLon());
+		} catch (NullPointerException e) {
+			txtLongitud.setText("");
 		}
 
-	};
+		imView = (ImageView) findViewById(R.id.imview);
+		String url = urlHostRemoto + parada.getUrlImg();
+		downloadFile(url);
+	}
 
 	void downloadFile(String fileUrl) {
 		URL myFileUrl = null;
+		Log.i("URL IMG", fileUrl);
 		try {
 			myFileUrl = new URL(fileUrl);
 		} catch (MalformedURLException e) {

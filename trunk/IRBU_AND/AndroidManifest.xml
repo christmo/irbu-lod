@@ -38,6 +38,14 @@
             android:label="@string/txtBuscarRuta"
             android:name=".modulos.InfoParadasActivity" >
         </activity>
+         <activity
+            android:label="@string/txtLoginEva"
+            android:name=".modulos.LoginEvaActivity" >
+        </activity>
+         <activity
+            android:label="@string/txtLoginEva"
+            android:name=".modulos.InfoEvaActivity" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >

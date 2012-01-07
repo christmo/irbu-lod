@@ -22,4 +22,13 @@
     <string name="txtCoordenadas">Coordenadas Geográficas:</string>
     <string name="txtLatitud">Latitud:</string>
     <string name="txtLongitud">Longitud:</string>
+    <string name="txtLoginEva">Entorno Virtual de Aprendizaje</string>
+    <string name="txtDatosEva">Obtener sus datos del sistema EVA</string>
+    <string name="txtIngresar">Ingresar</string>
+    <string name="txtUsuario">Usuario</string>
+    <string name="txtClave">Clave:</string>
+    <string name="txtInformacionUsuario">Información de Usuario</string>
+    <string name="txtNombre">Nombre:</string>
+    <string name="txtCI">Cédula:</string>
+    <string name="txtMail">Correo Electrónico:</string>
 </resources>
