@@ -46,6 +46,10 @@
             android:label="@string/txtLoginEva"
             android:name=".modulos.InfoEvaActivity" >
         </activity>
+         <activity
+            android:label="@string/txtLoginEva"
+            android:name=".modulos.LlenarDatosEvaActivity" >
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >

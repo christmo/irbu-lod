@@ -11,19 +11,26 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class InfoParadasActivity extends Activity {
+public class InfoParadasActivity extends Activity implements OnClickListener {
 
 	private ImageView imView;
 	private String urlHostRemoto = Constantes.URL_SERVER
 			+ Constantes.NOMBRE_PROYECTO;
 	private Bitmap imgParada;
+	private Paradas parada;
+	private Button btnGuardar;
+	private Button btnCancelar;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -31,13 +38,19 @@ public class InfoParadasActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.info_parada);
 
-//		Paradas parada = getIntent().getParcelableExtra("parada");
-		Paradas parada = (Paradas) getIntent().getExtras().get("parada");
+		parada = (Paradas) getIntent().getExtras().get("parada");
 
 		TextView txtDireccion = (TextView) findViewById(R.id.txtDireccion);
 		TextView txtReferencia = (TextView) findViewById(R.id.txtReferencia);
 		TextView txtLatitud = (TextView) findViewById(R.id.txtLatitud);
 		TextView txtLongitud = (TextView) findViewById(R.id.txtLongitud);
+
+		btnGuardar = (Button) findViewById(R.id.btnGuardarParada);
+		btnCancelar = (Button) findViewById(R.id.btnCancelarGuardadoParada);
+
+		btnGuardar.setOnClickListener(this);
+		btnCancelar.setOnClickListener(this);
+
 		try {
 			txtDireccion.setText(parada.getDir());
 		} catch (NullPointerException e) {
@@ -64,6 +77,11 @@ public class InfoParadasActivity extends Activity {
 		downloadFile(url);
 	}
 
+	/**
+	 * Descarga la imagen de la parada para presentar en la vista
+	 * 
+	 * @param fileUrl
+	 */
 	void downloadFile(String fileUrl) {
 		URL myFileUrl = null;
 		Log.i("URL IMG", fileUrl);
@@ -84,5 +102,25 @@ public class InfoParadasActivity extends Activity {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btnGuardarParada:
+			guardarParadaFavorita();
+			break;
+		case R.id.btnCancelarGuardadoParada:
+			InfoParadasActivity.this.finish();
+			break;
+		}
+	}
+
+	/*
+	 * Permite guardar los datos de la parada como parada favorita
+	 */
+	private void guardarParadaFavorita() {
+		Intent login = new Intent(this, LoginEvaActivity.class);
+		login.putExtra("id_parada", parada.getIdParada());
+		startActivity(login);
 	}
 }
