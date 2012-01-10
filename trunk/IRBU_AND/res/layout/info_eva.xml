@@ -55,9 +55,9 @@
                         android:id="@+id/txtNombreUsuario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
                         android:layout_marginLeft="30dp"
-                        android:text="TextView" />
+                        android:layout_marginRight="20dp"
+                        android:text="" />
 
                 </LinearLayout>
 
@@ -75,13 +75,13 @@
                         android:text="@string/txtDireccion"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/txtDireccionUsuario"
-                        android:layout_width="wrap_content"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
                         android:layout_marginLeft="30dp"
-                        android:text="TextView" />
+                        android:layout_marginRight="20dp"
+                        android:inputType="textPersonName" />
 
                 </LinearLayout>
 
@@ -98,14 +98,14 @@
                         android:layout_margin="15dp"
                         android:text="@string/txtCI"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+
                     <TextView
                         android:id="@+id/txtCIUsuario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
                         android:layout_marginLeft="30dp"
-                        android:text="TextView" />
+                        android:layout_marginRight="20dp"
+                        android:text="" />
 
                 </LinearLayout>
 
@@ -122,79 +122,67 @@
                         android:layout_margin="15dp"
                         android:text="@string/txtMail"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
-
+
                     <TextView
                         android:id="@+id/txtMailUsuario"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
                         android:layout_marginLeft="30dp"
-                        android:text="TextView" />
+                        android:layout_marginRight="20dp"
+                        android:text="" />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/linearLayout2"
+                    android:id="@+id/LinearLayout06"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
-
+
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/TextView07"
                         android:layout_width="wrap_content"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_margin="15dp"
-                        android:layout_weight="1"
-                        android:text="@string/txtCoordenadas"
+                        android:text="@string/txtPeriodoAcademico"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout3"
-                        android:layout_width="fill_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" >
-
-                        <TextView
-                            android:id="@+id/textView3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
-                            android:layout_marginLeft="30dp"
-                            android:text="@string/txtLatitud" />
 
-                        <TextView
-                            android:id="@+id/txtLatitudUsuario"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="50dp"
-                            android:text="TextView" />
+                    <TextView
+                        android:id="@+id/txtPeriodoAcademico"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="20dp"
+                        android:text="" />
 
-                    </LinearLayout>
+                </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/LinearLayout03"
-                        android:layout_width="fill_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" >
-
-                        <TextView
-                            android:id="@+id/TextView04"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
-                            android:layout_marginLeft="30dp"
-                            android:text="@string/txtLongitud" />
+                <LinearLayout
+                    android:id="@+id/LinearLayout03"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp" >
 
-                        <TextView
-                            android:id="@+id/txtLongitudUsuario"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
-                            android:layout_marginLeft="38dp"
-                            android:text="TextView" />
+                    <Button
+                        android:id="@+id/btnGuardar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="1"
+                        android:text="@string/txtGuardar" />
+
+                    <Button
+                        android:id="@+id/btnCancelarGuardado"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="1"
+                        android:text="@string/btnCancelar" />
 
-                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>

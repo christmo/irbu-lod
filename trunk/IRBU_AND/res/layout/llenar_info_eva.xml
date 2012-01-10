@@ -14,14 +14,14 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical" >
-
+
             <TextView
                 android:id="@+id/textView1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center"
-                android:text="@string/txtTituloInfoParadas"
+                android:text="@string/txtInformacionUsuario"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <ImageView
@@ -42,21 +42,25 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
-
+
                     <TextView
                         android:id="@+id/TextView03"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="15dp"
-                        android:text="@string/txtDireccion"
+                        android:text="@string/txtNombre"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:id="@+id/txtDireccion"
-                        android:layout_width="wrap_content"
+
+                    <EditText
+                        android:id="@+id/tfNombreUsuario"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
-                        android:text="TextView" />
+                        android:layout_marginRight="20dp"
+                        android:inputType="textPersonName" >
+
+                        <requestFocus />
+                    </EditText>
 
                 </LinearLayout>
 
@@ -65,103 +69,81 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
-
+
                     <TextView
                         android:id="@+id/TextView01"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="15dp"
-                        android:text="@string/txtReferencia"
+                        android:text="@string/txtDireccion"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <TextView
-                        android:id="@+id/txtReferencia"
-                        android:layout_width="wrap_content"
+
+                    <EditText
+                        android:id="@+id/tfDireccionUsuario"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
-                        android:text="TextView" />
+                        android:layout_marginRight="20dp"
+                        android:inputType="textPersonName" />
 
                 </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayout2"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-
-                    <TextView
-                        android:id="@+id/textView2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="0dp"
-                        android:layout_margin="15dp"
-                        android:layout_weight="1"
-                        android:text="@string/txtCoordenadas"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <LinearLayout
-                        android:id="@+id/linearLayout3"
-                        android:layout_width="fill_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" >
-
-                        <TextView
-                            android:id="@+id/textView3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
-                            android:layout_marginLeft="30dp"
-                            android:text="@string/txtLatitud" />
-
-                        <TextView
-                            android:id="@+id/txtLatitud"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="10dp"
-                            android:layout_marginLeft="50dp"
-                            android:text="TextView" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/LinearLayout03"
-                        android:layout_width="fill_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" >
-
-                        <TextView
-                            android:id="@+id/TextView04"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
-                            android:layout_marginLeft="30dp"
-                            android:text="@string/txtLongitud" />
-
-                        <TextView
-                            android:id="@+id/txtLongitud"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="15dp"
-                            android:layout_marginLeft="38dp"
-                            android:text="TextView" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/TextView02"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_margin="15dp"
-                    android:layout_weight="1"
-                    android:text="@string/txtGuardarParada"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
 
                 <LinearLayout
                     android:id="@+id/LinearLayout04"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp" >
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/TextView05"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="@string/txtCI"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:id="@+id/tfCI"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="20dp"
+                        android:inputType="number" />
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LinearLayout05"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/TextView06"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="@string/txtMail"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <EditText
+                        android:id="@+id/tfMail"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="20dp"
+                        android:inputType="textEmailAddress" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LinearLayout03"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp" >
+
                     <Button
-                        android:id="@+id/btnGuardarParada"
+                        android:id="@+id/btnGuardarDatos"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -169,9 +151,9 @@
                         android:layout_marginRight="15dp"
                         android:layout_weight="1"
                         android:text="@string/txtGuardar" />
-
+
                     <Button
-                        android:id="@+id/btnCancelarGuardadoParada"
+                        android:id="@+id/btnCancelarGuardadoDatos"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -179,6 +161,7 @@
                         android:layout_marginRight="15dp"
                         android:layout_weight="1"
                         android:text="@string/btnCancelar" />
+
                 </LinearLayout>
 
             </LinearLayout>

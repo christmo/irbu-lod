@@ -31,4 +31,7 @@
     <string name="txtNombre">Nombre:</string>
     <string name="txtCI">Cédula:</string>
     <string name="txtMail">Correo Electrónico:</string>
+    <string name="txtPeriodoAcademico">Periodo Académico:</string>
+    <string name="txtGuardar">Guardar</string>
+    <string name="txtGuardarParada">Guardar como parada preferida:</string>
 </resources>

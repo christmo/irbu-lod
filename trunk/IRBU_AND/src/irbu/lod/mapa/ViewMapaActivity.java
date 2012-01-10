@@ -2,6 +2,7 @@ package irbu.lod.mapa;
 
 import irbu.lod.R;
 import irbu.lod.modulos.InfoParadasActivity;
+import irbu.lod.modulos.LoginEvaActivity;
 import irbu.lod.objetos.Paradas;
 import irbu.lod.objetos.Puntos;
 
@@ -21,7 +22,9 @@ import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.SimpleLocationOverlay;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
@@ -37,7 +40,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class ViewMapaActivity extends Activity implements LocationListener  {
+public class ViewMapaActivity extends Activity implements LocationListener {
 
 	// ===========================================================
 	// Constants
@@ -45,6 +48,8 @@ public class ViewMapaActivity extends Activity implements LocationListener  {
 
 	private static final int MENU_ZOOMIN_ID = Menu.FIRST;
 	private static final int MENU_ZOOMOUT_ID = MENU_ZOOMIN_ID + 1;
+	private static final int MENU_COORD_ID = MENU_ZOOMOUT_ID + 1;
+	private static final int MENU_DATA_ID = MENU_COORD_ID + 1;
 
 	// ===========================================================
 	// Fields
@@ -90,6 +95,10 @@ public class ViewMapaActivity extends Activity implements LocationListener  {
 	 * Lista de puntos que conforman la linea a dibujar
 	 */
 	private ArrayList<Puntos> puntosLinea;
+	/**
+	 * Punto actual capturado del GPS
+	 */
+	private Location punto = null;
 
 	// ===========================================================
 	// Constructors
@@ -99,8 +108,6 @@ public class ViewMapaActivity extends Activity implements LocationListener  {
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-	
-		
 		puntosLinea = getIntent().getParcelableArrayListExtra("listaPuntos");
 		paradas = getIntent().getParcelableArrayListExtra("listaParadas");
 
@@ -260,9 +267,10 @@ public class ViewMapaActivity extends Activity implements LocationListener  {
 
 	@Override
 	public boolean onCreateOptionsMenu(final Menu pMenu) {
-		pMenu.add(0, MENU_ZOOMIN_ID, Menu.NONE, "ZoomIn");
-		pMenu.add(0, MENU_ZOOMOUT_ID, Menu.NONE, "ZoomOut");
-
+		pMenu.add(0, MENU_ZOOMIN_ID, Menu.NONE, "Amplear(+)");
+		pMenu.add(0, MENU_ZOOMOUT_ID, Menu.NONE, "Reducir(-)");
+		pMenu.add(0, MENU_COORD_ID, Menu.NONE, "Coordenadas Casa");
+		pMenu.add(0, MENU_DATA_ID, Menu.NONE, "Ver Datos");
 		return true;
 	}
 
@@ -272,15 +280,17 @@ public class ViewMapaActivity extends Activity implements LocationListener  {
 		case MENU_ZOOMIN_ID:
 			double lastLat = -3.97733;
 			double lastLon = -79.20484;
-			GeoPoint punto = new GeoPoint(lastLat, lastLon);
-			puntosParadasItems.add(new OverlayItem("Terminal", "Loja", punto));
+			GeoPoint puntoLoja = new GeoPoint(lastLat, lastLon);
+			puntosParadasItems.add(new OverlayItem("Terminal", "Loja",
+					puntoLoja));
 			this.osmMapa.getController().zoomIn();
 			this.osmMapa.invalidate();
 			return true;
-
 		case MENU_ZOOMOUT_ID:
 			this.osmMapa.getController().zoomOut();
 			return true;
+		case MENU_COORD_ID:
+			guardarCoordenadasVivienda();
 		}
 		return false;
 	}
@@ -290,10 +300,11 @@ public class ViewMapaActivity extends Activity implements LocationListener  {
 	 */
 	public void onLocationChanged(Location location) {
 		if (location != null) {
-			GeoPoint punto = new GeoPoint(location);
-			this.posicionActualOverlay.setLocation(punto);
-			osmViewController.animateTo(punto);
-			osmViewController.setCenter(punto);
+			punto = location;
+			GeoPoint puntoCap = new GeoPoint(location);
+			this.posicionActualOverlay.setLocation(puntoCap);
+			osmViewController.animateTo(puntoCap);
+			osmViewController.setCenter(puntoCap);
 		}
 	}
 
@@ -306,20 +317,42 @@ public class ViewMapaActivity extends Activity implements LocationListener  {
 	public void onStatusChanged(String provider, int status, Bundle extras) {
 	}
 
-	public void run() {
-		
-	}
-	
 	// ===========================================================
 	// Methods
 	// ===========================================================
 	/**
-	 * Activa el GPS para que comience a recibir las tramas para poner la posicion
-	 * actual del usuario
+	 * Activa el GPS para que comience a recibir las tramas para poner la
+	 * posicion actual del usuario
 	 */
 	public void activarGPS() {
 		lmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, this);
+		lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+	}
+
+	/**
+	 * guardar las coordenadas del domicilio
+	 */
+	private void guardarCoordenadasVivienda() {
+		if (punto != null) {
+			Intent login = new Intent(this, LoginEvaActivity.class);
+			login.putExtra("lat", punto.getLatitude());
+			login.putExtra("lon", punto.getLongitude());
+			startActivity(login);
+		} else {
+			AlertDialog.Builder builder1 = new AlertDialog.Builder(
+					ViewMapaActivity.this);
+			builder1.setMessage(
+					"Aun no se tiene una lectura de GPS válida, se sugiere mover el dispositivo unos metros o salir a una sona despejada para evitar la interferencia de las paredes...")
+					.setCancelable(false)
+					.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+								}
+							});
+			AlertDialog alert1 = builder1.create();
+			alert1.show();
+		}
 	}
 
 	// ===========================================================

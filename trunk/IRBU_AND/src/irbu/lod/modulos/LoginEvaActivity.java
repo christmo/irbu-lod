@@ -2,6 +2,8 @@ package irbu.lod.modulos;
 
 import irbu.lod.R;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,11 +16,23 @@ public class LoginEvaActivity extends Activity implements OnClickListener {
 	private EditText txtUsuario;
 	private EditText txtClave;
 	private Button btnIngresar;
+	private double lon;
+	private double lat;
+	private int idParada;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_eva);
+
+		if (getIntent().hasExtra("lat") && getIntent().hasExtra("lon")) {
+			lat = getIntent().getExtras().getDouble("lat");
+			lon = getIntent().getExtras().getDouble("lon");
+		}
+		if (getIntent().hasExtra("id_parada")) {
+			idParada = getIntent().getExtras().getInt("id_parada");
+		}
+
 		txtUsuario = (EditText) findViewById(R.id.txtUsuario);
 		txtClave = (EditText) findViewById(R.id.txtClave);
 		btnIngresar = (Button) findViewById(R.id.btnIngresar);
@@ -45,9 +59,28 @@ public class LoginEvaActivity extends Activity implements OnClickListener {
 			Intent datosEva = new Intent(this, InfoEvaActivity.class);
 			datosEva.putExtra("usuario", usuario);
 			datosEva.putExtra("clave", clave);
+			if (getIntent().hasExtra("lat") && getIntent().hasExtra("lon")) {
+				datosEva.putExtra("lon", lon);
+				datosEva.putExtra("lat", lat);
+			}
+			if (getIntent().hasExtra("id_parada")) {
+				datosEva.putExtra("id_parada", idParada);
+			}
 			startActivity(datosEva);
 		} else {
-			// alerta
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(
+					"No se pudo acceder al EVA, revice su usuario y su clave y vuelva a intentar...")
+					.setCancelable(false)
+					.setPositiveButton("OK",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+									txtClave.setText("");
+								}
+							});
+			AlertDialog alert = builder.create();
+			alert.show();
 		}
 	}
 }

@@ -5,7 +5,11 @@ import irbu.lod.constantes.Constantes;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
@@ -190,23 +194,24 @@ public class ConsultarServer {
 
 	/**
 	 * Obtiene la informacion de las paradas pertenecientes a una ruta
+	 * 
 	 * @param idRuta
-	 * @return ArrayList<Paradas> 
+	 * @return ArrayList<Paradas>
 	 * @throws IOException
 	 * @throws SocketException
 	 */
-	public ArrayList<Paradas> getParadasRuta(int idRuta,String strTipoRuta) throws IOException,
-			SocketException {
+	public ArrayList<Paradas> getParadasRuta(int idRuta, String strTipoRuta)
+			throws IOException, SocketException {
 		ArrayList<Paradas> paradasRuta = new ArrayList<Paradas>();
 		final String url = Constantes.URL_PARADAS_RUTAS;
 
 		httppost = new HttpPost(url);
-		
-		 // Poner prametros a la consulta POST
-	    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-	    nameValuePairs.add(new BasicNameValuePair("id_ruta", ""+idRuta));
-	    nameValuePairs.add(new BasicNameValuePair("tipo", strTipoRuta));
-	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+		// Poner prametros a la consulta POST
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		nameValuePairs.add(new BasicNameValuePair("id_ruta", "" + idRuta));
+		nameValuePairs.add(new BasicNameValuePair("tipo", strTipoRuta));
+		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 		Log.d("respuesta", url);
 
@@ -222,10 +227,10 @@ public class ConsultarServer {
 			datos = jObject.getJSONObject("datos");
 			String dato = datos.getString("coordenadas");
 
-			int idParada=0;
+			int idParada = 0;
 			double lon = 0, lat = 0;
-			String dir="",ref="",urlImg="";
-			
+			String dir = "", ref = "", urlImg = "";
+
 			String[] fila = dato.split("#");
 			for (int i = 0; i < fila.length; i++) {
 				String[] col = fila[i].split("%");
@@ -235,14 +240,7 @@ public class ConsultarServer {
 				dir = col[3];
 				ref = col[4];
 				urlImg = col[5];
-				Paradas p = new Paradas(
-						idParada, 
-						lon, 
-						lat,
-						dir,
-						ref,
-						urlImg
-						);
+				Paradas p = new Paradas(idParada, lon, lat, dir, ref, urlImg);
 				paradasRuta.add(p);
 			}
 
@@ -252,4 +250,227 @@ public class ConsultarServer {
 
 		return paradasRuta;
 	}
+
+	/**
+	 * Guardar Datos del estudiante en la base de datos del IRBU
+	 * 
+	 * @param strNombre
+	 * @param strCI
+	 * @param strMail
+	 * @return boolean
+	 * @throws IOException
+	 * @throws SocketException
+	 */
+	public boolean guardarDatosEstudiante(String strNombre, String strCI,
+			String strMail, String strUser) throws IOException, SocketException {
+		final String url = Constantes.URL_GUARDAR_ESTUDIANTE;
+
+		httppost = new HttpPost(url);
+
+		// Poner prametros a la consulta POST
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		nameValuePairs.add(new BasicNameValuePair("nombre", "" + strNombre));
+		nameValuePairs.add(new BasicNameValuePair("ci", strCI));
+		nameValuePairs.add(new BasicNameValuePair("mail", strMail));
+		nameValuePairs.add(new BasicNameValuePair("user_est", strUser));
+		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+		Log.d("URL", url);
+
+		// Execute HTTP Post Request
+		HttpResponse response = httpclient.execute(httppost);
+		HttpEntity resEntity = response.getEntity();
+
+		JSONObject jObject = null;
+		String rta = null;
+		try {
+			String txtJson = EntityUtils.toString(resEntity);
+
+			jObject = new JSONObject(txtJson);
+			rta = jObject.getString("success");
+			Log.i("Respuesta", rta.toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return Boolean.getBoolean(rta.toString());
+	}
+
+	/**
+	 * Envia los datos de la vivienda del estudiante para que sea almacenado en
+	 * la base de datos
+	 * 
+	 * @param strDir
+	 * @param strCI
+	 * @param lon
+	 * @param lat
+	 * @param strPeriodo
+	 * @return boolean
+	 * @throws IOException
+	 * @throws SocketException
+	 */
+	public boolean guardarDatosCasaEstudiante(String strDir, String strCI,
+			double lon, double lat, String strPeriodo) throws IOException,
+			SocketException {
+		final String url = Constantes.URL_GUARDAR_CASA_ESTUDIANTE;
+
+		httppost = new HttpPost(url);
+
+		// Poner prametros a la consulta POST
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		nameValuePairs.add(new BasicNameValuePair("dir", "" + strDir));
+		nameValuePairs.add(new BasicNameValuePair("ci", strCI));
+		nameValuePairs.add(new BasicNameValuePair("lon", "" + lon));
+		nameValuePairs.add(new BasicNameValuePair("lat", "" + lat));
+		if (strPeriodo != null) {
+			nameValuePairs.add(new BasicNameValuePair("periodo", strPeriodo));
+		}else{
+			nameValuePairs.add(new BasicNameValuePair("periodo", getPeriodoAcademico()));
+		}
+		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+		Log.d("URL", url);
+
+		// Execute HTTP Post Request
+		HttpResponse response = httpclient.execute(httppost);
+		HttpEntity resEntity = response.getEntity();
+
+		JSONObject jObject = null;
+		String rta = null;
+		try {
+			String txtJson = EntityUtils.toString(resEntity);
+
+			jObject = new JSONObject(txtJson);
+			rta = jObject.getString("success");
+			Log.i("Respuesta", rta.toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return Boolean.getBoolean(rta.toString());
+	}
+
+	/**
+	 * Envia los datos para almacenar informacion de la parada frecuente del
+	 * estudiante
+	 * 
+	 * @param strCI
+	 * @param intIdParada
+	 * @param strPeriodo
+	 * @return boolean
+	 * @throws IOException
+	 * @throws SocketException
+	 */
+	public boolean guardarDatosParadaEstudiante(String strCI, int intIdParada,
+			String strPeriodo) throws IOException, SocketException {
+		final String url = Constantes.URL_GUARDAR_PARADA_ESTUDIANTE;
+
+		httppost = new HttpPost(url);
+
+		// Poner prametros a la consulta POST
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+		nameValuePairs.add(new BasicNameValuePair("ci", strCI));
+		nameValuePairs
+				.add(new BasicNameValuePair("id_parada", "" + intIdParada));
+		nameValuePairs.add(new BasicNameValuePair("periodo", strPeriodo));
+		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+		Log.d("URL", url);
+
+		// Execute HTTP Post Request
+		HttpResponse response = httpclient.execute(httppost);
+		HttpEntity resEntity = response.getEntity();
+
+		JSONObject jObject = null;
+		String rta = null;
+		try {
+			String txtJson = EntityUtils.toString(resEntity);
+
+			jObject = new JSONObject(txtJson);
+			rta = jObject.getString("success");
+			Log.i("Respuesta", rta.toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return Boolean.getBoolean(rta.toString());
+	}
+
+	/**
+	 * Recupera la informacion de un estudiante dependiendo del usuario
+	 * 
+	 * @param strUser
+	 * @return
+	 * @throws IOException
+	 * @throws SocketException
+	 */
+	public HashMap<String, String> getInforEstudiante(String strUser)
+			throws IOException, SocketException {
+		System.out.println(strUser);
+		HashMap<String, String> infoEstudiante = new HashMap<String, String>();
+		final String url = Constantes.URL_ESTUDIANTE;
+
+		httppost = new HttpPost(url);
+
+		// Poner prametros a la consulta POST
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
+		nameValuePairs.add(new BasicNameValuePair("user_est", strUser));
+		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+		Log.d("respuesta", url);
+
+		// Execute HTTP Post Request
+		HttpResponse response = httpclient.execute(httppost);
+		HttpEntity resEntity = response.getEntity();
+
+		JSONObject jObject = null;
+		try {
+			String txtJson = EntityUtils.toString(resEntity);
+
+			jObject = new JSONObject(txtJson);
+			jObject = jObject.getJSONObject("estudiante");
+
+			String ci = jObject.getString("ci");
+			String nombre = jObject.getString("nombre");
+			String mail = jObject.getString("mail");
+			String direccion = jObject.getString("direccion");
+
+			infoEstudiante.put("ci", ci);
+			infoEstudiante.put("nombre", nombre);
+			infoEstudiante.put("mail", mail);
+			infoEstudiante.put("direccion", direccion);
+			infoEstudiante.put("periodo", getPeriodoAcademico());
+			return infoEstudiante;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	/**
+	 * Calcula el periodo academico dependiendo del mes que tenga configurado en
+	 * el celular
+	 * 
+	 * @return String
+	 */
+	private String getPeriodoAcademico() {
+		Calendar cal = GregorianCalendar.getInstance();
+		SimpleDateFormat sdfAnio = new SimpleDateFormat("yyyy");
+		SimpleDateFormat sdfMesNumero = new SimpleDateFormat("MM");
+
+		int anio = Integer.parseInt(sdfAnio.format(cal.getTime()));
+		int mesNumero = Integer.parseInt(sdfMesNumero.format(cal.getTime()));
+
+		if (mesNumero >= 4 && mesNumero <= 9) {
+			return "Abr/" + anio + " - " + "Ago/" + anio;
+		}
+		if (mesNumero >= 10 && mesNumero <= 12) {
+			return "Oct/" + anio + " - " + "Feb/" + (anio + 1);
+		}
+		if (mesNumero >= 1 && mesNumero <= 3) {
+			return "Oct/" + (anio - 1) + " - " + "Feb/" + anio;
+		}
+		return null;
+	}
+
 }
