@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/fondo"
     android:orientation="vertical" >
 
     <ScrollView
@@ -20,8 +21,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="@string/txtTituloTipoRecorrido" 
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text="@string/txtTituloTipoRecorrido"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <LinearLayout
                 android:id="@+id/linearLayout3"
@@ -66,8 +67,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
-                android:text="@string/txtTituloHora" 
-                android:textAppearance="?android:attr/textAppearanceMedium"/>
+                android:text="@string/txtTituloHora"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TimePicker
                 android:id="@+id/tpHora"
@@ -79,7 +80,7 @@
                 android:id="@+id/linearLayout1"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content" >
-
+
                 <Button
                     android:id="@+id/btnBuscarRutaHora"
                     android:layout_width="0dp"
@@ -89,7 +90,7 @@
                     android:layout_marginRight="15dp"
                     android:layout_weight="1"
                     android:text="@string/btnBuscar" />
-
+
                 <Button
                     android:id="@+id/btnCancelarRutaHora"
                     android:layout_width="0dp"
@@ -99,7 +100,6 @@
                     android:layout_marginRight="15dp"
                     android:layout_weight="1"
                     android:text="@string/btnCancelar" />
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

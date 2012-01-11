@@ -326,7 +326,7 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	 */
 	public void activarGPS() {
 		lmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+		lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 10, this);
 	}
 
 	/**

@@ -34,4 +34,6 @@
     <string name="txtPeriodoAcademico">Periodo Académico:</string>
     <string name="txtGuardar">Guardar</string>
     <string name="txtGuardarParada">Guardar como parada preferida:</string>
+    <string name="txtInformacionEstudiante">Información Estudiante</string>
+    <string name="txtInformacion">Información:</string>
 </resources>

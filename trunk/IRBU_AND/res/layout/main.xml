@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@drawable/fondo"
     android:orientation="vertical" >
 
     <ScrollView
@@ -12,15 +13,15 @@
         <LinearLayout
             android:id="@+id/linearLayout1"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
-
+
             <LinearLayout
                 android:id="@+id/linearLayout3"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical" >
-
+
                 <TextView
                     android:id="@+id/textView1"
                     android:layout_width="fill_parent"
@@ -29,8 +30,10 @@
                     android:layout_marginTop="10dp"
                     android:gravity="center"
                     android:text="@string/app_name"
-                    android:textAppearance="?android:attr/textAppearanceLarge" />
-
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:id="@+id/textView3"
                     android:layout_width="fill_parent"
@@ -39,8 +42,9 @@
                     android:layout_marginBottom="20dp"
                     android:gravity="center"
                     android:text="@string/txtTitutloApp"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
-
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
@@ -56,7 +60,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:src="@drawable/mapa" />
-
+
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="0dp"
@@ -66,7 +70,6 @@
                     android:layout_weight="1"
                     android:text="@string/txtMapa"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -82,7 +85,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:src="@drawable/rutas" />
-
+
                 <TextView
                     android:id="@+id/TextView01"
                     android:layout_width="0dp"
@@ -92,7 +95,6 @@
                     android:layout_weight="1"
                     android:text="@string/txtBuscarRuta"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -121,6 +123,31 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/LinearLayout04"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp" >
+
+                <ImageButton
+                    android:id="@+id/btnInformacion"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/info_user" />
+
+                <TextView
+                    android:id="@+id/TextView04"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_weight="1"
+                    android:text="@string/txtInformacionEstudiante"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/LinearLayout03"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -133,7 +160,7 @@
                     android:layout_marginLeft="30dp"
                     android:layout_weight="1"
                     android:src="@drawable/ayuda" />
-
+
                 <TextView
                     android:id="@+id/TextView03"
                     android:layout_width="0dp"
@@ -143,30 +170,6 @@
                     android:layout_weight="1"
                     android:text="@string/txtAyuda"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/LinearLayout04"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp" >
-
-                <ImageButton
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/layers" />
-
-                <TextView
-                    android:id="@+id/TextView04"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_weight="1"
-                    android:text="@string/txtBuscarRutaHoraSector" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
