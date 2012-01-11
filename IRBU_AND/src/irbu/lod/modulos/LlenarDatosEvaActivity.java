@@ -1,10 +1,11 @@
 package irbu.lod.modulos;
 
+import irbu.lod.R;
+import irbu.lod.mapa.ViewMapaActivity;
+import irbu.lod.objetos.ConsultarServer;
+
 import java.io.IOException;
 import java.net.SocketException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,9 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import irbu.lod.R;
-import irbu.lod.mapa.ViewMapaActivity;
-import irbu.lod.objetos.ConsultarServer;
 
 public class LlenarDatosEvaActivity extends Activity implements OnClickListener {
 
@@ -27,7 +25,7 @@ public class LlenarDatosEvaActivity extends Activity implements OnClickListener 
 	private Button btnCancelar;
 
 	private String user;
-	private String pass;
+//	private String pass;
 	private double lon;
 	private double lat;
 
@@ -42,7 +40,7 @@ public class LlenarDatosEvaActivity extends Activity implements OnClickListener 
 		txtMail = (EditText) findViewById(R.id.tfMail);
 
 		user = getIntent().getExtras().getString("usuario");
-		pass = getIntent().getExtras().getString("clave");
+//		pass = getIntent().getExtras().getString("clave");
 		lat = getIntent().getExtras().getDouble("lat") * 1e6;
 		lon = getIntent().getExtras().getDouble("lon") * 1e6;
 

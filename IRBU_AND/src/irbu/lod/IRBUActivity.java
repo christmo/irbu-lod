@@ -1,10 +1,10 @@
 package irbu.lod;
 
 import irbu.lod.mapa.ViewMapaActivity;
+import irbu.lod.modulos.AyudaActivity;
 import irbu.lod.modulos.BuscarRutaActivity;
 import irbu.lod.modulos.BuscarRutaHoraActivity;
 import irbu.lod.modulos.LoginEvaActivity;
-import irbu.lod.objetos.LoginEvaUTPL;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ public class IRBUActivity extends Activity implements OnClickListener {
 	private ImageButton btnBuscarRuta;
 	private ImageButton btnBuscarRutaHora;
 	private ImageButton btnAyuda;
+	private ImageButton btnInformacion;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,10 +29,12 @@ public class IRBUActivity extends Activity implements OnClickListener {
 		btnBuscarRuta = (ImageButton) findViewById(R.id.btnBuscarRuta);
 		btnBuscarRutaHora = (ImageButton) findViewById(R.id.btnBuscarRutaHora);
 		btnAyuda = (ImageButton) findViewById(R.id.btnAyuda);
+		btnInformacion = (ImageButton) findViewById(R.id.btnInformacion);
 
 		btnMapa.setOnClickListener(this);
 		btnBuscarRuta.setOnClickListener(this);
 		btnBuscarRutaHora.setOnClickListener(this);
+		btnInformacion.setOnClickListener(this);
 		btnAyuda.setOnClickListener(this);
 	}
 
@@ -50,11 +53,13 @@ public class IRBUActivity extends Activity implements OnClickListener {
 					BuscarRutaHoraActivity.class);
 			startActivity(buscarRutaHora);
 			break;
-		case R.id.btnAyuda:
-			 Intent mapa1 = new Intent(this,LoginEvaActivity.class);
-			 startActivity(mapa1);
+		case R.id.btnInformacion:
+			Intent info = new Intent(this, LoginEvaActivity.class);
+			startActivity(info);
 			break;
-		default:
+		case R.id.btnAyuda:
+			Intent ayuda = new Intent(this, AyudaActivity.class);
+			startActivity(ayuda);
 			break;
 		}
 	}
