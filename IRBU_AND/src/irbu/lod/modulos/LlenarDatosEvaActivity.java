@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.net.SocketException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +27,7 @@ public class LlenarDatosEvaActivity extends Activity implements OnClickListener 
 	private Button btnCancelar;
 
 	private String user;
-//	private String pass;
+	// private String pass;
 	private double lon;
 	private double lat;
 
@@ -40,7 +42,7 @@ public class LlenarDatosEvaActivity extends Activity implements OnClickListener 
 		txtMail = (EditText) findViewById(R.id.tfMail);
 
 		user = getIntent().getExtras().getString("usuario");
-//		pass = getIntent().getExtras().getString("clave");
+		// pass = getIntent().getExtras().getString("clave");
 		lat = getIntent().getExtras().getDouble("lat") * 1e6;
 		lon = getIntent().getExtras().getDouble("lon") * 1e6;
 
@@ -67,17 +69,35 @@ public class LlenarDatosEvaActivity extends Activity implements OnClickListener 
 	 */
 	private void guardarDatos() {
 		try {
-			new ConsultarServer().guardarDatosEstudiante(txtNombre.getText()
-					.toString(), txtCI.getText().toString(), txtMail.getText()
-					.toString(), user);
-			new ConsultarServer().guardarDatosCasaEstudiante(txtDireccion
-					.getText().toString(), txtCI.getText().toString(), lon,
-					lat, null);
-			regresarMapa();
+			String strNombre = txtNombre.getText().toString();
+			if (!strNombre.equals("")) {
+				String strDir = txtDireccion.getText().toString();
+				if (!strDir.equals("")) {
+						String strCI = txtCI.getText().toString();
+						if (!strCI.equals("")) {
+							String strMail = txtMail.getText().toString();
+							if (!strMail.equals("")) {
+							new ConsultarServer().guardarDatosEstudiante(
+									strNombre, strCI, strMail, user);
+							new ConsultarServer().guardarDatosCasaEstudiante(
+									strDir, strCI, lon, lat, null);
+							regresarMapa();
+						} else {
+							mensaje("Debe ingresar su mail, este campo no puede quedar vacio.");
+						}
+					} else {
+						mensaje("Debe ingresar su cédula, este campo no puede quedar vacio.");
+					}
+				} else {
+					mensaje("Debe ingresar su dirección, este campo no puede quedar vacio.");
+				}
+			} else {
+				mensaje("Debe ingresar su nombre, este campo no puede quedar vacio.");
+			}
 		} catch (SocketException e) {
-			e.printStackTrace();
+			mensajeErrorConexion();
 		} catch (IOException e) {
-			e.printStackTrace();
+			mensajeErrorConexion();
 		}
 	}
 
@@ -88,5 +108,36 @@ public class LlenarDatosEvaActivity extends Activity implements OnClickListener 
 	private void regresarMapa() {
 		Intent mapa = new Intent(this, ViewMapaActivity.class);
 		startActivity(mapa);
+	}
+
+	/**
+	 * Mensaje Error de conexión a internet
+	 */
+	private void mensaje(String txt) {
+		AlertDialog.Builder builder1 = new AlertDialog.Builder(
+				LlenarDatosEvaActivity.this);
+		builder1.setMessage(txt).setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		AlertDialog alert1 = builder1.create();
+		alert1.show();
+	}
+
+	/**
+	 * Mensaje Error de conexión a internet
+	 */
+	private void mensajeErrorConexion() {
+		AlertDialog.Builder builder1 = new AlertDialog.Builder(
+				LlenarDatosEvaActivity.this);
+		builder1.setMessage(R.string.txtErrorConexionInternet)
+				.setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		AlertDialog alert1 = builder1.create();
+		alert1.show();
 	}
 }

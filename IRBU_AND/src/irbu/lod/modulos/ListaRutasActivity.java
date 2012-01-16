@@ -172,9 +172,9 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 					handler.sendEmptyMessage(2);
 
 				} catch (SocketException e) {
-					e.printStackTrace();
+					mensajeErrorConexion();
 				} catch (IOException e) {
-					e.printStackTrace();
+					mensajeErrorConexion();
 				}
 			}
 		});
@@ -192,12 +192,12 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	}
 
 	/**
-	 * Muestra el mensaje de error cuando no hay conexión
+	 * Muestra el mensaje de error cuando no hay conexiï¿½n
 	 */
 	private void mensajeErrorConexion() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(
-				"No se puede obtener las rutas del servidor, revise su conexión a internet e intente nuevamente...")
+				R.string.txtErrorNoHayRutas)
 				.setCancelable(false)
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {

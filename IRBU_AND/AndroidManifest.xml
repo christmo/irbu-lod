@@ -4,55 +4,58 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk
+        android:minSdkVersion="7" />
 
+    <!-- quitar debuggable para subir a un dispositivo -->
     <application
+        android:name=".sesion.SesionApplication"
         android:debuggable="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
         <activity
-            android:label="@string/app_name"
-            android:name=".IRBUActivity" >
-            <intent-filter >
+            android:name=".IRBUActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity
-            android:label="@string/txtBuscarRuta"
-            android:name=".modulos.BuscarRutaHoraActivity" >
+        <activity
+            android:name=".modulos.BuscarRutaHoraActivity"
+            android:label="@string/txtBuscarRuta" >
         </activity>
         <activity
-            android:label="@string/txtBuscarRuta"
-            android:name=".modulos.BuscarRutaActivity" >
+            android:name=".modulos.BuscarRutaActivity"
+            android:label="@string/txtBuscarRuta" >
         </activity>
         <activity
-            android:label="@string/txtBuscarRuta"
-            android:name=".modulos.ListaRutasActivity" >
+            android:name=".modulos.ListaRutasActivity"
+            android:label="@string/txtBuscarRuta" >
         </activity>
         <activity
-            android:label="@string/txtBuscarRuta"
-            android:name=".mapa.ViewMapaActivity" >
+            android:name=".mapa.ViewMapaActivity"
+            android:label="@string/txtBuscarRuta" >
         </activity>
-         <activity
-            android:label="@string/txtBuscarRuta"
-            android:name=".modulos.InfoParadasActivity" >
+        <activity
+            android:name=".modulos.InfoParadasActivity"
+            android:label="@string/txtBuscarRuta" >
         </activity>
-         <activity
-            android:label="@string/txtLoginEva"
-            android:name=".modulos.LoginEvaActivity" >
+        <activity
+            android:name=".modulos.LoginEvaActivity"
+            android:label="@string/txtLoginEva" >
         </activity>
-         <activity
-            android:label="@string/txtLoginEva"
-            android:name=".modulos.InfoEvaActivity" >
+        <activity
+            android:name=".modulos.InfoEvaActivity"
+            android:label="@string/txtLoginEva" >
         </activity>
-         <activity
-            android:label="@string/txtLoginEva"
-            android:name=".modulos.LlenarDatosEvaActivity" >
+        <activity
+            android:name=".modulos.LlenarDatosEvaActivity"
+            android:label="@string/txtLoginEva" >
         </activity>
-         <activity
-            android:label="@string/txtLoginEva"
-            android:name=".modulos.AyudaActivity" >
+        <activity
+            android:name=".modulos.AyudaActivity"
+            android:label="@string/txtLoginEva" >
         </activity>
     </application>
 

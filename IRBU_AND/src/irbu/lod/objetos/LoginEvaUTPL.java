@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +12,14 @@ import java.util.List;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+
+import android.util.Log;
 
 /**
  * 
@@ -24,7 +28,7 @@ import org.apache.http.protocol.HTTP;
 public class LoginEvaUTPL {
 
 	private DefaultHttpClient httpclient = new DefaultHttpClient();
-	private HashMap<String, String> inforUsuario = new HashMap<String, String>();
+	private HashMap<String, String> inforUsuario;
 	private boolean isLogin = false;
 	private String user;
 
@@ -36,6 +40,42 @@ public class LoginEvaUTPL {
 	}
 
 	/**
+	 * Hace el login dentro del entorno virtual de aprendizaje EVA para obtener
+	 * los datos del estudiante de alli
+	 * 
+	 * @param user
+	 * @param pass
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
+	public void loginFormUTPL(String user, String pass) throws IOException {
+		String url = "http://rsa.utpl.edu.ec/eva/login/index.php";
+		List<NameValuePair> nvps = null;
+		try {
+			nvps = new ArrayList<NameValuePair>(2);
+			nvps.add(new BasicNameValuePair("username", user));
+			nvps.add(new BasicNameValuePair("password", pass));
+			this.user = user;
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		try {
+			HttpEntity entity = conectarSitio(url, nvps);
+			// Thread getEstudianteServer = new Thread(this);
+			// getEstudianteServer.start();
+			procesarIndex(entity);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new IOException();
+		} finally {
+			// When HttpClient instance is no longer needed,
+			// shut down the connection manager to ensure
+			// immediate deallocation of all system resources
+			httpclient.getConnectionManager().shutdown();
+		}
+	}
+
+	/**
 	 * Conecta a un sitio sin parametros extrae todo el contenido
 	 * 
 	 * @param url
@@ -44,11 +84,12 @@ public class LoginEvaUTPL {
 	private HttpEntity conectarSitio(String url)
 			throws UnsupportedOperationException, IOException {
 		if (url != null) {
-			System.out.println("URL:" + url);
+			Log.d("Login", "URL:" + url);
 			HttpPost httpost = new HttpPost(url);
 			HttpResponse response = httpclient.execute(httpost);
 			return response.getEntity();
 		} else {
+			Log.d("Login", "Dentro del EVA, NO hay link para obtener datos...");
 			throw new UnsupportedOperationException(
 					"Dentro del EVA, NO hay link para obtener datos...");
 		}
@@ -60,34 +101,36 @@ public class LoginEvaUTPL {
 	 * @param url
 	 * @param parametros
 	 * @return HttpEntity
+	 * @throws IOException
+	 * @throws IllegalArgumentException
 	 */
 	private HttpEntity conectarSitio(String url, List<NameValuePair> parametros)
-			throws IllegalArgumentException, IOException {
+			throws IllegalArgumentException {
 		if (url != null) {
-			System.out.println("Conectar:" + url);
+			Log.d("Login", "Conectar:" + url);
 			HttpPost httpost = new HttpPost(url);
-			httpost.setEntity(new UrlEncodedFormEntity(parametros, HTTP.UTF_8));
-			HttpResponse response = httpclient.execute(httpost);
-			return response.getEntity();
-		} else {
-			throw new IllegalArgumentException("Conexión NULL...");
-		}
-	}
+			try {
+				httpost.setEntity(new UrlEncodedFormEntity(parametros,
+						HTTP.UTF_8));
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			HttpResponse response;
+			try {
+				response = httpclient.execute(httpost);
+				return response.getEntity();
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
 
-	public void loginFormUTPL(String user, String pass) throws IOException {
-		String url = "http://rsa.utpl.edu.ec/eva/login/index.php";
-		try {
-			List<NameValuePair> nvps = new ArrayList<NameValuePair>();
-			nvps.add(new BasicNameValuePair("username", user));
-			nvps.add(new BasicNameValuePair("password", pass));
-			this.user = user;
-			HttpEntity entity = conectarSitio(url, nvps);
-			procesarIndex(entity);
-		} finally {
-			// When HttpClient instance is no longer needed,
-			// shut down the connection manager to ensure
-			// immediate deallocation of all system resources
-			httpclient.getConnectionManager().shutdown();
+		} else {
+			Log.d("Login", "Conexion NULL");
+			throw new IllegalArgumentException("ConexiÃ³n NULL...");
 		}
 	}
 
@@ -99,7 +142,9 @@ public class LoginEvaUTPL {
 	 */
 	private void procesarIndex(HttpEntity entity) throws IOException {
 		String url = null;
+		String periodo = null;
 		if (entity != null) {
+			Log.d("Login", "Procesando index moodle...");
 			InputStream instream = null;
 			try {
 				instream = entity.getContent();
@@ -109,26 +154,30 @@ public class LoginEvaUTPL {
 				while ((line = in.readLine()) != null) {
 					if (line.contains("Hola, ")) {
 						isLogin = true;
-						break;
+						inforUsuario = new ConsultarServer()
+								.getInforEstudiante(user);
 					}
 					if (line.contains("Consultar notas y saldos")) {
 						url = line.split("href=")[1].split("\"")[1];
-						break;
+						// break;
 					}
 					if (line.contains("&#9658;")) {
 						System.out
 								.println(line.split("&#9658; ")[1].split("<")[0]);
-						getInforUsuario().put("periodo",
-								line.split("&#9658; ")[1].split("<")[0]);
+						periodo = line.split("&#9658; ")[1].split("<")[0];
 						break;
 					}
 				}
 				in.close();
 				entity.consumeContent();
+				Log.d("Login", "" + isLogin());
+				/* Hacer si esta logueado en el eva */
 				if (isLogin()) {
-					inforUsuario = new ConsultarServer()
-							.getInforEstudiante(user);
 					if (inforUsuario == null) {
+						inforUsuario = new HashMap<String, String>();
+						inforUsuario.put("periodo", periodo);
+						Log.d("respuesta",
+								"No hay info del estudiante conectar a:" + url);
 						procesarPagina2(conectarSitio(url));
 					}
 				}
@@ -149,8 +198,9 @@ public class LoginEvaUTPL {
 	 * @throws IOException
 	 */
 	private void procesarPagina2(HttpEntity entity) throws IOException {
-		String url = null;
 		if (entity != null) {
+			String url = null;
+			Log.d("Login", "Procesando menssaje de navegador...");
 			InputStream instream = entity.getContent();
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					instream));
@@ -162,9 +212,9 @@ public class LoginEvaUTPL {
 				}
 			}
 			in.close();
+			conectarSitio(url).consumeContent();
+			procesarPagina3();
 		}
-		conectarSitio(url).consumeContent();
-		procesarPagina3();
 	}
 
 	/**
@@ -178,6 +228,7 @@ public class LoginEvaUTPL {
 		HttpEntity entity = conectarSitio(url);
 
 		if (entity != null) {
+			Log.d("Login", "Sacando datos...");
 			InputStream instream = entity.getContent();
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					instream));
@@ -219,12 +270,13 @@ public class LoginEvaUTPL {
 				}
 			}
 			in.close();
+			entity.consumeContent();
 		}
-		entity.consumeContent();
+
 	}
 
 	/**
-	 * Procesamiento a parte porque la fila del domicilío aparece en lugares
+	 * Procesamiento a parte porque la fila del domicilï¿½o aparece en lugares
 	 * diferentes
 	 * 
 	 * @param linea
@@ -234,7 +286,6 @@ public class LoginEvaUTPL {
 		String dir = txt.split("Calles: ")[1];
 		if (linea.contains("Domicilio")) {
 			getInforUsuario().put("direccion", dir);
-			System.out.println(dir);
 		}
 	}
 
