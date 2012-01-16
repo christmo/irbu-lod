@@ -3,7 +3,9 @@ package irbu.lod.modulos;
 import irbu.lod.R;
 import irbu.lod.mapa.ViewMapaActivity;
 import irbu.lod.objetos.ConsultarServer;
+import irbu.lod.objetos.Estudiante;
 import irbu.lod.objetos.LoginEvaUTPL;
+import irbu.lod.sesion.SesionApplication;
 
 import java.io.IOException;
 import java.net.SocketException;
@@ -17,6 +19,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -41,6 +44,7 @@ public class InfoEvaActivity extends Activity implements Runnable,
 	private int idParada;
 	private ProgressDialog pd;
 	private HashMap<String, String> infoUsuario;
+	private SesionApplication sesion;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +62,7 @@ public class InfoEvaActivity extends Activity implements Runnable,
 		btnGuardar.setOnClickListener(this);
 		btnCancelar.setOnClickListener(this);
 
-		user = getIntent().getExtras().getString("usuario");
-		pass = getIntent().getExtras().getString("clave");
+		sesion = (SesionApplication) getApplicationContext();
 
 		if (getIntent().hasExtra("lat") && getIntent().hasExtra("lon")) {
 			lat = getIntent().getExtras().getDouble("lat");
@@ -69,13 +72,23 @@ public class InfoEvaActivity extends Activity implements Runnable,
 			idParada = getIntent().getExtras().getInt("id_parada");
 		}
 
-		pd = ProgressDialog
-				.show(InfoEvaActivity.this,
-						"",
-						"Obteniendo sus datos del EVA, esto puede tardar un momento por favor espere... :-)",
-						true);
-		Thread thread = new Thread(this);
-		thread.start();
+		if (sesion.isLogin()) {
+			infoUsuario = new HashMap<String, String>();
+			infoUsuario.put("nombre", sesion.getEstudiante().getStrNombre());
+			infoUsuario.put("ci", sesion.getEstudiante().getStrCI());
+			infoUsuario.put("direccion", sesion.getEstudiante()
+					.getStrDireccion());
+			infoUsuario.put("mail", sesion.getEstudiante().getStrMail());
+			infoUsuario.put("periodo", sesion.getEstudiante().getStrPeriodo());
+			handler.sendEmptyMessage(0);
+		} else {
+			user = getIntent().getExtras().getString("usuario");
+			pass = getIntent().getExtras().getString("clave");
+			pd = ProgressDialog.show(InfoEvaActivity.this, "", getResources()
+					.getText(R.string.txtMensajeEVA), true);
+			Thread thread = new Thread(this);
+			thread.start();
+		}
 	}
 
 	public void run() {
@@ -83,12 +96,19 @@ public class InfoEvaActivity extends Activity implements Runnable,
 		try {
 			eva.loginFormUTPL(user, pass);
 			infoUsuario = eva.getInforUsuario();
-			handler.sendEmptyMessage(0);
+			if (infoUsuario != null) {
+				handler.sendEmptyMessage(0);
+			} else {
+				handler.sendEmptyMessage(4);
+			}
 		} catch (IllegalArgumentException e) {
+			// Error de Usuario y clave
 			handler.sendEmptyMessage(2);
 		} catch (UnsupportedOperationException e) {
+			// Error de usuario, no hay datos ingresar manualmente
 			handler.sendEmptyMessage(3);
 		} catch (IOException e) {
+			// Error de conexion
 			handler.sendEmptyMessage(1);
 		}
 	}
@@ -96,41 +116,53 @@ public class InfoEvaActivity extends Activity implements Runnable,
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
+			if (!sesion.isLogin()) {
+				/**
+				 * TODO: Error cuando se cambia de orientacion la pantalla
+				 * varias veces
+				 */
+				pd.dismiss();
+			}
 			switch (msg.what) {
 			case 0:
-				txtNombre.setText(infoUsuario.get("nombre"));
-				txtDireccion.setText(infoUsuario.get("direccion"));
-				txtCI.setText(infoUsuario.get("ci"));
-				txtMail.setText(infoUsuario.get("mail"));
-				txtPeriodoAcademico.setText(infoUsuario.get("periodo"));
+				String strNombre = infoUsuario.get("nombre");
+				String strDir = infoUsuario.get("direccion");
+				String strCI = infoUsuario.get("ci");
+				String strMail = infoUsuario.get("mail");
+				String strPeriodo = infoUsuario.get("periodo");
+
+				txtNombre.setText(strNombre);
+				txtDireccion.setText(strDir);
+				txtCI.setText(strCI);
+				txtMail.setText(strMail);
+				txtPeriodoAcademico.setText(strPeriodo);
+
+				if (!sesion.isLogin()) {
+					Estudiante estudiante = new Estudiante();
+					estudiante.setStrCI(strCI);
+					estudiante.setStrNombre(strNombre);
+					estudiante.setStrDireccion(strDir);
+					estudiante.setStrMail(strMail);
+					estudiante.setStrPeriodo(strPeriodo);
+
+					sesion.setEstudiante(estudiante);
+					sesion.setLogin(true);
+					Log.d("SeSiOn", "LOGIN");
+				}
+
 				break;
 			case 1:
-				mensajeErrorConexion();
+				mensajeErrorConexionEVA();
 				break;
 			case 2:
 				mensajeErrorUsuarioClave();
 				break;
 			case 3:
-				// try {
-				// infoUsuario = new ConsultarServer().getInforEstudiante(user);
-				// txtNombre.setText(infoUsuario.get("nombre"));
-				// txtCI.setText(infoUsuario.get("ci"));
-				// txtMail.setText(infoUsuario.get("mail"));
-				// } catch (SocketException e) {
-				// e.printStackTrace();
-				// } catch (IOException e) {
-				// e.printStackTrace();
-				// }catch (NullPointerException e) {
-				// mensajeErrorUsuario();
-				// }
-				mensajeErrorUsuario();
+				mensajeErrorUsuarioSinDatos();
 				break;
+			case 4:
+				mensajeErrorUsuarioNoRegistrado();
 			}
-			/**
-			 * TODO: Error cuando se cambia de orientacion la pantalla varias
-			 * veces
-			 */
-			pd.dismiss();
 		}
 	};
 
@@ -151,24 +183,29 @@ public class InfoEvaActivity extends Activity implements Runnable,
 	 */
 	private void guardarCoordenadasCasaParada() {
 		try {
-			new ConsultarServer().guardarDatosEstudiante(txtNombre.getText()
-					.toString(), txtCI.getText().toString(), txtMail.getText()
-					.toString(), user);
-			if (getIntent().hasExtra("lat") && getIntent().hasExtra("lon")) {
-				new ConsultarServer().guardarDatosCasaEstudiante(txtDireccion
-						.getText().toString(), txtCI.getText().toString(), lon,
-						lat, txtPeriodoAcademico.getText().toString());
-			} 
-			if (getIntent().hasExtra("id_parada")) {
-				new ConsultarServer().guardarDatosParadaEstudiante(txtCI
-						.getText().toString(), idParada, txtPeriodoAcademico
-						.getText().toString());
+			if (!txtDireccion.getText().toString().equals("")) {
+				new ConsultarServer().guardarDatosEstudiante(txtNombre
+						.getText().toString(), txtCI.getText().toString(),
+						txtMail.getText().toString(), user);
+				if (getIntent().hasExtra("lat") && getIntent().hasExtra("lon")) {
+					new ConsultarServer().guardarDatosCasaEstudiante(
+							txtDireccion.getText().toString(), txtCI.getText()
+									.toString(), lon, lat, txtPeriodoAcademico
+									.getText().toString());
+				}
+				if (getIntent().hasExtra("id_parada")) {
+					new ConsultarServer().guardarDatosParadaEstudiante(txtCI
+							.getText().toString(), idParada,
+							txtPeriodoAcademico.getText().toString());
+				}
+				regresarMapa();
+			} else {
+				mensaje("Se debe ingresar una dirección, no se puede dejar este campo en blanco.");
 			}
-			regresarMapa();
 		} catch (SocketException e) {
-			e.printStackTrace();
+			mensajeErrorConexion();
 		} catch (IOException e) {
-			e.printStackTrace();
+			mensajeErrorConexion();
 		}
 	}
 
@@ -182,13 +219,11 @@ public class InfoEvaActivity extends Activity implements Runnable,
 	}
 
 	/**
-	 * Muestra el mensaje de error cuando no hay conexi�n
+	 * Muestra el mensaje de error cuando no hay conexion
 	 */
-	private void mensajeErrorConexion() {
+	private void mensajeErrorConexionEVA() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(
-				"No se pudo obtener los datos del EVA por favor vuelva a intentar mas tarde...")
-				.setCancelable(false)
+		builder.setMessage(R.string.txtErrorConexionEVA).setCancelable(false)
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						InfoEvaActivity.this.finish();
@@ -204,9 +239,7 @@ public class InfoEvaActivity extends Activity implements Runnable,
 	private void mensajeErrorUsuarioClave() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(
 				InfoEvaActivity.this);
-		builder.setMessage(
-				"El nombre de usuario o la clave son incorrectas, por favor vuelva a intentar nuevamente...")
-				.setCancelable(false)
+		builder.setMessage(R.string.txtErrorUsuarioClave).setCancelable(false)
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						InfoEvaActivity.this.finish();
@@ -220,18 +253,18 @@ public class InfoEvaActivity extends Activity implements Runnable,
 	 * Muestra el mensaje de error cuando no se han podido obtener los datos del
 	 * usuario
 	 */
-	private void mensajeErrorUsuario() {
+	private void mensajeErrorUsuarioSinDatos() {
 		AlertDialog.Builder builder1 = new AlertDialog.Builder(
 				InfoEvaActivity.this);
-		builder1.setMessage(
-				"No hay datos de este usuario ingresarlos manualmente...")
+		builder1.setMessage(R.string.txtErrorUsuarioSinDatos)
 				.setCancelable(false)
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						Intent llenarDatos = new Intent(InfoEvaActivity.this,
 								LlenarDatosEvaActivity.class);
 						llenarDatos.putExtra("usuario", user);
-						if (getIntent().hasExtra("lat") && getIntent().hasExtra("lon")) {
+						if (getIntent().hasExtra("lat")
+								&& getIntent().hasExtra("lon")) {
 							llenarDatos.putExtra("lon", lon);
 							llenarDatos.putExtra("lat", lat);
 						}
@@ -239,6 +272,55 @@ public class InfoEvaActivity extends Activity implements Runnable,
 							llenarDatos.putExtra("id_parada", idParada);
 						}
 						startActivity(llenarDatos);
+					}
+				});
+		AlertDialog alert1 = builder1.create();
+		alert1.show();
+	}
+
+	/**
+	 * Usuario no registrado ingresar los datos manualmente
+	 */
+	private void mensajeErrorUsuarioNoRegistrado() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				InfoEvaActivity.this);
+		builder.setMessage(R.string.txtErrorUsuarioNoRegistrado)
+				.setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						InfoEvaActivity.this.finish();
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+
+	/**
+	 * Mensaje
+	 */
+	private void mensaje(String txt) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				InfoEvaActivity.this);
+		builder.setMessage(txt).setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		AlertDialog alert = builder.create();
+		alert.show();
+	}
+
+	/**
+	 * Mensaje Error de conexión a internet
+	 */
+	private void mensajeErrorConexion() {
+		AlertDialog.Builder builder1 = new AlertDialog.Builder(
+				InfoEvaActivity.this);
+		builder1.setMessage(R.string.txtErrorConexionInternet)
+				.setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						InfoEvaActivity.this.finish();
 					}
 				});
 		AlertDialog alert1 = builder1.create();

@@ -3,6 +3,7 @@ package irbu.lod.modulos;
 import irbu.lod.R;
 import irbu.lod.constantes.Constantes;
 import irbu.lod.objetos.Paradas;
+import irbu.lod.sesion.SesionApplication;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -119,7 +120,13 @@ public class InfoParadasActivity extends Activity implements OnClickListener {
 	 * Permite guardar los datos de la parada como parada favorita
 	 */
 	private void guardarParadaFavorita() {
-		Intent login = new Intent(this, LoginEvaActivity.class);
+		SesionApplication sesion = (SesionApplication) getApplicationContext();
+		Intent login=null;
+		if (sesion.isLogin()) {
+			login = new Intent(this, InfoEvaActivity.class);
+		} else {
+			login = new Intent(this, LoginEvaActivity.class);
+		}
 		login.putExtra("id_parada", parada.getIdParada());
 		startActivity(login);
 	}

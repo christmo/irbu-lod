@@ -15,6 +15,7 @@ public class Constantes {
 	 * consultas
 	 */
 	public static final String IP_SERVER = "10.0.2.2";
+//	public static final String IP_SERVER = "192.168.1.5";
 	public static final String PUERTO_SERVER = "8080";
 
 	/**
@@ -53,6 +54,16 @@ public class Constantes {
 			+ "core/php/core/RQ2_TrazadoRutas.php";
 
 	/**
+	 * URL para obtener las paradas aproximadas a un punto o coordenadas GPS
+	 * 
+	 * @params x
+	 * @params y
+	 * @params meters
+	 */
+	public static final String URL_PARADAS_APROX = URL_SERVER + NOMBRE_PROYECTO
+			+ "core/php/core/RQ3_paradas_cercanas.php";
+
+	/**
 	 * URL para obtener la informacion de las paradas de un ruta determinada
 	 * 
 	 * @params id_ruta
@@ -78,7 +89,7 @@ public class Constantes {
 	 */
 	public static final String URL_GUARDAR_PARADA_ESTUDIANTE = URL_SERVER
 			+ NOMBRE_PROYECTO + "core/php/core/guardarParadaEstudiante.php";
-	
+
 	/**
 	 * URL para recuperar la informacion del estudiante
 	 */

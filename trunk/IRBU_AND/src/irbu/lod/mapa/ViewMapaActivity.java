@@ -1,11 +1,17 @@
 package irbu.lod.mapa;
 
+import irbu.lod.IRBUActivity;
 import irbu.lod.R;
+import irbu.lod.modulos.InfoEvaActivity;
 import irbu.lod.modulos.InfoParadasActivity;
 import irbu.lod.modulos.LoginEvaActivity;
+import irbu.lod.objetos.ConsultarServer;
 import irbu.lod.objetos.Paradas;
 import irbu.lod.objetos.Puntos;
+import irbu.lod.sesion.SesionApplication;
 
+import java.io.IOException;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import org.osmdroid.DefaultResourceProxyImpl;
@@ -16,6 +22,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MinimapOverlay;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
@@ -31,14 +38,16 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class ViewMapaActivity extends Activity implements LocationListener {
 
@@ -49,7 +58,15 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	private static final int MENU_ZOOMIN_ID = Menu.FIRST;
 	private static final int MENU_ZOOMOUT_ID = MENU_ZOOMIN_ID + 1;
 	private static final int MENU_COORD_ID = MENU_ZOOMOUT_ID + 1;
-	private static final int MENU_DATA_ID = MENU_COORD_ID + 1;
+	private static final int MENU_LIMPIAR = MENU_COORD_ID + 1;
+	private static final int MENU_DATOS = MENU_LIMPIAR + 1;
+	private static final int MENU_PARADAS_PROXIMAS = MENU_DATOS + 1;
+	private static final int SUBM_100 = MENU_PARADAS_PROXIMAS + 1;
+	private static final int SUBM_200 = SUBM_100 + 1;
+	private static final int SUBM_400 = SUBM_200 + 1;
+	private static final int SUBM_600 = SUBM_400 + 1;
+	private static final int SUBM_800 = SUBM_600 + 1;
+	private static final int SUBM_1000 = SUBM_800 + 1;
 
 	// ===========================================================
 	// Fields
@@ -225,21 +242,29 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 					new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 						public boolean onItemSingleTapUp(final int index,
 								final OverlayItem item) {
-							Toast.makeText(
-									ViewMapaActivity.this,
-									"Dir: " + item.mTitle + "\n" + "Ref: "
-											+ item.mDescription,
-									Toast.LENGTH_LONG).show();
+							try {
+								Intent infoParada = new Intent(
+										ViewMapaActivity.this,
+										InfoParadasActivity.class);
+								infoParada.putExtra("parada",
+										paradas.get(index));
+								startActivity(infoParada);
+								// Toast.makeText(
+								// ViewMapaActivity.this,
+								// "Dir: " + item.mTitle + "\n" + "Ref: "
+								// + item.mDescription,
+								// Toast.LENGTH_LONG).show();
+							} catch (IndexOutOfBoundsException e) {
+								// TODO: handle exception
+								Log.d("ERROR",
+										"????????ERROR????????? NO hay parada seleccionada");
+							}
 							return true; // We 'handled' this event.
 						}
 
 						public boolean onItemLongPress(final int index,
 								final OverlayItem item) {
-							Intent infoParada = new Intent(
-									ViewMapaActivity.this,
-									InfoParadasActivity.class);
-							infoParada.putExtra("parada", paradas.get(index));
-							startActivity(infoParada);
+
 							return false;
 						}
 					}, mResourceProxy);
@@ -267,32 +292,97 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(final Menu pMenu) {
-		pMenu.add(0, MENU_ZOOMIN_ID, Menu.NONE, "Amplear(+)");
-		pMenu.add(0, MENU_ZOOMOUT_ID, Menu.NONE, "Reducir(-)");
-		pMenu.add(0, MENU_COORD_ID, Menu.NONE, "Coordenadas Casa");
-		pMenu.add(0, MENU_DATA_ID, Menu.NONE, "Ver Datos");
-		return true;
+		pMenu.add(0, MENU_ZOOMOUT_ID, Menu.NONE, "Reducir").setIcon(
+				R.drawable.zoom_out);
+		pMenu.add(0, MENU_ZOOMIN_ID, Menu.NONE, "Ampliar").setIcon(
+				R.drawable.zoom_in);
+		pMenu.add(0, MENU_LIMPIAR, Menu.NONE, "Limpiar Mapa").setIcon(
+				R.drawable.limpiar);
+		pMenu.add(0, MENU_COORD_ID, Menu.NONE, "Guardar Casa").setIcon(
+				R.drawable.casa);
+		pMenu.add(0, MENU_DATOS, Menu.NONE, "Mis Datos").setIcon(
+				R.drawable.mis_datos);
+
+		int menuPos = 0;
+		String m = " Metros";
+		{ // Layer-Item
+			final SubMenu subMenu = pMenu.addSubMenu(menuPos,
+					MENU_PARADAS_PROXIMAS, Menu.NONE, R.string.txtTituloParadasAproximadas)
+					.setIcon(R.drawable.radar);
+			{
+				subMenu.add(menuPos, SUBM_100, Menu.NONE, "100" + m).setIcon(
+						R.drawable.casa);
+				subMenu.add(menuPos, SUBM_200, Menu.NONE, "200" + m).setIcon(
+						R.drawable.casa);
+				subMenu.add(menuPos, SUBM_400, Menu.NONE, "400" + m).setIcon(
+						R.drawable.casa);
+				subMenu.add(menuPos, SUBM_600, Menu.NONE, "600" + m).setIcon(
+						R.drawable.casa);
+				subMenu.add(menuPos, SUBM_800, Menu.NONE, "800" + m).setIcon(
+						R.drawable.casa);
+				subMenu.add(menuPos, SUBM_1000, Menu.NONE, "1000" + m).setIcon(
+						R.drawable.casa);
+			}
+		}
+		return super.onCreateOptionsMenu(pMenu);
 	}
 
 	@Override
 	public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
 		switch (item.getItemId()) {
 		case MENU_ZOOMIN_ID:
-			double lastLat = -3.97733;
-			double lastLon = -79.20484;
-			GeoPoint puntoLoja = new GeoPoint(lastLat, lastLon);
-			puntosParadasItems.add(new OverlayItem("Terminal", "Loja",
-					puntoLoja));
 			this.osmMapa.getController().zoomIn();
-			this.osmMapa.invalidate();
 			return true;
 		case MENU_ZOOMOUT_ID:
 			this.osmMapa.getController().zoomOut();
 			return true;
 		case MENU_COORD_ID:
 			guardarCoordenadasVivienda();
+			return true;
+		case MENU_LIMPIAR:
+			Log.d("Iconos Mapa", "" + listaIconosParadasOverlay.size());
+			for (Overlay o : osmMapa.getOverlays()) {
+				if (!osmMapa.getOverlays().contains(posicionActualOverlay)) {
+					// osmMapa.getOverlays().remove(o);
+					// osmMapa.postInvalidate();
+					Log.d("O", "" + o.toString());
+				}
+			}
+			return true;
+		case MENU_DATOS:
+			/*
+			 * TODO: dibujar la parada frecuente del usuario y la casa en el
+			 * mapa
+			 */
+			
+			return true;
+		case SUBM_100:
+			buscarParadasAproximadas(100);
+			return true;
+		case SUBM_200:
+			buscarParadasAproximadas(200);
+			return true;
+		case SUBM_400:
+			buscarParadasAproximadas(400);
+			return true;
+		case SUBM_600:
+			buscarParadasAproximadas(600);
+			return true;
+		case SUBM_800:
+			buscarParadasAproximadas(800);
+			return true;
+		case SUBM_1000:
+			buscarParadasAproximadas(1000);
+			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public void onBackPressed() {
+		Intent principal = new Intent(this, IRBUActivity.class);
+		startActivity(principal);
+		super.onBackPressed();
 	}
 
 	/**
@@ -326,7 +416,15 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	 */
 	public void activarGPS() {
 		lmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 30000, 10, this);
+		if (!lmgr
+				.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+			Intent myIntent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+			startActivity(myIntent);
+		}
+
+		lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 10,
+				this);
+
 	}
 
 	/**
@@ -334,28 +432,101 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	 */
 	private void guardarCoordenadasVivienda() {
 		if (punto != null) {
-			Intent login = new Intent(this, LoginEvaActivity.class);
+			SesionApplication sesion = (SesionApplication) getApplicationContext();
+			Intent login = null;
+			if (sesion.isLogin()) {
+				login = new Intent(this, InfoEvaActivity.class);
+			} else {
+				login = new Intent(this, LoginEvaActivity.class);
+			}
 			login.putExtra("lat", punto.getLatitude());
 			login.putExtra("lon", punto.getLongitude());
 			startActivity(login);
 		} else {
-			AlertDialog.Builder builder1 = new AlertDialog.Builder(
-					ViewMapaActivity.this);
-			builder1.setMessage(
-					"Aun no se tiene una lectura de GPS v�lida, se sugiere mover el dispositivo unos metros o salir a una sona despejada para evitar la interferencia de las paredes...")
-					.setCancelable(false)
-					.setPositiveButton("OK",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-								}
-							});
-			AlertDialog alert1 = builder1.create();
-			alert1.show();
+			mensajeErrorGPS();
 		}
+	}
+
+	/**
+	 * Buscar las paradas que se encuentran más cerda al punto de GPS capturado
+	 */
+	private void buscarParadasAproximadas(int distancia) {
+		Log.d("Distancia", "" + distancia);
+		try {
+			paradas = new ConsultarServer().getParadasAproximacion(
+					punto.getLatitude(), punto.getLongitude(), distancia);
+			if (paradas != null) {
+				Intent mapa = new Intent(this, ViewMapaActivity.class);
+				mapa.putParcelableArrayListExtra("listaParadas", paradas);
+				startActivity(mapa);
+			} else {
+				mensajeNoHayParadas();
+			}
+		} catch (NullPointerException e) {
+			mensajeErrorGPS();
+		} catch (SocketException e) {
+			mensajeErrorConexion();
+		} catch (IOException e) {
+			mensajeErrorConexion();
+		}
+	}
+
+	/**
+	 * Mensaje Error de coordenadas de GPS
+	 */
+	private void mensajeErrorGPS() {
+		AlertDialog.Builder builder1 = new AlertDialog.Builder(
+				ViewMapaActivity.this);
+		builder1.setMessage(
+				R.string.txtErrorGPS)
+				.setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		AlertDialog alert1 = builder1.create();
+		alert1.show();
+
+	}
+
+	/**
+	 * Mensaje Error de coordenadas de GPS
+	 */
+	private void mensajeNoHayParadas() {
+		AlertDialog.Builder builder1 = new AlertDialog.Builder(
+				ViewMapaActivity.this);
+		builder1.setMessage(
+				R.string.txtErrorNoHayParadas)
+				.setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		AlertDialog alert1 = builder1.create();
+		alert1.show();
+
+	}
+	
+	/**
+	 * Mensaje Error de conexión a internet
+	 */
+	private void mensajeErrorConexion() {
+		AlertDialog.Builder builder1 = new AlertDialog.Builder(
+				ViewMapaActivity.this);
+		builder1.setMessage(
+				R.string.txtErrorConexionInternet)
+				.setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+					}
+				});
+		AlertDialog alert1 = builder1.create();
+		alert1.show();
+
 	}
 
 	// ===========================================================
 	// Inner and Anonymous Classes
 	// ===========================================================
+	
 }

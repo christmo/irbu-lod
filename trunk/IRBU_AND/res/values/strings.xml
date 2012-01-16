@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
-
     <string name="hello">Hello World, IRBUActivity!</string>
     <string name="app_name">IRBU</string>
     <string name="txtBajaUTPL">Baja de la UTPL</string>
@@ -36,4 +35,5 @@
     <string name="txtGuardarParada">Guardar como parada preferida:</string>
     <string name="txtInformacionEstudiante">Información Estudiante</string>
     <string name="txtInformacion">Información:</string>
+    <string name="txtTituloParadasAproximadas">Paradas Aproximadas</string>
 </resources>

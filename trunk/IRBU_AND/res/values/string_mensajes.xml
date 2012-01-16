@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="txtErrorConexionInternet">No hay conexión al servidor revisar su conexión a internet e intente nuevamente&#8230;</string>
+    <string name="txtErrorNoHayParadas">No existen paradas cercanas, volver a buscar con una mayor distancia&#8230;</string>
+    <string name="txtErrorGPS">Aun no se tiene una lectura de GPS válida, se sugiere mover el dispositivo unos metros o salir a una sona despejada para evitar la interferencia de las paredes&#8230;</string>
+    <string name="txtErrorNoHayRutas">No se puede obtener las rutas del servidor, revise su conexión a internet e intente nuevamente&#8230;</string>
+    <string name="txtErrorUsuarioNoRegistrado">El usuario no se encuentra registrado en el sistema EVA, revise su usuario y clave y vuelva a ingresar&#8230;</string>
+    <string name="txtErrorUsuarioSinDatos">No hay datos de este usuario se deben ingresar manualmente&#8230;</string>
+    <string name="txtErrorUsuarioClave">El nombre de usuario o la clave son incorrectas, por favor vuelva a intentar nuevamente&#8230;</string>
+    <string name="txtErrorConexionEVA">No se pudo obtener los datos del EVA por favor vuelva a intentar mas tarde&#8230;</string>
+
+    <string name="txtMensajeEVA">Obteniendo sus datos del EVA, esto puede tardar un momento por favor espere&#8230; :-)</string>
+    
+</resources>
