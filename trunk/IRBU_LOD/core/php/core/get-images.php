@@ -18,17 +18,16 @@ while ($name = $d->read()) {
     $consulta = "SELECT DIRECCION,LAT,LON,REFERENCIA,ID_PARADA FROM PARADAS WHERE DIR_IMG='" . $src_img_paradas . $thumb . "'";
     consulta($consulta);
     $dato = unicaFila();
-
     $images[] = array(
         'name' => $name,
         'size' => $size,
         'lastmod' => $lastmod,
         'url' => $src_img_paradas . $name,
         'thumb_url' => $src_img_paradas . $thumb,
-        'direccion' => $dato["DIRECCION"],
+        'direccion' => utf8_encode($dato["DIRECCION"]),
         'lat' => $dato["LAT"],
         'lon' => $dato["LON"],
-        'referencia' => $dato["REFERENCIA"],
+        'referencia' => utf8_encode($dato["REFERENCIA"]),
         'id' => $dato["ID_PARADA"]
     );
 }
