@@ -165,7 +165,7 @@ function guardarHorasRuta(){
             var r = Ext.util.JSON.decode(result.responseText);
             winHorasRuta.hide();
             storeHorasRuta.removeAll();
-            ventanaPuntosRuta(r.id,true);
+            ventanaPuntosRuta(id_ruta,true);
         },
         timeout : 1000,
         params: {

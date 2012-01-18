@@ -28,7 +28,7 @@ if (count($resulset) >= 1) {
                 . $fila["DIR_IMG"] . "%"
                 . $fila["ORDEN"] . "#";
     }
-    $salida = "{success:true,datos: { coordenadas: '$datos' }}";
+    $salida = "{success:true,datos:{coordenadas:'$datos'}}";
 }
 echo $salida;
 ?>

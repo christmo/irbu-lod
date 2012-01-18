@@ -10,12 +10,13 @@ var listaParadasSeleccionadas;
 var listaParadas;
 var id_ruta_vpr;
 var storeParadasSelecionadas;
+var storeParadas;
 
 Ext.onReady(function(){
 
-    var storeParadas = new Ext.data.JsonStore({
+    storeParadas = new Ext.data.JsonStore({
         autoDestroy : true,
-        autoLoad    : true,
+        //        autoLoad    : true,
         url         : "core/php/gui/listaParadas.php",
         root        : 'paradas',
         fields      : [{
@@ -185,8 +186,6 @@ Ext.onReady(function(){
                         id_ruta : id_ruta_vpr
                     },
                     success: function(form, o) {
-                        //console.info(o.response.responseText);
-                        //var obj = Ext.util.JSON.decode(o.response.responseText);
                         resetFormularioParadasRuta();
                         winParadasRuta.hide();
                         activarArrastradoPuntos(false);
@@ -204,33 +203,6 @@ Ext.onReady(function(){
 
 });
 
-/**
- * Muestra la ventana para ingresar una nueva parada
- * @param id_ruta de la ruta
- * @param cargar si tiene que llenar el store con datos o no true=cargar
- */
-function ventanaParadasRuta(id_ruta,cargar){
-    id_ruta_vpr = id_ruta;
-    if(!winParadasRuta){
-        winParadasRuta = new Ext.Window({
-            layout      : 'fit',
-            title       : 'Paradas para una ruta...',
-            resizable   : false,
-            width       : 650,
-            height      : 420,
-            closeAction : 'hide',
-            plain       : false,
-            items       : [frmPanelParadasRuta]
-        });
-    }
-    winParadasRuta.show(this);
-    efectoDragAndDropListas();
-    
-    if(cargar){
-        listaParadasSeleccionadas.store.proxy.conn.url = "core/php/gui/getParadas.php?id_ruta="+id_ruta_vpr;
-        listaParadasSeleccionadas.store.load();
-    }
-}
 
 /**
  * Permite crear el efecto para arrastras una parada de las lista hacia
@@ -351,4 +323,40 @@ function resetFormularioParadasRuta(){
     //storeParadasSelecionadas.loadData([],false);
     listaParadas.store.load();
     
+}
+
+/**
+ * Muestra la ventana para ingresar una nueva parada
+ * @param id_ruta de la ruta
+ * @param cargar si tiene que llenar el store con datos o no true=cargar
+ */
+function ventanaParadasRuta(id_ruta,cargar){
+    id_ruta_vpr = id_ruta;
+    if(!winParadasRuta){
+        winParadasRuta = new Ext.Window({
+            layout      : 'fit',
+            title       : 'Paradas para una ruta...',
+            resizable   : false,
+            width       : 650,
+            height      : 420,
+            closeAction : 'hide',
+            plain       : false,
+            items       : [frmPanelParadasRuta]
+        });
+    }
+    winParadasRuta.show(this);
+    efectoDragAndDropListas();
+    
+    if(cargar){
+        listaParadasSeleccionadas.store.proxy.conn.url = "core/php/gui/getParadas.php?id_ruta="+id_ruta_vpr;
+        listaParadasSeleccionadas.store.load();
+    }
+    console.info(paradasCercanasRuta);
+    storeParadas.store.proxy.conn.url = "core/php/gui/getParadas.php";
+    storeParadas.store.load({
+        params:{
+            paradas:paradasCercanasRuta
+        }
+    });
+    paradasCercanasRuta=null;
 }

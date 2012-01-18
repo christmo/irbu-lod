@@ -4,7 +4,6 @@ session_start();
 require_once('../../../dll/php/conexionBD.php');
 
 extract($_POST);
-//extract($_GET);
 
 if (is_numeric($id_parada)) {
     $consultaSql = "DELETE FROM RUTA_PARADA WHERE ID_PARADA=$id_parada";

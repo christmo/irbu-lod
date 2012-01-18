@@ -65,32 +65,32 @@ Ext.onReady(function(){
         }],
 
         buttons: [
-//        {
-//            text    : 'Editar',
-//            id      : 'btnEditarRuta',
-//            handler : function() {
-//                nombreRuta = cbxNuevaRuta.getValue();
-//                panelInfoRuta.getForm().submit({
-//                    url     : 'core/php/core/guardarRuta.php?nombreRuta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
-//                    method  : 'POST',
-//                    waitMsg : 'Editando Ruta...',
-//                    failure : function (form, action) {
-//                        Ext.MessageBox.show({
-//                            title   : 'Error...',
-//                            msg     : 'Ruta ya guardada...',
-//                            buttons : Ext.MessageBox.OK,
-//                            icon    : Ext.MessageBox.ERROR
-//                        });
-//                    },
-//                    success: function (form, action) {
-//                        var resultado = Ext.util.JSON.decode(action.response.responseText);
-//
-//                        limpiarVentana();
-//                        ventanaHorasRuta(resultado.id,false);
-//                    }
-//                });
-//            }
-//        },
+        //        {
+        //            text    : 'Editar',
+        //            id      : 'btnEditarRuta',
+        //            handler : function() {
+        //                nombreRuta = cbxNuevaRuta.getValue();
+        //                panelInfoRuta.getForm().submit({
+        //                    url     : 'core/php/core/guardarRuta.php?nombreRuta='+nombreRuta+'&radioTipo='+rbTipoRecorrido,
+        //                    method  : 'POST',
+        //                    waitMsg : 'Editando Ruta...',
+        //                    failure : function (form, action) {
+        //                        Ext.MessageBox.show({
+        //                            title   : 'Error...',
+        //                            msg     : 'Ruta ya guardada...',
+        //                            buttons : Ext.MessageBox.OK,
+        //                            icon    : Ext.MessageBox.ERROR
+        //                        });
+        //                    },
+        //                    success: function (form, action) {
+        //                        var resultado = Ext.util.JSON.decode(action.response.responseText);
+        //
+        //                        limpiarVentana();
+        //                        ventanaHorasRuta(resultado.id,false);
+        //                    }
+        //                });
+        //            }
+        //        },
         {
             text    : 'Eliminar',
             id      : 'btnEliminarRuta',
@@ -141,7 +141,11 @@ Ext.onReady(function(){
                     },
                     success: function (form, action) {
                         var resultado = Ext.util.JSON.decode(action.response.responseText);
-
+                        /**
+                         *Guardar el tipo de recorrido seleccionado para poner el 
+                         *icono de inicio o fin de la nueva ruta
+                         */
+                        strTipoRecorrido=rbTipoRecorrido;
                         limpiarVentana();
                         ventanaHorasRuta(resultado.id,false);
                     }

@@ -12,8 +12,8 @@ Ext.onReady(function(){
 
     storePuntosRuta = new Ext.data.JsonStore({
         autoDestroy : true,
-        url         : "core/php/gui/getPuntosRuta.php",
         root        : 'puntos',
+        url         : "core/php/gui/getPuntosRuta.php",
         fields      : [{
             name: 'numero'
         },{
@@ -66,9 +66,9 @@ Ext.onReady(function(){
                     puntosLineaRuta.splice(rowIndex,1);
                     lienzoRutas.features.splice(rowIndex,1);
                     /**
-                     * Dibuja la linea que une los puntos de la ruta despues de
-                     * eliminar lo que no sirven
-                     */
+                             * Dibuja la linea que une los puntos de la ruta despues de
+                             * eliminar lo que no sirven
+                             */
                     dibujarLineaRuta();
                     storePuntosRuta.commitChanges();
                 }
@@ -120,16 +120,88 @@ function cargarPuntosRuta(id_ruta){
     Ext.Ajax.request({
         url     : 'core/php/gui/getPuntosRuta.php',
         method  : 'POST',
-        success: function (result) {
+        success:function ( result, request ) {
             var datos = Ext.util.JSON.decode(result.responseText);
-//            console.info(datos.puntos.length);
-            dibujarPuntosLineaRutaEditar(datos);
+            if(datos.puntos==0){
+                cargarPuntoInicial(strTipoRecorrido);
+            }else{
+                dibujarPuntosLineaRutaEditar(datos);
+            }
         },
         timeout : 1000,
         params: {
             id_ruta : id_ruta
         }
     });
+}
+
+/**
+ * Carga las paradas en el mapa para que el usuario pueda por donde se
+ * debe dibujar la ruta por que paradas debe pasar
+ */
+function cargarParadasMapa(){
+    Ext.Ajax.request({
+        url     : 'core/php/gui/getParadasTodas.php',
+        method  : 'POST',
+        success: function (result) {
+            var resultado = Ext.util.JSON.decode(result.responseText);
+            var datos = resultado.datos.coordenadas;
+            lienzosRecorridoHistorico(datos);
+        },
+        timeout : 1000
+    });
+}
+
+/**
+ * Carga los iconos de inicio o de fin en la utpl para definir donde tiene
+ * que comenzar o finalizar la ruta
+ */
+function cargarPuntoInicial(strRecorrido){
+    var lon=0;
+    var lat=0;
+    
+    if(strRecorrido=="R"){//Llega a la UTPL
+        /* Punto Final Bandera */
+        lon = -79.19861071;
+        lat = -3.98571285;
+        iconoFin(lon,lat);
+        enlazarPuntoRuta(lon, lat);
+    }else if(strRecorrido=="B"){ //Sale de la UTPL
+        /* Punto Inicial Estrella */
+        lon = -79.19852488;
+        lat = -3.98547739;
+        iconoInicio(lon,lat);
+        enlazarPuntoRuta(lon, lat);
+    }else{ // Sale de la UTPL y llega a la UTPL
+        /* Punto Inicial Estrella */
+        lon = -79.19852488;
+        lat = -3.98547739;
+        iconoInicio(lon,lat);
+        enlazarPuntoRuta(lon, lat);
+        
+        /* Punto Final Bandera */
+        lon = -79.19861071;
+        lat = -3.98571285;
+        iconoFin(lon,lat);
+        enlazarPuntoRuta(lon, lat);
+    }
+}
+
+/*
+ * Hace que el punto inicial o final se unan al trazado de los puntos para 
+ * restringir que el primero o el ultimo punto sea en la utpl
+ */
+function enlazarPuntoRuta(lon,lat){
+    var ptIni = new OpenLayers.Geometry.Point(lon,lat);
+    ptIni.transform( new OpenLayers.Projection( "EPSG:4326" ),
+        new OpenLayers.Projection( "EPSG:900913" ) );
+
+    puntosLineaRuta.push(ptIni);
+    storePuntosRuta.add(new Ext.data.Record({
+        numero  : contadorPuntos,
+        latitud : lat,
+        longitud: lon
+    }));
 }
 
 /**
@@ -141,8 +213,8 @@ function cargarPuntosRuta(id_ruta){
 function ventanaPuntosRuta(id,cargar){
     if(!winPuntosRuta){
         winPuntosRuta = new Ext.Window({
-            layout      : 'fit',
             title       : 'Nueva Ruta',
+            layout      : 'fit',
             resizable   : true,
             width       : 350,
             height      : 300,
@@ -152,12 +224,13 @@ function ventanaPuntosRuta(id,cargar){
         });
     }
     this.id_ruta = id;
-    if(cargar){
+    booCapturarPuntosNuevaRuta=true;
+    if(cargar){ // se carga al momento de editar la ruta
         storePuntosRuta.proxy.conn.url = "core/php/gui/getPuntosRuta.php?id_ruta="+id;
         storePuntosRuta.load();
     }
-    cargarPuntosRuta(id);
-    booCapturarPuntosNuevaRuta=true;
     limpiarCapas();
+    cargarPuntosRuta(id);
+    cargarParadasMapa();
     winPuntosRuta.show(this);
 }

@@ -25,6 +25,9 @@ Ext.onReady(function(){
             text    : 'Parada mas Cercana',
             handler: function(){
                 capturarPuntoReferencia();
+//                    console.info(storePuntosRuta.getCount());
+//                    storePuntosRuta.getAt(storePuntosRuta.find('numero',"n")).set('numero',"y");
+                
             }
         },'-',{
             xtype   : 'tbbutton',
@@ -133,7 +136,11 @@ Ext.onReady(function(){
                     showVentanaUsuarios();
                 }
             },{
-                text: 'Ayuda'
+                icon    : 'img/ayuda.png',
+                text    : 'Ayuda Administrador',
+                handler: function(){
+                    window.open ("img/ayuda.pdf","Ayuda KRADAC...");
+                }
             }]
         },
         //        '-',{

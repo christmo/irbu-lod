@@ -3,22 +3,16 @@
  */
 function dibujarTrazado(coord){
     iconosInicioFin(coord);
-
     var fil = coord.split("#");
-
     var cantPuntos = 0;
 
     //PUNTOS PARA RUTA
     var puntosRuta = new Array();
 
     for ( i=0; i<fil.length-1; i++ ) {
-
         var col = fil[i].split("%");
-
         for ( j=0; j<col.length; j++ ) {
-
             var pt = new OpenLayers.Geometry.Point(col[0],col[1]);
-
             pt.transform( new OpenLayers.Projection( "EPSG:4326" ),new OpenLayers.Projection( "EPSG:900913" ) );
             puntosRuta.push(pt);
             cantPuntos++;
@@ -58,32 +52,39 @@ function dibujarTrazado(coord){
  */
 function iconosInicioFin(coordPuntos){
     var fil = coordPuntos.split("#");
+    markerInicioFin.clearMarkers();
+    var filIni = fil[0].split("%");
+    iconoInicio(filIni[0],filIni[1]);
+    var filFin = fil[fil.length-2].split("%");
+    iconoFin(filFin[0],filFin[1]);
+}
 
-    //punto Inicial y Final
-    var size = new OpenLayers.Size(32, 32);
+/**
+ * Poner el icono de inicio de ruta sobre el mapa
+ */
+function iconoInicio(lon,lat){
+    var size = new OpenLayers.Size(32,32);
     var iconIni = new OpenLayers.Icon(
         'img/inicio.png',
         size, null, 0);
+    var pInicio = new OpenLayers.LonLat(lon,lat);
+    pInicio.transform(new OpenLayers.Projection( "EPSG:4326" ),
+        new OpenLayers.Projection( "EPSG:900913" ));
+    markerInicioFin.addMarker(new OpenLayers.Marker(pInicio, iconIni));
 
+    
+}
+
+/**
+ * Poner el icono de Fin de la ruta sobre el mapa 
+ */
+function iconoFin(lon,lat){
+    var size = new OpenLayers.Size(32,32);
     var iconFin = new OpenLayers.Icon(
         'img/fin.png',
         size, null, 0);
-
-    markerInicioFin.clearMarkers();
-
-    var filIni = fil[0].split("%");
-
-    var pInicio = new OpenLayers.LonLat(filIni[0],filIni[1]);
-    pInicio.transform(new OpenLayers.Projection( "EPSG:4326" ),
-        new OpenLayers.Projection( "EPSG:900913" ) );
-    markerInicioFin.addMarker(new OpenLayers.Marker(pInicio, iconIni));
-
-    var filFin = fil[fil.length-2].split("%");
-
-    var pFin = new OpenLayers.LonLat(filFin[0],filFin[1]);
+    var pFin = new OpenLayers.LonLat(lon,lat);
     pFin.transform(new OpenLayers.Projection( "EPSG:4326" ),
         new OpenLayers.Projection( "EPSG:900913" ) );
     markerInicioFin.addMarker(new OpenLayers.Marker(pFin, iconFin));
 }
-
-
