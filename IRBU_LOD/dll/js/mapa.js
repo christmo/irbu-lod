@@ -83,7 +83,7 @@ function init(){
                  * Une los puntos de la ruta con una linea
                  */
                 dibujarLineaRuta();
-                permitirArrastrarPuntosRutas();
+//                permitirArrastrarPuntosRutas();
             }
             
             /**
@@ -395,6 +395,7 @@ function finalizarArrastre(feature, pixel){
  * esta definida en el archivo php del servidor
  */
 function getParadasCercanasPuntoRuta(lon,lat){
+    console.info('Entrar');
     Ext.Ajax.request({
         url     : 'core/php/gui/getParadasCercanasPunto.php',
         method  : 'POST',
