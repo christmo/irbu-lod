@@ -103,6 +103,7 @@ function guardarPuntosRuta(){
             winPuntosRuta.hide();
             limpiarCapas();
             booCapturarPuntosNuevaRuta=false;
+            activarArrastradoPuntos(false);
             ventanaParadasRuta(r.id,true);
         },
         timeout : 1000,
@@ -140,6 +141,7 @@ function cargarPuntosRuta(id_ruta){
  * debe dibujar la ruta por que paradas debe pasar
  */
 function cargarParadasMapa(){
+    paradasCercanasRuta = new Array();
     Ext.Ajax.request({
         url     : 'core/php/gui/getParadasTodas.php',
         method  : 'POST',
@@ -233,4 +235,5 @@ function ventanaPuntosRuta(id,cargar){
     cargarPuntosRuta(id);
     cargarParadasMapa();
     winPuntosRuta.show(this);
+    permitirArrastrarPuntosRutas();
 }

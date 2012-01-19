@@ -188,7 +188,6 @@ Ext.onReady(function(){
                     success: function(form, o) {
                         resetFormularioParadasRuta();
                         winParadasRuta.hide();
-                        activarArrastradoPuntos(false);
                     }
                 });
             }
@@ -359,7 +358,7 @@ function ventanaParadasRuta(id_ruta,cargar){
             id_ruta:id_ruta_vpr
         },
         callback: function() {
-            console.info('getParadas parametros');
+            //resultado cuando trae los datos y llena el store
         }
     });
     console.info(paradasCercanasRuta);

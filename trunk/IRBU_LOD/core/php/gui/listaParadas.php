@@ -9,8 +9,8 @@ Header("content-type: application/x-javascript");
 $salida = "{failure:true}";
 if (isset($paradas) && count(json_decode($paradas)) > 0) {
     $consultaSql = "SELECT ID_PARADA,DIRECCION,DIR_IMG FROM PARADAS
-                WHERE ID_PARADA IN " . str_replace("]", ")", str_replace("[", "(", $paradas)) . " 
-                ORDER BY DIRECCION";
+                    WHERE ID_PARADA IN " . str_replace("[", "(", str_replace("]", ")", $paradas)) . " 
+                    ORDER BY DIRECCION";
 } else {
     $consultaSql = "SELECT ID_PARADA,DIRECCION,DIR_IMG FROM PARADAS ORDER BY DIRECCION";
 }

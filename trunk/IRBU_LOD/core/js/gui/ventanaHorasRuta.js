@@ -158,21 +158,30 @@ function ingersarHora(hora){
  * servidor...
  */
 function guardarHorasRuta(){
-    Ext.Ajax.request({
-        url     : 'core/php/core/guardarHorasRuta.php',
-        method  : 'POST',
-        success: function (result) {
-            var r = Ext.util.JSON.decode(result.responseText);
-            winHorasRuta.hide();
-            storeHorasRuta.removeAll();
-            ventanaPuntosRuta(id_ruta,true);
-        },
-        timeout : 1000,
-        params: {
-            horas   : getJsonOfStore(storeHorasRuta),
-            id_ruta : id_ruta
-        }
-    });
+    if(storeHorasRuta.getCount()>0){
+        Ext.Ajax.request({
+            url     : 'core/php/core/guardarHorasRuta.php',
+            method  : 'POST',
+            success: function (result) {
+                var r = Ext.util.JSON.decode(result.responseText);
+                winHorasRuta.hide();
+                storeHorasRuta.removeAll();
+                ventanaPuntosRuta(id_ruta,true);
+            },
+            timeout : 1000,
+            params: {
+                horas   : getJsonOfStore(storeHorasRuta),
+                id_ruta : id_ruta
+            }
+        });
+    }else{
+        Ext.MessageBox.show({
+            title   : 'Error...',
+            msg     : 'Se debe ingresar por lo menos una hora para esa ruta...',
+            buttons : Ext.MessageBox.OK,
+            icon    : Ext.MessageBox.ERROR
+        });
+    }
 }
 
 /**
