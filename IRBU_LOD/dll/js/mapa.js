@@ -9,10 +9,21 @@ var lienzoParadas;
 var lienzoRecorridos;
 var capturarPosicion;
 var markerInicioFin;
-
+/**
+ * Lleva el conteo de los puntos que conforma la lista de puntos de una ruta
+ */
 var contadorPuntos=0;
 var puntosLineaRuta;
+/**
+ * Bandera para permitir ir poniendo puntos en el mapa cuando se cree
+ * una nueva ruta
+ */
 var booCapturarPuntosNuevaRuta=false;
+
+/**
+ * Bandera para capturar un solo punto sobre el mapa para coseguir las 
+ * coordenadas de la parada
+ */
 var booCapturarPuntosNuevaParada=false;
 var booCapturarPuntosEditarParada=false;
 var cont_puntos=0;
@@ -68,7 +79,7 @@ function init(){
                 capturarPosicion = false;
                 RQ3_getWin();
             }
-
+           
             /**
              * Captura los puntos que van a componer una nueva ruta para el trazado
              */
@@ -83,7 +94,6 @@ function init(){
                  * Une los puntos de la ruta con una linea
                  */
                 dibujarLineaRuta();
-//                permitirArrastrarPuntosRutas();
             }
             
             /**
@@ -162,6 +172,7 @@ function activarArrastradoPuntos(activar){
         dragPuntosRuta.activate();
     }else{
         dragPuntosRuta.deactivate();
+        selectFeatures.activate();
     }
 }
 
@@ -256,7 +267,6 @@ function cargarCapas() {
     });
 
     map.addLayer(lienzoRutas);
-    permitirArrastrarPuntosRutas();
 
     //Comportamiento de los Elementos de la Capa
     selectFeatures = new OpenLayers.Control.SelectFeature(
@@ -282,7 +292,7 @@ function cargarCapas() {
      * Inicializa el mapa para que permita graficar los recorridos de los buses
      */
     capaRecorridos();
-
+    permitirArrastrarPuntosRutas();
 }
 
 /**
@@ -374,7 +384,6 @@ function dibujarPuntosLineaRutaEditar(datos){
         puntosLineaRuta.push(punto);
     }
     lienzoRutas.addFeatures(marca);
-    permitirArrastrarPuntosRutas();
     dibujarLineaRuta();
 }
 
@@ -395,7 +404,6 @@ function finalizarArrastre(feature, pixel){
  * esta definida en el archivo php del servidor
  */
 function getParadasCercanasPuntoRuta(lon,lat){
-    console.info('Entrar');
     Ext.Ajax.request({
         url     : 'core/php/gui/getParadasCercanasPunto.php',
         method  : 'POST',
@@ -434,7 +442,7 @@ function insertarDatosTablaPuntosRuta(aux){
     var idPt = new OpenLayers.Feature.Vector( pt, {
         id : contadorPuntos
     });
-                    
+
     if(strTipoRecorrido=="B"){
         /*Enviar al estore de la tabla de puntos de ruta*/
         storePuntosRuta.add(new Ext.data.Record({
@@ -469,7 +477,34 @@ function insertarDatosTablaPuntosRuta(aux){
     idPt.id = contadorPuntos;
     features.push(idPt);
     lienzoRutas.addFeatures(features);
-}
+}    
+
+/**
+ * Inserta el punto al final de la linea dibujada para que se vaya editando la
+ * ruta ya ingresada
+ */
+//function insertarDatosTablaPuntosRutaEditar(aux){
+//    var features = new Array();
+//    var pt = new OpenLayers.Geometry.Point(aux.x,aux.y);
+//    pt.transform( new OpenLayers.Projection( "EPSG:4326" ),
+//        new OpenLayers.Projection( "EPSG:900913" ) );
+//    
+//    var idPt = new OpenLayers.Feature.Vector( pt, {
+//        id : contadorPuntos
+//    });
+//    
+//    storePuntosRuta.add(new Ext.data.Record({
+//        numero  : contadorPuntos,
+//        latitud : aux.y,
+//        longitud: aux.x
+//    }));
+//                    
+//    /* linea */
+//    puntosLineaRuta.push(pt);
+//    idPt.id = contadorPuntos;
+//    features.push(idPt);
+//    lienzoRutas.addFeatures(features);
+//}
 
 /**
  * Activa el control para arrastrar los puntos de una ruta para editarlos de 

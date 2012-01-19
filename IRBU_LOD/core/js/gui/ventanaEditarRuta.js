@@ -123,24 +123,28 @@ Ext.onReady(function(){
                         radTipoRecor: rbEditarTipoRecorrido
                     },
                     failure : function (form, action) {
-                        var resultado = Ext.util.JSON.decode(action.response.responseText);
-                        switch(resultado.error){
-                            case 1:
-                                Ext.MessageBox.show({
-                                    title   : 'Error...',
-                                    msg     : 'De seleccionar un recorrido de la lista de rutas, la cual se va a cambiar...',
-                                    buttons : Ext.MessageBox.OK,
-                                    icon    : Ext.MessageBox.ERROR
-                                });
-                                break;
-                            case 2:
-                                Ext.MessageBox.show({
-                                    title   : 'Error...',
-                                    msg     : 'El recorrido ingresado ya existe, escribirlo nuevamente...',
-                                    buttons : Ext.MessageBox.OK,
-                                    icon    : Ext.MessageBox.ERROR
-                                });  
-                                break;
+                        try{
+                            var resultado = Ext.util.JSON.decode(action.response.responseText);
+                            switch(resultado.error){
+                                case 1:
+                                    Ext.MessageBox.show({
+                                        title   : 'Error...',
+                                        msg     : 'De seleccionar un recorrido de la lista de rutas, la cual se va a cambiar...',
+                                        buttons : Ext.MessageBox.OK,
+                                        icon    : Ext.MessageBox.ERROR
+                                    });
+                                    break;
+                                case 2:
+                                    Ext.MessageBox.show({
+                                        title   : 'Error...',
+                                        msg     : 'El recorrido ingresado ya existe, escribirlo nuevamente...',
+                                        buttons : Ext.MessageBox.OK,
+                                        icon    : Ext.MessageBox.ERROR
+                                    });  
+                                    break;
+                            }
+                        }catch(e){
+                        //No hacer nada
                         }
                     },
                     success: function (form, action) {
@@ -148,7 +152,7 @@ Ext.onReady(function(){
 
                         //Limpia las capas antes de hacer una nueva consulta
                         limpiarCapas();
-
+                        strTipoRecorrido = "B"; //siempre la edicion de datos se va a rpoceder como la ruta que baja
                         winEditarRuta.hide();
                         panelEditarInfoRuta.getForm().reset();
                         ventanaHorasRuta(resultado.id,true);
