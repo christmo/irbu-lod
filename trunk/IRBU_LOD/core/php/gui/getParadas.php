@@ -7,19 +7,11 @@ extract($_GET);
 Header("content-type: application/x-javascript");
 
 $salida = "{failure:true}";
-if (isset($id_ruta)) {
-    $consultaSql = "SELECT P.ID_PARADA,P.DIRECCION,P.DIR_IMG 
+$consultaSql = "SELECT P.ID_PARADA,P.DIRECCION,P.DIR_IMG 
         FROM PARADAS P, RUTA_PARADA RP 
         WHERE P.ID_PARADA=RP.ID_PARADA 
         AND ID_RUTA=$id_ruta 
         ORDER BY ORDEN";
-}else{
-    if(isset ($paradas)){
-        echo $paradas;
-//        echo $arrParadas;
-    }
-    
-}
 
 consulta($consultaSql);
 $resulset = variasFilas();

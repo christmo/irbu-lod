@@ -2,20 +2,22 @@
 
 require_once('../../../dll/php/conexionBD.php');
 
-//extract($_POST);
-//extract($_GET);
+extract($_POST);
+extract($_GET);
 Header("content-type: application/x-javascript");
 
 $salida = "{failure:true}";
-
-$consultaSql = "SELECT ID_PARADA,DIRECCION,DIR_IMG FROM PARADAS ORDER BY DIRECCION";
-
+if (isset($paradas) && count(json_decode($paradas)) > 0) {
+    $consultaSql = "SELECT ID_PARADA,DIRECCION,DIR_IMG FROM PARADAS
+                WHERE ID_PARADA IN " . str_replace("]", ")", str_replace("[", "(", $paradas)) . " 
+                ORDER BY DIRECCION";
+} else {
+    $consultaSql = "SELECT ID_PARADA,DIRECCION,DIR_IMG FROM PARADAS ORDER BY DIRECCION";
+}
 consulta($consultaSql);
 $resulset = variasFilas();
 
 $salida = "{\"paradas\": [";
-//$salida = "stcCallback1001([";
-
 for ($i = 0; $i < count($resulset); $i++) {
     $fila = $resulset[$i];
     $salida .= "{
@@ -28,8 +30,6 @@ for ($i = 0; $i < count($resulset); $i++) {
         $salida .= ",";
     }
 }
-
-//$salida .="]);";
 $salida .="]}";
 
 echo $salida;

@@ -351,12 +351,17 @@ function ventanaParadasRuta(id_ruta,cargar){
         listaParadasSeleccionadas.store.proxy.conn.url = "core/php/gui/getParadas.php?id_ruta="+id_ruta_vpr;
         listaParadasSeleccionadas.store.load();
     }
-    console.info(paradasCercanasRuta);
-    storeParadas.store.proxy.conn.url = "core/php/gui/getParadas.php";
-    storeParadas.store.load({
-        params:{
-            paradas:paradasCercanasRuta
+    listaParadas.store.proxy.conn.url = "core/php/gui/listaParadas.php";
+    listaParadas.store.load({
+        scope   : this,
+        params  :{
+            paradas:Ext.util.JSON.encode(paradasCercanasRuta),
+            id_ruta:id_ruta_vpr
+        },
+        callback: function() {
+            console.info('getParadas parametros');
         }
     });
+    console.info(paradasCercanasRuta);
     paradasCercanasRuta=null;
 }
