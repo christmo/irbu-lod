@@ -5,66 +5,67 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="7" />
+        android:minSdkVersion="7"
+        android:targetSdkVersion="7" />
 
     <!-- quitar debuggable para subir a un dispositivo -->
     <application
-        android:name=".sesion.SesionApplication"
         android:debuggable="true"
         android:icon="@drawable/icon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:name=".sesion.SesionApplication" >
         <activity
-            android:name=".IRBUActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
+            android:label="@string/app_name"
+            android:name=".IRBUActivity" >
+            <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:name=".modulos.BuscarRutaHoraActivity"
-            android:label="@string/txtBuscarRuta" >
+            android:label="@string/txtBuscarRuta"
+            android:name=".modulos.BuscarRutaHoraActivity" >
         </activity>
         <activity
-            android:name=".modulos.BuscarRutaActivity"
-            android:label="@string/txtBuscarRuta" >
+            android:label="@string/txtBuscarRuta"
+            android:name=".modulos.BuscarRutaActivity" >
         </activity>
         <activity
-            android:name=".modulos.ListaRutasActivity"
-            android:label="@string/txtBuscarRuta" >
+            android:label="@string/txtBuscarRuta"
+            android:name=".modulos.ListaRutasActivity" >
         </activity>
         <activity
-            android:name=".mapa.ViewMapaActivity"
-            android:label="@string/txtBuscarRuta" >
+            android:label="@string/txtBuscarRuta"
+            android:name=".mapa.ViewMapaActivity" >
         </activity>
         <activity
-            android:name=".modulos.InfoParadasActivity"
-            android:label="@string/txtBuscarRuta" >
+            android:label="@string/txtBuscarRuta"
+            android:name=".modulos.InfoParadasActivity" >
         </activity>
         <activity
-            android:name=".modulos.LoginEvaActivity"
-            android:label="@string/txtLoginEva" >
+            android:label="@string/txtLoginEva"
+            android:name=".modulos.LoginEvaActivity" >
         </activity>
         <activity
-            android:name=".modulos.InfoEvaActivity"
-            android:label="@string/txtLoginEva" >
+            android:label="@string/txtLoginEva"
+            android:name=".modulos.InfoEvaActivity" >
         </activity>
         <activity
-            android:name=".modulos.LlenarDatosEvaActivity"
-            android:label="@string/txtLoginEva" >
+            android:label="@string/txtLoginEva"
+            android:name=".modulos.LlenarDatosEvaActivity" >
         </activity>
         <activity
-            android:name=".modulos.AyudaActivity"
-            android:label="@string/txtLoginEva" >
+            android:label="@string/txtLoginEva"
+            android:name=".modulos.AyudaActivity" >
         </activity>
     </application>
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.INTERNET" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
+    
 </manifest>
