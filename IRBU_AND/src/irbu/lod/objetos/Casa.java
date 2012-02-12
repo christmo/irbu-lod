@@ -15,6 +15,12 @@ public class Casa implements Parcelable {
 	this.douLon = douLon;
     }
 
+    private Casa(Parcel in) {
+	this.strDireccion = in.readString();
+	this.douLat = in.readDouble();
+	this.douLon = in.readDouble();
+    }
+
     public String getStrDireccion() {
 	return strDireccion;
     }
@@ -38,6 +44,16 @@ public class Casa implements Parcelable {
     public void setDouLon(double douLon) {
 	this.douLon = douLon;
     }
+
+    public static final Parcelable.Creator<Casa> CREATOR = new Parcelable.Creator<Casa>() {
+	public Casa createFromParcel(Parcel in) {
+	    return new Casa(in);
+	}
+
+	public Casa[] newArray(int size) {
+	    return new Casa[size];
+	}
+    };
 
     public int describeContents() {
 	return 0;
