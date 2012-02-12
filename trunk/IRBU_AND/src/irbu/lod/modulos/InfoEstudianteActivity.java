@@ -109,6 +109,7 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
 
 	    btnGraficarParada.setOnClickListener(this);
 	    hasParada = true;
+	    sesion.setParadaFrecuente(parada);
 	} catch (NullPointerException e) {
 	    ocultarCamposParada();
 	}
@@ -130,6 +131,7 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
 
 	    btnGraficarCasa.setOnClickListener(this);
 	    hasCasa = true;
+	    sesion.setCasaEstudiante(casa);
 	} catch (NullPointerException e) {
 	    ocultarCamposCasa();
 	}
@@ -170,23 +172,29 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
     public void onClick(View v) {
 	switch (v.getId()) {
 	case R.id.btnGraficarParada:
-	    graficarParada();
+	    graficarParadaCasa(true);
 	    break;
 	case R.id.btnGraficarCasa:
+	    graficarParadaCasa(false);
 	    break;
 	}
     }
 
     /**
      * Envia al mapa a graficar la parada y la casa...
+     * 
+     * @param boolean true para graficar la parada y false la casa
      */
-    private void graficarParada() {
+    private void graficarParadaCasa(boolean parada) {
 	Intent mapa = new Intent(this, ViewMapaActivity.class);
-	if (hasParada) {
-	    mapa.putExtra("parada", parada);
-	}
-	if (hasCasa) {
-	    mapa.putExtra("casa", casa);
+	if (parada) {
+	    if (hasParada) {
+		mapa.putExtra("parada", parada);
+	    }
+	} else {
+	    if (hasCasa) {
+		mapa.putExtra("casa", casa);
+	    }
 	}
 	startActivity(mapa);
     }

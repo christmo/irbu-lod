@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class InfoParadasActivity extends Activity implements OnClickListener {
@@ -42,6 +43,10 @@ public class InfoParadasActivity extends Activity implements OnClickListener {
 	setContentView(R.layout.info_parada);
 	if (getIntent().hasExtra("parada")) {
 	    parada = (Paradas) getIntent().getExtras().get("parada");
+	}
+	if (getIntent().hasExtra("paradafrecuente")) {
+	    LinearLayout panelBotones = (LinearLayout) findViewById(R.id.panelBotonesGuardarParadaFrecuente);
+	    panelBotones.setVisibility(View.GONE);
 	}
 	TextView txtDireccion = (TextView) findViewById(R.id.txtDireccion);
 	TextView txtReferencia = (TextView) findViewById(R.id.txtReferencia);
@@ -118,7 +123,7 @@ public class InfoParadasActivity extends Activity implements OnClickListener {
 	    InfoParadasActivity.this.finish();
 	    break;
 	case R.id.btnRutasHorariosParada:
-	    Intent listaRutasHorario =new Intent(this,ListaRutasParada.class);
+	    Intent listaRutasHorario = new Intent(this, ListaRutasParada.class);
 	    listaRutasHorario.putExtra("parada", parada);
 	    startActivity(listaRutasHorario);
 	    break;

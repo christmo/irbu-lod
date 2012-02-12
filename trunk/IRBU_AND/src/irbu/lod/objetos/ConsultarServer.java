@@ -258,8 +258,8 @@ public class ConsultarServer {
 		idParada = Integer.parseInt(col[0]);
 		lon = Double.parseDouble(col[1]);
 		lat = Double.parseDouble(col[2]);
-		dir = col[3];
-		ref = col[4];
+		dir = covertirUTF8Decode(col[3]);
+		ref = covertirUTF8Decode(col[4]);
 		urlImg = col[5];
 		Paradas p = new Paradas(idParada, lon, lat, dir, ref, urlImg);
 		paradasRuta.add(p);
@@ -326,8 +326,8 @@ public class ConsultarServer {
 		idParada = Integer.parseInt(col[0]);
 		lon = Double.parseDouble(col[1]);
 		lat = Double.parseDouble(col[2]);
-		dir = col[3];
-		ref = col[4];
+		dir = covertirUTF8Decode(col[3]);
+		ref = covertirUTF8Decode(col[4]);
 		urlImg = col[5];
 		Paradas p = new Paradas(idParada, lon, lat, dir, ref, urlImg);
 		paradasRuta.add(p);
@@ -528,9 +528,9 @@ public class ConsultarServer {
 		String direccion = jObject.getString("direccion");
 
 		infoEstudiante.put("ci", ci);
-		infoEstudiante.put("nombre", nombre);
+		infoEstudiante.put("nombre", covertirUTF8Decode(nombre));
 		infoEstudiante.put("mail", mail);
-		infoEstudiante.put("direccion", direccion);
+		infoEstudiante.put("direccion", covertirUTF8Decode(direccion));
 		infoEstudiante.put("periodo", getPeriodoAcademico());
 		return infoEstudiante;
 	    } catch (JSONException e) {
@@ -583,8 +583,8 @@ public class ConsultarServer {
 		JSONObject jsParada = jObject.getJSONObject("parada");
 
 		int idPar = Integer.parseInt(jsParada.getString("id_parada"));
-		String dirPar = jsParada.getString("dir");
-		String refPar = jsParada.getString("ref");
+		String dirPar = covertirUTF8Decode(jsParada.getString("dir"));
+		String refPar = covertirUTF8Decode(jsParada.getString("ref"));
 		double latPar = Double.parseDouble(jsParada.getString("lat"));
 		double lonPar = Double.parseDouble(jsParada.getString("lon"));
 		String imgPar = jsParada.getString("img");
