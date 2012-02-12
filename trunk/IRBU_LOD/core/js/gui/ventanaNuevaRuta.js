@@ -147,7 +147,8 @@ Ext.onReady(function(){
                          */
                         strTipoRecorrido=rbTipoRecorrido;
                         limpiarVentana();
-                        ventanaHorasRuta(resultado.id,false);
+                        console.info('R:'+resultado);
+                        ventanaHorasRuta(resultado,false);
                     }
                 });
             }

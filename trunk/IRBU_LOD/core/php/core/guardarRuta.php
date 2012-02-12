@@ -2,6 +2,7 @@
 
 session_start();
 require_once('../../../dll/php/conexionBD.php');
+require_once '../../../dll/php/Virtuoso.php';
 
 //extract($_POST);
 extract($_GET);
@@ -15,9 +16,11 @@ if (is_numeric($nombreRuta)) {
     $id_ruta = $dato["ID_RUTA"];
 
     $consultaSql = "INSERT INTO RUTAS(ID_RUTA,TIPO,NOMBRE) 
-                    VALUES($id_ruta,'$radioTipo','".utf8_decode($nombreRuta)."')";
+                    VALUES($id_ruta,'$radioTipo','" . utf8_decode($nombreRuta) . "')";
     consulta($consultaSql);
-    $salida = "{success:true,id:$id_ruta}";
+    $rest = new Virtuoso();
+    $id_rlod = $rest->crear_ruta($nombreRuta, "00:00", $radioTipo);
+    $salida = "{success:true,id:$id_ruta,id_rlod:$id_rlods}";
 }
 echo $salida;
 ?>

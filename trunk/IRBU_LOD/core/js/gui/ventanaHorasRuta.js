@@ -8,6 +8,7 @@ var grid;
 var spiner;
 var proxy;
 var id_ruta;
+var id_rlod;
 var contadorHoras=1;
 var storeHorasRuta;
 
@@ -171,7 +172,8 @@ function guardarHorasRuta(){
             timeout : 1000,
             params: {
                 horas   : getJsonOfStore(storeHorasRuta),
-                id_ruta : id_ruta
+                id_ruta : id_ruta,
+                id_rlod : id_rlod
             }
         });
     }else{
@@ -186,10 +188,10 @@ function guardarHorasRuta(){
 
 /**
 * Muestra la ventana para buscar una ruta
-* @param id de la ruta
+* @param resp de la ruta
 * @param cargar si tiene que llenar el store con datos o no true=cargar
 */
-function ventanaHorasRuta(id,cargar){
+function ventanaHorasRuta(resp,cargar){
     if(!winHorasRuta){
         winHorasRuta = new Ext.Window({
             layout      : 'fit',
@@ -202,9 +204,10 @@ function ventanaHorasRuta(id,cargar){
             items       : [panelHoras]
         });
     }
-    this.id_ruta = id;
+    this.id_ruta = resp.id;
+    this.id_rlod = resp.id_rlod;
     if(cargar){
-        storeHorasRuta.proxy.conn.url = "core/php/gui/getHorasRuta.php?id_ruta="+id;
+        storeHorasRuta.proxy.conn.url = "core/php/gui/getHorasRuta.php?id_ruta="+resp.id;
         storeHorasRuta.load();
     }
  

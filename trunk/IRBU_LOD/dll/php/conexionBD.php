@@ -6,7 +6,7 @@ $Consulta_ID = 0;
 /* numero de error y texto error */
 $Errno = 0;
 $Error = "";
-$BaseDatos = "irbudata";
+$BaseDatos = "irbudata1";
 $Servidor = "localhost";
 $Usuario = "root";
 $Clave = "";
