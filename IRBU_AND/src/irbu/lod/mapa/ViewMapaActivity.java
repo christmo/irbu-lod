@@ -49,7 +49,18 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+/**
+ * Clase que permite controlar el mapa de open street map, en esta clase se hace
+ * el dibujado de los puntos y las rutas
+ * 
+ * @author christmo
+ */
+/**
+ * @author DellXPS_L401X
+ * 
+ */
 public class ViewMapaActivity extends Activity implements LocationListener {
 
     // ===========================================================
@@ -126,6 +137,10 @@ public class ViewMapaActivity extends Activity implements LocationListener {
      * Almacena la información de la casa del estudiante para ser graficada
      */
     private Casa casaEstudiante = null;
+    /**
+     * Variables de sesion
+     */
+    private SesionApplication sesion;
 
     // ===========================================================
     // Constructors
@@ -134,6 +149,18 @@ public class ViewMapaActivity extends Activity implements LocationListener {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
+
+	/**
+	 * Configuración inicial del mapa
+	 */
+	mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
+	final RelativeLayout rl = new RelativeLayout(this);
+	CloudmadeUtil.retrieveCloudmadeKey(getApplicationContext());
+	this.osmMapa = new MapView(this, 256);
+	rl.addView(this.osmMapa, new RelativeLayout.LayoutParams(
+		LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+	osmViewController = osmMapa.getController();
+	sesion = (SesionApplication) getApplicationContext();
 
 	if (getIntent().hasExtra("listaPuntos")) {
 	    puntosLinea = getIntent()
@@ -148,22 +175,13 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	    paradaFrecuente = (Paradas) getIntent()
 		    .getParcelableExtra("parada");
 	    Log.d("Mapa", "Dibujar parada frecuente del estudiante");
+	    dibujarParadaFrecuenteEstudiante();
 	}
 	if (getIntent().hasExtra("casa")) {
 	    casaEstudiante = (Casa) getIntent().getParcelableExtra("casa");
 	    Log.d("Mapa", "Dibujar la casa del estudiante");
+	    dibujarCasaEstudiante();
 	}
-	mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
-
-	final RelativeLayout rl = new RelativeLayout(this);
-
-	CloudmadeUtil.retrieveCloudmadeKey(getApplicationContext());
-
-	this.osmMapa = new MapView(this, 256);
-	rl.addView(this.osmMapa, new RelativeLayout.LayoutParams(
-		LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
-
-	osmViewController = osmMapa.getController();
 
 	/* Configuracion Inicial Mapa Loja */
 	{
@@ -274,13 +292,7 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 				infoParada.putExtra("parada",
 					paradas.get(index));
 				startActivity(infoParada);
-				// Toast.makeText(
-				// ViewMapaActivity.this,
-				// "Dir: " + item.mTitle + "\n" + "Ref: "
-				// + item.mDescription,
-				// Toast.LENGTH_LONG).show();
 			    } catch (IndexOutOfBoundsException e) {
-				// TODO: handle exception
 				Log.d("ERROR",
 					"????????ERROR????????? NO hay parada seleccionada");
 			    }
@@ -354,6 +366,13 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	return super.onCreateOptionsMenu(pMenu);
     }
 
+    /**
+     * Ejecutar cuando se presione la tecla de menu
+     * 
+     * @param featureId
+     * @param item
+     * @return boolean
+     */
     @Override
     public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
 	switch (item.getItemId()) {
@@ -369,23 +388,16 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	case MENU_LIMPIAR:
 	    Log.d("Iconos Mapa", "" + listaIconosParadasOverlay.size());
 	    for (Overlay o : osmMapa.getOverlays()) {
-		if (!osmMapa.getOverlays().contains(posicionActualOverlay)) {
-		    // osmMapa.getOverlays().remove(o);
-		    // osmMapa.postInvalidate();
+		if (!osmMapa.getOverlays().contains(listaIconosParadasOverlay)) {
+		     osmMapa.getOverlays().remove(o);
+		     osmMapa.postInvalidate();
 		    Log.d("O", "" + o.toString());
 		}
 	    }
+//	    limpiarMapa();
 	    return true;
 	case MENU_DATOS:
-	    /*
-	     * TODO: dibujar la parada frecuente del usuario y la casa en el
-	     * mapa
-	     */
-	    Location loc2 = lmgr
-		    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-	    Log.d("Localización",
-		    loc2.getLongitude() + " " + loc2.getLatitude());
-	    lmgr.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+	    mostrarDatosEstudiante();
 	    return true;
 	case SUBM_100:
 	    buscarParadasAproximadas(100);
@@ -409,6 +421,9 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	return false;
     }
 
+    /**
+     * Cuando se presione la tecla de retroceso
+     */
     @Override
     public void onBackPressed() {
 	// Parar capturas de GPS
@@ -553,6 +568,115 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	AlertDialog alert1 = builder1.create();
 	alert1.show();
 
+    }
+
+    /**
+     * Permite dibujar la parada frecuente del estudiante
+     */
+    private void dibujarParadaFrecuenteEstudiante() {
+	GeoPoint geoParada = new GeoPoint(paradaFrecuente.getLat(),
+		paradaFrecuente.getLon());
+
+	ArrayList<OverlayItem> paradaFrecDibujar = new ArrayList<OverlayItem>();
+	paradaFrecDibujar.add(new OverlayItem(paradaFrecuente.getDir(),
+		paradaFrecuente.getRef(), geoParada));
+	this.listaIconosParadasOverlay = new ItemizedIconOverlay<OverlayItem>(
+		paradaFrecDibujar,
+		new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+		    public boolean onItemSingleTapUp(final int index,
+			    final OverlayItem item) {
+			try {
+			    Intent infoParada = new Intent(
+				    ViewMapaActivity.this,
+				    InfoParadasActivity.class);
+			    infoParada.putExtra("parada", paradaFrecuente);
+			    infoParada.putExtra("paradafrecuente", true);
+			    startActivity(infoParada);
+			} catch (IndexOutOfBoundsException e) {
+			    Log.d("ERROR",
+				    "????????ERROR????????? NO hay parada seleccionada");
+			}
+			return true; // We 'handled' this event.
+		    }
+
+		    public boolean onItemLongPress(final int index,
+			    final OverlayItem item) {
+			// cuando se presiona un largo tiempo ejecutar algo
+			// aqui
+			return false;
+		    }
+		}, mResourceProxy);
+	this.osmMapa.getOverlays().add(this.listaIconosParadasOverlay);
+    }
+
+    /**
+     * Prmite dibujar la casa del estudiante sobre el mapa
+     */
+    private void dibujarCasaEstudiante() {
+	GeoPoint geoCasa = new GeoPoint(casaEstudiante.getDouLat(),
+		casaEstudiante.getDouLon());
+
+	ArrayList<OverlayItem> casaDibujar = new ArrayList<OverlayItem>();
+	casaDibujar.add(new OverlayItem(casaEstudiante.getStrDireccion(),
+		"Dirección", geoCasa));
+	this.listaIconosParadasOverlay = new ItemizedIconOverlay<OverlayItem>(
+		casaDibujar,
+		new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+		    public boolean onItemSingleTapUp(final int index,
+			    final OverlayItem item) {
+			try {
+			    Toast t = Toast.makeText(
+				    ViewMapaActivity.this,
+				    "Aquí queda tu casa :-)\n"
+					    + item.getTitle(),
+				    Toast.LENGTH_LONG);
+			    t.show();
+			} catch (IndexOutOfBoundsException e) {
+			    Log.d("ERROR",
+				    "????????ERROR????????? NO hay parada seleccionada");
+			}
+			return true; // We 'handled' this event.
+		    }
+
+		    public boolean onItemLongPress(final int index,
+			    final OverlayItem item) {
+			// cuando se presiona un largo tiempo ejecutar algo
+			// aqui
+			return false;
+		    }
+		}, mResourceProxy);
+	this.osmMapa.getOverlays().add(this.listaIconosParadasOverlay);
+    }
+
+    /**
+     * Dibuja los datos del estudiante parada frecuente y casa
+     */
+    private void mostrarDatosEstudiante() {
+	if (sesion.isLogin()) {
+	    Intent mapa = new Intent(this, ViewMapaActivity.class);
+	    if (sesion.getParadaFrecuente() != null) {
+		mapa.putExtra("parada", sesion.getParadaFrecuente());
+	    }
+	    if (sesion.getCasaEstudiante() != null) {
+		mapa.putExtra("casa", sesion.getCasaEstudiante());
+	    }
+	    startActivity(mapa);
+	} else {
+	    Toast t = Toast.makeText(this, "No ha iniciado sesión...",
+		    Toast.LENGTH_LONG);
+	    t.show();
+	    Intent info = new Intent(this, LoginEvaActivity.class);
+	    info.putExtra("informacion", true);
+	    startActivity(info);
+	}
+
+    }
+
+    private void limpiarMapa() {
+	for (int i = 0; i < osmMapa.getOverlays().size(); i++) {
+	    this.osmMapa.getOverlays().remove(i);
+	}
+	this.osmMapa.postInvalidate();
     }
 
     // ===========================================================

@@ -15,8 +15,7 @@ public class AyudaActivity extends Activity{
 				
 		SesionApplication sesion = (SesionApplication) getApplicationContext();
 		if (sesion.isLogin()) {
-			sesion.setLogin(false);
-			sesion.setEstudiante(null);
+			sesion.cerrarSesion();
 			Log.d("SESION","CERRAR SESION");
 		} 
 	}
