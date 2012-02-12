@@ -3,6 +3,7 @@
 session_start();
 require_once('../../../dll/php/conexionBD.php');
 extract($_GET);
+extract($_POST);
 
 $consultaSql = "SELECT TIPO, NOMBRE, HORA
                 FROM RUTA_HORA R, (
