@@ -69,7 +69,7 @@
         <activity 
             android:name="irbu.lod.modulos.InfoEstudianteActivity" />
         <activity 
-            android:name="irbu.lod.modulos.listas.rutasparada.ListaRutasParada" />
+            android:name="irbu.lod.modulos.listarrutas.ListaRutasParada" />
     </application>
 
 </manifest>
