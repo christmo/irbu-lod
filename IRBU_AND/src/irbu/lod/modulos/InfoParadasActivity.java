@@ -2,7 +2,7 @@ package irbu.lod.modulos;
 
 import irbu.lod.R;
 import irbu.lod.constantes.Constantes;
-import irbu.lod.modulos.listas.rutasparada.ListaRutasParada;
+import irbu.lod.modulos.listarrutas.ListaRutasParada;
 import irbu.lod.objetos.Paradas;
 import irbu.lod.sesion.SesionApplication;
 
