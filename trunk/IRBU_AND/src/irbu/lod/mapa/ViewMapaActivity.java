@@ -5,6 +5,7 @@ import irbu.lod.R;
 import irbu.lod.modulos.InfoEvaActivity;
 import irbu.lod.modulos.InfoParadasActivity;
 import irbu.lod.modulos.LoginEvaActivity;
+import irbu.lod.objetos.Casa;
 import irbu.lod.objetos.ConsultarServer;
 import irbu.lod.objetos.Paradas;
 import irbu.lod.objetos.Puntos;
@@ -116,6 +117,15 @@ public class ViewMapaActivity extends Activity implements LocationListener {
      * Punto actual capturado del GPS
      */
     private Location punto = null;
+    /**
+     * Almacena la información de la parada frecuente cuando sea envia a
+     * graficar
+     */
+    private Paradas paradaFrecuente = null;
+    /**
+     * Almacena la información de la casa del estudiante para ser graficada
+     */
+    private Casa casaEstudiante = null;
 
     // ===========================================================
     // Constructors
@@ -125,9 +135,24 @@ public class ViewMapaActivity extends Activity implements LocationListener {
     public void onCreate(final Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
 
-	puntosLinea = getIntent().getParcelableArrayListExtra("listaPuntos");
-	paradas = getIntent().getParcelableArrayListExtra("listaParadas");
-
+	if (getIntent().hasExtra("listaPuntos")) {
+	    puntosLinea = getIntent()
+		    .getParcelableArrayListExtra("listaPuntos");
+	    Log.d("Mapa", "Lista de puntos para dibujar linea de ruta");
+	}
+	if (getIntent().hasExtra("listaParadas")) {
+	    paradas = getIntent().getParcelableArrayListExtra("listaParadas");
+	    Log.d("Mapa", "Lista de paradas para dibujar sobre la ruta");
+	}
+	if (getIntent().hasExtra("parada")) {
+	    paradaFrecuente = (Paradas) getIntent()
+		    .getParcelableExtra("parada");
+	    Log.d("Mapa", "Dibujar parada frecuente del estudiante");
+	}
+	if (getIntent().hasExtra("casa")) {
+	    casaEstudiante = (Casa) getIntent().getParcelableExtra("casa");
+	    Log.d("Mapa", "Dibujar la casa del estudiante");
+	}
 	mResourceProxy = new DefaultResourceProxyImpl(getApplicationContext());
 
 	final RelativeLayout rl = new RelativeLayout(this);
@@ -187,7 +212,7 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	{
 	    /* Create a ImageView with a zoomIn-Icon. */
 	    final ImageView ivZoomIn = new ImageView(this);
-	    ivZoomIn.setImageResource(R.drawable.zoom_in);
+	    ivZoomIn.setImageResource(irbu.lod.R.drawable.zoom_in);
 	    /*
 	     * Create RelativeLayoutParams, that position it in the top right
 	     * corner.
@@ -264,7 +289,8 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 
 			public boolean onItemLongPress(final int index,
 				final OverlayItem item) {
-
+			    // cuando se presiona un largo tiempo ejecutar algo
+			    // aqui
 			    return false;
 			}
 		    }, mResourceProxy);
@@ -385,10 +411,10 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 
     @Override
     public void onBackPressed() {
-	//Parar capturas de GPS
-//	lmgr.removeUpdates(this);
-//	lmgr = null;
-	
+	// Parar capturas de GPS
+	// lmgr.removeUpdates(this);
+	// lmgr = null;
+
 	Intent principal = new Intent(this, IRBUActivity.class);
 	startActivity(principal);
 	super.onBackPressed();

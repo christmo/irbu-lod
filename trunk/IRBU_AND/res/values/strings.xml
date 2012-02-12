@@ -36,4 +36,12 @@
     <string name="txtInformacionEstudiante">Información Estudiante</string>
     <string name="txtInformacion">Información:</string>
     <string name="txtTituloParadasAproximadas">Paradas Aproximadas</string>
+    <string name="txtTituloInfoEstudiante">Información Usuario</string>
+    <string name="txtInfoParadaFrecuente">Información Parada Frecuente</string>
+    <string name="txtTitutloInfoCasaEstudiante">Información Domicilio</string>
+    <string name="btnGraficarParada">Graficar Parada</string>
+    <string name="btnGraficarCasa">Graficar Domicilio</string>
+    <string name="txtUTPL">Universidad Técnica Particular de Loja</string>
+    <string name="txtRutasHorarioParada">Ver rutas y horarios de la parada</string>
+    <string name="txtListaRutasHorarios">Lista de Rutas y Horarios</string>
 </resources>

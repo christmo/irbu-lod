@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/fondo"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:gravity="center"
+                android:text="@string/txtTituloInfoEstudiante"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <LinearLayout
+                android:id="@+id/contenedorParada"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="@string/txtInfoParadaFrecuente"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <ImageView
+                    android:id="@+id/imview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dip"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:contentDescription="@string/txtInfoParadaFrecuente" />
+
+                <LinearLayout
+                    android:id="@+id/LinearLayout02"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/TextView03"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="@string/txtDireccion"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/txtDireccionInfoUsuario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LinearLayout01"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/TextView01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="@string/txtReferencia"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/txtReferenciaInfoUsuario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearLayout2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_margin="15dp"
+                        android:text="@string/txtCoordenadas"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout3"
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp" >
+
+                        <TextView
+                            android:id="@+id/textView3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="30dp"
+                            android:text="@string/txtLatitud" />
+
+                        <TextView
+                            android:id="@+id/txtLatitudInfoUsuario"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="50dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LinearLayout03"
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp" >
+
+                        <TextView
+                            android:id="@+id/TextView04"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="30dp"
+                            android:text="@string/txtLongitud" />
+
+                        <TextView
+                            android:id="@+id/txtLongitudInfoUsuario"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="38dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnGraficarParada"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:text="@string/btnGraficarParada" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/contenedorCasa"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/TextView02"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:gravity="center"
+                    android:text="@string/txtTitutloInfoCasaEstudiante"
+                    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                <LinearLayout
+                    android:id="@+id/LinearLayout08"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/TextView13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:text="@string/txtDireccion"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <TextView
+                        android:id="@+id/txtDireccionCasaUsuario"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/LinearLayout04"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/TextView09"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_margin="15dp"
+                        android:layout_weight="1"
+                        android:text="@string/txtCoordenadas"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                    <LinearLayout
+                        android:id="@+id/LinearLayout05"
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" >
+
+                        <TextView
+                            android:id="@+id/TextView10"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="30dp"
+                            android:text="@string/txtLatitud" />
+
+                        <TextView
+                            android:id="@+id/txtLatitudCasaUsuario"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginLeft="50dp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/LinearLayout07"
+                        android:layout_width="fill_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" >
+
+                        <TextView
+                            android:id="@+id/TextView12"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="30dp"
+                            android:text="@string/txtLongitud" />
+
+                        <TextView
+                            android:id="@+id/txtLongitudCasaUsuario"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="15dp"
+                            android:layout_marginLeft="38dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnGraficarCasa"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:text="@string/btnGraficarCasa" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
