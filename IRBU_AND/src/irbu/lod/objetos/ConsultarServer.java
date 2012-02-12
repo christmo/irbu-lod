@@ -2,7 +2,7 @@ package irbu.lod.objetos;
 
 import irbu.lod.R;
 import irbu.lod.constantes.Constantes;
-import irbu.lod.modulos.listas.rutasparada.CamposListaRutasParada;
+import irbu.lod.modulos.listarrutas.CamposListaRutasParada;
 
 import java.io.IOException;
 import java.io.InputStream;
