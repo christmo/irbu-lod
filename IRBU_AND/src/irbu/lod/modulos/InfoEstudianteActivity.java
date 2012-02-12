@@ -55,13 +55,13 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
 	sesion = (SesionApplication) getApplicationContext();
 	infoParada = (LinearLayout) findViewById(R.id.contenedorParada);
 	infoCasa = (LinearLayout) findViewById(R.id.contenedorCasa);
+	inicializarComponentesGraficos();
     }
 
     @Override
     protected void onResume() {
 	super.onResume();
 	mostarPanelesParadaCasa();
-	inicializarComponentesGraficos();
     }
 
     /**
