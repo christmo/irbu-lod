@@ -24,13 +24,29 @@
                 android:gravity="center"
                 android:text="@string/txtTituloInfoParadas"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-
+
             <ImageView
                 android:id="@+id/imview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout4"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <Button
+                    android:id="@+id/btnRutasHorariosParada"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/txtRutasHorarioParada" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout1"
@@ -144,42 +160,51 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/TextView02"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_margin="15dp"
-                    android:layout_weight="1"
-                    android:text="@string/txtGuardarParada"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
-
                 <LinearLayout
-                    android:id="@+id/LinearLayout04"
+                    android:id="@+id/panelBotonesGuardarParadaFrecuente"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp" >
+                    android:orientation="vertical" >
 
-                    <Button
-                        android:id="@+id/btnGuardarParada"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
+                    <TextView
+                        android:id="@+id/TextView02"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
                         android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
                         android:layout_weight="1"
-                        android:text="@string/txtGuardar" />
+                        android:text="@string/txtGuardarParada"
+                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-                    <Button
-                        android:id="@+id/btnCancelarGuardadoParada"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:id="@+id/panelBotonesParada"
+                        android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_weight="1"
-                        android:text="@string/btnCancelar" />
+                        android:layout_marginTop="10dp"
+                        android:layout_weight="1" >
+
+                        <Button
+                            android:id="@+id/btnGuardarParada"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_weight="1"
+                            android:text="@string/txtGuardar" />
+
+                        <Button
+                            android:id="@+id/btnCancelarGuardadoParada"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp"
+                            android:layout_weight="1"
+                            android:text="@string/btnCancelar" />
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 
