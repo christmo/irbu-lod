@@ -10,5 +10,7 @@
     <string name="txtErrorConexionEVA">No se pudo obtener los datos del EVA por favor vuelva a intentar mas tarde&#8230;</string>
 
     <string name="txtMensajeEVA">Obteniendo sus datos del EVA, esto puede tardar un momento por favor espere&#8230; :-)</string>
+    <string name="txtMensajeServidor">Obteniendo sus datos de casa y de parada frecuente&#8230; :-)</string>
+    <string name="txtMensajeParada">Cargando la información de la parada&#8230; :-)</string>
     
 </resources>

@@ -17,6 +17,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,7 +27,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class InfoParadasActivity extends Activity implements OnClickListener {
+public class InfoParadasActivity extends Activity implements OnClickListener,
+	Runnable {
 
     private ImageView imView;
     private String urlHostRemoto = Constantes.URL_SERVER
@@ -83,16 +86,32 @@ public class InfoParadasActivity extends Activity implements OnClickListener {
 	}
 
 	imView = (ImageView) findViewById(R.id.imview);
-	String url = urlHostRemoto + parada.getUrlImg();
-	downloadFile(url);
+	imView.setImageDrawable(getResources().getDrawable(R.drawable.loading));
+	Thread thread = new Thread(this);
+	thread.start();
     }
+
+    public void run() {
+	downloadFile(urlHostRemoto + parada.getUrlImg());
+    }
+
+    private Handler handler = new Handler() {
+	@Override
+	public void handleMessage(Message msg) {
+	    switch (msg.what) {
+	    case 0:
+		imView.setImageBitmap(imgParada);
+		break;
+	    }
+	}
+    };
 
     /**
      * Descarga la imagen de la parada para presentar en la vista
      * 
      * @param fileUrl
      */
-    void downloadFile(String fileUrl) {
+    private void downloadFile(String fileUrl) {
 	URL myFileUrl = null;
 	Log.i("URL IMG", fileUrl);
 	try {
@@ -108,7 +127,7 @@ public class InfoParadasActivity extends Activity implements OnClickListener {
 	    InputStream is = conn.getInputStream();
 
 	    imgParada = BitmapFactory.decodeStream(is);
-	    imView.setImageBitmap(imgParada);
+	    handler.sendEmptyMessage(0);
 	} catch (IOException e) {
 	    e.printStackTrace();
 	}
@@ -144,4 +163,5 @@ public class InfoParadasActivity extends Activity implements OnClickListener {
 	login.putExtra("id_parada", parada.getIdParada());
 	startActivity(login);
     }
+
 }
