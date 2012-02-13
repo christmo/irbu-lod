@@ -12,10 +12,13 @@ import irbu.lod.sesion.SesionApplication;
 import java.io.InputStream;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,7 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class InfoEstudianteActivity extends Activity implements OnClickListener {
+public class InfoEstudianteActivity extends Activity implements
+	OnClickListener, Runnable {
 
     private final int INVISIBLE = View.GONE; // 1 invisible, 0 visible, 2
 					     // completamente oculto
@@ -44,6 +48,25 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
     private boolean hasParada = false;
     private boolean hasCasa = false;
 
+    private ProgressDialog pd;
+    private InformacionAlmacenadaEstudiante info;
+
+    /**
+     * Componentes graficos parada
+     */
+    private TextView txtDirParada;
+    private TextView txtRefParada;
+    private TextView txtLatParada;
+    private TextView txtLonParada;
+    private Button btnGraficarParada;
+    /**
+     * Componentes Graficos Casa
+     */
+    private TextView txtDirCasa;
+    private TextView txtLatCasa;
+    private TextView txtLonCasa;
+    private Button btnGraficarCasa;
+
     /**
      * @see android.app.Activity#onCreate(Bundle)
      */
@@ -55,7 +78,24 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
 	sesion = (SesionApplication) getApplicationContext();
 	infoParada = (LinearLayout) findViewById(R.id.contenedorParada);
 	infoCasa = (LinearLayout) findViewById(R.id.contenedorCasa);
-	inicializarComponentesGraficos();
+
+	txtDirParada = (TextView) findViewById(R.id.txtDireccionInfoUsuario);
+	txtRefParada = (TextView) findViewById(R.id.txtReferenciaInfoUsuario);
+	txtLatParada = (TextView) findViewById(R.id.txtLatitudInfoUsuario);
+	txtLonParada = (TextView) findViewById(R.id.txtLongitudInfoUsuario);
+	btnGraficarParada = (Button) findViewById(R.id.btnGraficarParada);
+	txtDirCasa = (TextView) findViewById(R.id.txtDireccionCasaUsuario);
+	txtLatCasa = (TextView) findViewById(R.id.txtLatitudCasaUsuario);
+	txtLonCasa = (TextView) findViewById(R.id.txtLongitudCasaUsuario);
+	btnGraficarCasa = (Button) findViewById(R.id.btnGraficarCasa);
+
+	imView = (ImageView) findViewById(R.id.imview);
+	imView.setImageDrawable(getResources().getDrawable(R.drawable.loading));
+	pd = ProgressDialog.show(InfoEstudianteActivity.this, "",
+		getResources().getText(R.string.txtMensajeServidor), true);
+
+	Thread thread = new Thread(this);
+	thread.start();
     }
 
     @Override
@@ -64,19 +104,40 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
 	mostarPanelesParadaCasa();
     }
 
+    public void run() {
+	getInformacionEstudiante();
+    }
+
+    private Handler handler = new Handler() {
+	@Override
+	public void handleMessage(Message msg) {
+	    /**
+	     * TODO: Error cuando se cambia de orientacion la pantalla varias
+	     * veces
+	     */
+	    pd.dismiss();
+	    switch (msg.what) {
+	    case 0:
+		imView.setImageBitmap(imgParada);
+		break;
+	    case 1:
+		inicializarComponentesGraficos();
+		break;
+	    }
+	}
+    };
+
+    private void getInformacionEstudiante() {
+	String strCI = sesion.getEstudiante().getStrCI();
+	info = consultar.getInformacionAlmacenadaEstudiante(strCI);
+	handler.sendEmptyMessage(1);
+    }
+
     /**
      * Inicializa la interfaz grafica asignando a las variables y los campos los
      * valores recuperados desde el servidor
      */
     private void inicializarComponentesGraficos() {
-	String strCI = sesion.getEstudiante().getStrCI();
-	InformacionAlmacenadaEstudiante info = consultar
-		.getInformacionAlmacenadaEstudiante(strCI);
-	TextView txtDirParada = (TextView) findViewById(R.id.txtDireccionInfoUsuario);
-	TextView txtRefParada = (TextView) findViewById(R.id.txtReferenciaInfoUsuario);
-	TextView txtLatParada = (TextView) findViewById(R.id.txtLatitudInfoUsuario);
-	TextView txtLonParada = (TextView) findViewById(R.id.txtLongitudInfoUsuario);
-	Button btnGraficarParada = (Button) findViewById(R.id.btnGraficarParada);
 	try {
 	    parada = info.getParada();
 	    Log.d("ID PARADA", "" + parada.getIdParada());
@@ -102,8 +163,13 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
 	    }
 	    try {
 		imView = (ImageView) findViewById(R.id.imview);
-		String url = urlHostRemoto + parada.getUrlImg();
-		obtenerImagenParada(url);
+		Thread getImagen = new Thread(new Runnable() {
+		    public void run() {
+			obtenerImagenParada(urlHostRemoto + parada.getUrlImg());
+		    }
+		});
+		getImagen.start();
+
 	    } catch (NullPointerException e) {
 	    }
 
@@ -113,10 +179,7 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
 	} catch (NullPointerException e) {
 	    ocultarCamposParada();
 	}
-	TextView txtDirCasa = (TextView) findViewById(R.id.txtDireccionCasaUsuario);
-	TextView txtLatCasa = (TextView) findViewById(R.id.txtLatitudCasaUsuario);
-	TextView txtLonCasa = (TextView) findViewById(R.id.txtLongitudCasaUsuario);
-	Button btnGraficarCasa = (Button) findViewById(R.id.btnGraficarCasa);
+
 	try {
 	    casa = info.getCasa();
 
@@ -185,9 +248,9 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
      * 
      * @param boolean true para graficar la parada y false la casa
      */
-    private void graficarParadaCasa(boolean parada) {
+    private void graficarParadaCasa(boolean showParada) {
 	Intent mapa = new Intent(this, ViewMapaActivity.class);
-	if (parada) {
+	if (showParada) {
 	    if (hasParada) {
 		mapa.putExtra("parada", parada);
 	    }
@@ -205,7 +268,7 @@ public class InfoEstudianteActivity extends Activity implements OnClickListener 
     private void obtenerImagenParada(String url) {
 	InputStream is = consultar.getImagenParada(url);
 	imgParada = BitmapFactory.decodeStream(is);
-	imView.setImageBitmap(imgParada);
+	handler.sendEmptyMessage(0);
     }
 
 }

@@ -57,10 +57,6 @@ import android.widget.Toast;
  * 
  * @author christmo
  */
-/**
- * @author DellXPS_L401X
- * 
- */
 public class ViewMapaActivity extends Activity implements LocationListener {
 
     // ===========================================================
@@ -274,9 +270,16 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	{
 	    if (paradas != null) {
 		for (Paradas p : paradas) {
-		    GeoPoint punto = new GeoPoint(p.getLat(), p.getLon());
-		    puntosParadasItems.add(new OverlayItem(p.getDir(), p
-			    .getRef(), punto));
+		    GeoPoint geoParada = new GeoPoint(p.getLat(), p.getLon());
+
+		    OverlayItem overlayParada = new OverlayItem(p.getDir(),
+			    p.getRef(), geoParada);
+		    overlayParada.setMarker(this.getResources().getDrawable(
+			    R.drawable.bus_stop));
+		    puntosParadasItems.add(overlayParada);
+		    // GeoPoint punto = new GeoPoint(p.getLat(), p.getLon());
+		    // puntosParadasItems.add(new OverlayItem(p.getDir(), p
+		    // .getRef(), punto));
 		}
 	    }
 	    /* OnTapListener for the Markers, shows a simple Toast. */
@@ -366,6 +369,12 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	return super.onCreateOptionsMenu(pMenu);
     }
 
+    @Override
+    protected void onResume() {
+	super.onResume();
+	onLocationChanged(lmgr.getLastKnownLocation(LOCATION_SERVICE));
+    }
+
     /**
      * Ejecutar cuando se presione la tecla de menu
      * 
@@ -389,12 +398,12 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	    Log.d("Iconos Mapa", "" + listaIconosParadasOverlay.size());
 	    for (Overlay o : osmMapa.getOverlays()) {
 		if (!osmMapa.getOverlays().contains(listaIconosParadasOverlay)) {
-		     osmMapa.getOverlays().remove(o);
-		     osmMapa.postInvalidate();
+		    osmMapa.getOverlays().remove(o);
+		    osmMapa.postInvalidate();
 		    Log.d("O", "" + o.toString());
 		}
 	    }
-//	    limpiarMapa();
+	    // limpiarMapa();
 	    return true;
 	case MENU_DATOS:
 	    mostrarDatosEstudiante();
@@ -472,9 +481,12 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	    startActivity(myIntent);
 	}
 
-	lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 10,
+	/* Para trabajar con el emulador y telefono para obtener por gps */
+	lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+	/* Para obtener el el movil dentro de edificios por red e internet */
+	lmgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1,
 		this);
-
+	Log.d("Actualizando...", "Coordenadas");
     }
 
     /**
@@ -574,12 +586,21 @@ public class ViewMapaActivity extends Activity implements LocationListener {
      * Permite dibujar la parada frecuente del estudiante
      */
     private void dibujarParadaFrecuenteEstudiante() {
+	// GeoPoint geoParada = new GeoPoint(paradaFrecuente.getLat(),
+	// paradaFrecuente.getLon());
+	//
+	 ArrayList<OverlayItem> paradaFrecDibujar = new
+	 ArrayList<OverlayItem>();
+	// paradaFrecDibujar.add(new OverlayItem(paradaFrecuente.getDir(),
+	// paradaFrecuente.getRef(), geoParada));
 	GeoPoint geoParada = new GeoPoint(paradaFrecuente.getLat(),
 		paradaFrecuente.getLon());
 
-	ArrayList<OverlayItem> paradaFrecDibujar = new ArrayList<OverlayItem>();
-	paradaFrecDibujar.add(new OverlayItem(paradaFrecuente.getDir(),
-		paradaFrecuente.getRef(), geoParada));
+	OverlayItem overlayParada = new OverlayItem(paradaFrecuente.getDir(),
+		paradaFrecuente.getRef(), geoParada);
+	overlayParada.setMarker(this.getResources().getDrawable(
+		R.drawable.bus_stop));
+	paradaFrecDibujar.add(overlayParada);
 	this.listaIconosParadasOverlay = new ItemizedIconOverlay<OverlayItem>(
 		paradaFrecDibujar,
 		new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
@@ -607,20 +628,32 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 		    }
 		}, mResourceProxy);
 	this.osmMapa.getOverlays().add(this.listaIconosParadasOverlay);
+
+	// osmViewController.animateTo(geoParada);
+	// osmViewController.setCenter(geoParada);
     }
 
     /**
      * Prmite dibujar la casa del estudiante sobre el mapa
      */
     private void dibujarCasaEstudiante() {
+	// final GeoPoint geoCasa = new GeoPoint(casaEstudiante.getDouLat(),
+	// casaEstudiante.getDouLon());
+	//
+	// ArrayList<OverlayItem> casaDibujar = new ArrayList<OverlayItem>();
+	// casaDibujar.add(new OverlayItem(casaEstudiante.getStrDireccion(),
+	// "Dirección", geoCasa));
 	GeoPoint geoCasa = new GeoPoint(casaEstudiante.getDouLat(),
 		casaEstudiante.getDouLon());
 
-	ArrayList<OverlayItem> casaDibujar = new ArrayList<OverlayItem>();
-	casaDibujar.add(new OverlayItem(casaEstudiante.getStrDireccion(),
-		"Dirección", geoCasa));
+	ArrayList<OverlayItem> listaItemsCasa = new ArrayList<OverlayItem>();
+	OverlayItem overlayCasa = new OverlayItem(
+		casaEstudiante.getStrDireccion(), "Dirección", geoCasa);
+	overlayCasa.setMarker(this.getResources().getDrawable(
+		R.drawable.casa_icon));
+	listaItemsCasa.add(overlayCasa);
 	this.listaIconosParadasOverlay = new ItemizedIconOverlay<OverlayItem>(
-		casaDibujar,
+		listaItemsCasa,
 		new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
 		    public boolean onItemSingleTapUp(final int index,
 			    final OverlayItem item) {
@@ -646,6 +679,9 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 		    }
 		}, mResourceProxy);
 	this.osmMapa.getOverlays().add(this.listaIconosParadasOverlay);
+
+	// osmViewController.animateTo(geoCasa);
+	// osmViewController.setCenter(geoCasa);
     }
 
     /**
