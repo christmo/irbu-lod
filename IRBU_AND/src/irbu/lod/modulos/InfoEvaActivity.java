@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.SocketException;
 import java.util.HashMap;
 
+import org.apache.http.conn.ConnectTimeoutException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -128,6 +130,9 @@ public class InfoEvaActivity extends Activity implements Runnable,
 		// Error usuario no registrado
 		handler.sendEmptyMessage(4);
 	    }
+	} catch (ConnectTimeoutException e) {
+	    // Error al conectar el servidor tardar mucho en contestar
+	    handler.sendEmptyMessage(6);
 	} catch (IllegalArgumentException e) {
 	    // Error de Usuario y clave
 	    handler.sendEmptyMessage(2);
@@ -169,8 +174,12 @@ public class InfoEvaActivity extends Activity implements Runnable,
 	    case 5:
 		llamarVistaInformacion();
 		break;
+	    case 6:
+		mensajeErrorServidorOcupado();
+		break;
 	    }
 	}
+
     };
 
     public void onClick(View v) {
@@ -373,6 +382,22 @@ public class InfoEvaActivity extends Activity implements Runnable,
 		InfoEvaActivity.this);
 	builder1.setMessage(R.string.txtErrorConexionInternet)
 		.setCancelable(false)
+		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int id) {
+			InfoEvaActivity.this.finish();
+		    }
+		});
+	AlertDialog alert1 = builder1.create();
+	alert1.show();
+    }
+
+    /**
+     * Mensaje de error cuando el servidor se demora mucho en contestar
+     */
+    private void mensajeErrorServidorOcupado() {
+	AlertDialog.Builder builder1 = new AlertDialog.Builder(
+		InfoEvaActivity.this);
+	builder1.setMessage(R.string.txtErrorTimeOut).setCancelable(false)
 		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int id) {
 			InfoEvaActivity.this.finish();

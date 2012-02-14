@@ -14,8 +14,11 @@ import irbu.lod.sesion.SesionApplication;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import org.osmdroid.DefaultResourceProxyImpl;
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.tileprovider.util.CloudmadeUtil;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
@@ -25,6 +28,7 @@ import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MinimapOverlay;
 import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.OverlayItem;
+import org.osmdroid.views.overlay.OverlayManager;
 import org.osmdroid.views.overlay.PathOverlay;
 import org.osmdroid.views.overlay.ScaleBarOverlay;
 import org.osmdroid.views.overlay.SimpleLocationOverlay;
@@ -395,15 +399,7 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	    guardarCoordenadasVivienda();
 	    return true;
 	case MENU_LIMPIAR:
-	    Log.d("Iconos Mapa", "" + listaIconosParadasOverlay.size());
-	    for (Overlay o : osmMapa.getOverlays()) {
-		if (!osmMapa.getOverlays().contains(listaIconosParadasOverlay)) {
-		    osmMapa.getOverlays().remove(o);
-		    osmMapa.postInvalidate();
-		    Log.d("O", "" + o.toString());
-		}
-	    }
-	    // limpiarMapa();
+	    limpiarMapa();
 	    return true;
 	case MENU_DATOS:
 	    mostrarDatosEstudiante();
@@ -589,8 +585,7 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	// GeoPoint geoParada = new GeoPoint(paradaFrecuente.getLat(),
 	// paradaFrecuente.getLon());
 	//
-	 ArrayList<OverlayItem> paradaFrecDibujar = new
-	 ArrayList<OverlayItem>();
+	ArrayList<OverlayItem> paradaFrecDibujar = new ArrayList<OverlayItem>();
 	// paradaFrecDibujar.add(new OverlayItem(paradaFrecuente.getDir(),
 	// paradaFrecuente.getRef(), geoParada));
 	GeoPoint geoParada = new GeoPoint(paradaFrecuente.getLat(),
@@ -680,8 +675,20 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 		}, mResourceProxy);
 	this.osmMapa.getOverlays().add(this.listaIconosParadasOverlay);
 
-	// osmViewController.animateTo(geoCasa);
-	// osmViewController.setCenter(geoCasa);
+//	IGeoPoint centro = new IGeoPoint() {
+//
+//	    public int getLongitudeE6() {
+//		return (int) (casaEstudiante.getDouLon() * 1e6);
+//	    }
+//
+//	    public int getLatitudeE6() {
+//		return (int) (casaEstudiante.getDouLat() * 1e6);
+//	    }
+//	};
+//
+	osmViewController.animateTo(geoCasa);
+	osmViewController.setCenter(geoCasa);
+	osmViewController.setZoom(osmMapa.getZoomLevel()+1);
     }
 
     /**
@@ -708,11 +715,24 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 
     }
 
+    /**
+     * Elimina todos los Overlay del mapa, solo iconos de paradas, casa y rutas
+     */
     private void limpiarMapa() {
-	for (int i = 0; i < osmMapa.getOverlays().size(); i++) {
-	    this.osmMapa.getOverlays().remove(i);
+	OverlayManager overMng = osmMapa.getOverlayManager();
+
+	ArrayList<Overlay> listaOverlayBorrar = new ArrayList<Overlay>();
+	for (Overlay o : overMng) {
+	    if (o instanceof ItemizedOverlay<?>) {
+		listaOverlayBorrar.add(o);
+	    }
+	    if (o instanceof PathOverlay) {
+		listaOverlayBorrar.add(o);
+	    }
 	}
-	this.osmMapa.postInvalidate();
+	overMng.removeAll(listaOverlayBorrar);
+	osmMapa.postInvalidate();
+	listaOverlayBorrar.clear();
     }
 
     // ===========================================================

@@ -8,6 +8,7 @@
     <string name="txtErrorUsuarioSinDatos">No hay datos de este usuario se deben ingresar manualmente&#8230;</string>
     <string name="txtErrorUsuarioClave">El nombre de usuario o la clave son incorrectas, por favor vuelva a intentar nuevamente&#8230;</string>
     <string name="txtErrorConexionEVA">No se pudo obtener los datos del EVA por favor vuelva a intentar mas tarde&#8230;</string>
+    <string name="txtErrorTimeOut">No se pudo obtener los datos del EVA el servidor parece muy ocupado, intente por favor más tarde&#8230; :-(</string>
 
     <string name="txtMensajeEVA">Obteniendo sus datos del EVA, esto puede tardar un momento por favor espere&#8230; :-)</string>
     <string name="txtMensajeServidor">Obteniendo sus datos de casa y de parada frecuente&#8230; :-)</string>
