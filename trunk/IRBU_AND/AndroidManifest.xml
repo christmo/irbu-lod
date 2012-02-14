@@ -7,14 +7,14 @@
     <uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="7" />
-    
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    
+
     <!-- quitar debuggable para subir a un dispositivo -->
     <application
         android:name=".sesion.SesionApplication"
@@ -26,7 +26,6 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -40,11 +39,11 @@
         </activity>
         <activity
             android:name=".modulos.ListaRutasActivity"
-            android:label="@string/txtBuscarRuta" >
+            android:label="@string/txtListaRutas" >
         </activity>
         <activity
             android:name=".mapa.ViewMapaActivity"
-            android:label="@string/txtBuscarRuta" >
+            android:label="@string/txtMapa" >
         </activity>
         <activity
             android:name=".modulos.InfoParadasActivity"
@@ -64,12 +63,16 @@
         </activity>
         <activity
             android:name=".modulos.AyudaActivity"
-            android:label="@string/txtLoginEva" >
+            android:label="@string/txtAyuda" >
         </activity>
-        <activity 
-            android:name="irbu.lod.modulos.InfoEstudianteActivity" />
-        <activity 
-            android:name="irbu.lod.modulos.listarrutas.ListaRutasParada" />
+        <activity
+            android:name="irbu.lod.modulos.InfoEstudianteActivity"
+            android:label="@string/txtInformacionEstudiante" >
+        </activity>
+        <activity
+            android:name="irbu.lod.modulos.listarrutas.ListaRutasParada"
+            android:label="@string/txtListaRutasHorarios" >
+        </activity>
     </application>
 
 </manifest>

@@ -44,4 +44,16 @@
     <string name="txtUTPL">Universidad Técnica Particular de Loja</string>
     <string name="txtRutasHorarioParada">Ver rutas y horarios de la parada</string>
     <string name="txtListaRutasHorarios">Lista de Rutas y Horarios</string>
+    <string name="txtNombreAutor">Christian Mora</string>
+    <string name="txtAutor">Autor:</string>
+    <string name="txtMailCM">cfmora@utpl.edu.ec</string>
+    <string name="txtNotificarProblemas">Notificar Problemas</string>
+    <string name="txtProyecto">Proyecto:</string>
+    <string name="txtDescripcionProyecto">Este proyecto fué desarrollado bajo la modalidad de tema de tesis de la Escuela de Ciencias de la Computación, tutelado por el ingeniero Jorge López dentro de la Universidad Técnica Particular de Loja, el código de esta aplicación es totalmente libre y puede ser utilizado como referencia para otros proyectos, los detalles se pueden encontrar en:</string>
+    <string name="txtLinkGoogleCode">http://code.google.com/p/irbu-lod/</string>
+    <string name="txtGuiaRapida">Guía Rápida:</string>
+    <string name="txtGuiaIntroduccion1">Esta aplicación permite a los estudiantes y personal de la UTPL tener la información de las rutas de los buses que prestan este servicio dentro de este establecimiento, de una manera ágil y al alcance de la mano.</string>
+    <string name="txtGuiaIntroduccion2">Se permiten busquedas de rutas dependiendo del tipo de recorrido que realizan los buses, información de paradas, utilización de GPS para ver paradas cercanas a un punto, guardado de información del estudiante como parada frecuente y coordenadas de la casa.</string>
+    <string name="txtGuiaIntroduccion3">La utilización de la aplicación es bastante sensilla solo requiere ingresar los parámetros de las rutas que se quiere buscar y de alli solo pulsar en los iconos para ver la información que contiene.</string>
+    <string name="txtGuiaIntroduccion4">Al momento de autenticarse en el EVA y obtener la información de parada y casa, estos datos pemanecen accesibles a través de esta aplicación hasta cerrar la sesión, esta puede ser cerrada simplemente con entrar a esta página de ayuda, para comprobarlo si ya ingresamos con el usuario y la clave e ingresamos a esta página de ayuda y volvemos a ingresar a información del estudiante nos pedirá que ingresemos nuevamente los datos de autenticación.</string>
 </resources>
