@@ -1,6 +1,7 @@
 package irbu.lod.modulos;
 
 import irbu.lod.R;
+import irbu.lod.objetos.Paradas;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -18,7 +19,8 @@ public class LoginEvaActivity extends Activity implements OnClickListener {
     private Button btnIngresar;
     private double lon;
     private double lat;
-    private int idParada;
+//    private int idParada;
+    private Paradas parada;
     private boolean irInformacion = false;
 
     @Override
@@ -33,8 +35,11 @@ public class LoginEvaActivity extends Activity implements OnClickListener {
 		lat = getIntent().getExtras().getDouble("lat");
 		lon = getIntent().getExtras().getDouble("lon");
 	    }
-	    if (getIntent().hasExtra("id_parada")) {
-		idParada = getIntent().getExtras().getInt("id_parada");
+//	    if (getIntent().hasExtra("id_parada")) {
+//		idParada = getIntent().getExtras().getInt("id_parada");
+//	    }
+	    if (getIntent().hasExtra("parada")) {
+		parada = getIntent().getParcelableExtra("parada");
 	    }
 	}
 
@@ -71,8 +76,11 @@ public class LoginEvaActivity extends Activity implements OnClickListener {
 		    datosEva.putExtra("lon", lon);
 		    datosEva.putExtra("lat", lat);
 		}
-		if (getIntent().hasExtra("id_parada")) {
-		    datosEva.putExtra("id_parada", idParada);
+//		if (getIntent().hasExtra("id_parada")) {
+//		    datosEva.putExtra("id_parada", idParada);
+//		}
+		if (getIntent().hasExtra("parada")) {
+		    datosEva.putExtra("parada", parada);
 		}
 	    }
 	    startActivity(datosEva);

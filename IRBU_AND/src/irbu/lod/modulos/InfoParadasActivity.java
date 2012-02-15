@@ -92,7 +92,11 @@ public class InfoParadasActivity extends Activity implements OnClickListener,
     }
 
     public void run() {
-	downloadFile(urlHostRemoto + parada.getUrlImg());
+	if (parada.getUrlImg().contains("http")) {
+	    downloadFile(parada.getUrlImg());
+	} else {
+	    downloadFile(urlHostRemoto + parada.getUrlImg());
+	}
     }
 
     private Handler handler = new Handler() {
@@ -160,7 +164,8 @@ public class InfoParadasActivity extends Activity implements OnClickListener,
 	} else {
 	    login = new Intent(this, LoginEvaActivity.class);
 	}
-	login.putExtra("id_parada", parada.getIdParada());
+//	login.putExtra("id_parada", parada.getIdParada());
+	login.putExtra("parada", parada);
 	startActivity(login);
     }
 

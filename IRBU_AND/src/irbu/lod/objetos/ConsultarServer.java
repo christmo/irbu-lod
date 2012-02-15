@@ -2,6 +2,7 @@ package irbu.lod.objetos;
 
 import irbu.lod.R;
 import irbu.lod.constantes.Constantes;
+import irbu.lod.mapa.ViewMapaActivity;
 import irbu.lod.modulos.listarrutas.CamposListaRutasParada;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
@@ -36,6 +38,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.util.Log;
+import android.widget.Toast;
 
 public class ConsultarServer {
 
@@ -283,6 +286,115 @@ public class ConsultarServer {
      * @throws SocketException
      */
     public ArrayList<Paradas> getParadasAproximacion(double latitud,
+	    double longitud, int distancia,ViewMapaActivity ctx) throws IOException, SocketException {
+	boolean virtuoso = true;
+	if (virtuoso) {
+	    try {
+		return getParadasAproximacionVirtuoso(latitud, longitud,
+			distancia);
+	    } catch (JSONException e) {
+		Toast t = Toast
+			.makeText(
+				ctx,
+				"Servidor Virtuoso no disponiblre conectado con servidor IRBU...",
+				Toast.LENGTH_LONG);
+		t.show();
+		return getParadasAproximacionIRBU(latitud, longitud, distancia);
+	    }
+	} else {
+	    return getParadasAproximacionIRBU(latitud, longitud, distancia);
+	}
+    }
+
+    /**
+     * Obtiene las paradas aproximadas a un punto en este caso 1km de la
+     * coordenada GPS, esta hace la consulta al servidor Virtuoso
+     * 
+     * @param x
+     * @param y
+     * @return ArrayList<Paradas>
+     * @throws IOException
+     * @throws SocketException
+     */
+    private ArrayList<Paradas> getParadasAproximacionVirtuoso(double latitud,
+	    double longitud, int distancia) throws IOException,
+	    SocketException, JSONException {
+	String metros = "" + distancia;
+	ArrayList<Paradas> paradasRuta = new ArrayList<Paradas>();
+	final String url = Constantes.URL_PARADAS_APROX_VIRTUOSO;
+
+	httppost = new HttpPost(url);
+
+	// Poner prametros a la consulta POST
+	List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+	nameValuePairs.add(new BasicNameValuePair("x", "" + longitud));
+	nameValuePairs.add(new BasicNameValuePair("y", "" + latitud));
+	nameValuePairs.add(new BasicNameValuePair("meters", metros));
+	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+	Log.d("respuesta", url);
+
+	// Execute HTTP Post Request
+	HttpResponse response = httpclient.execute(httppost);
+	HttpEntity resEntity = response.getEntity();
+
+	JSONArray jObject = null;
+	try {
+	    String txtJson = EntityUtils.toString(resEntity);
+	    jObject = new JSONArray(txtJson);
+	    Log.d("Server", "" + jObject);
+
+	    for (int i = 0; i < jObject.length(); i++) {
+		JSONObject info = (JSONObject) jObject.get(i);
+		Paradas p = new Paradas(0, info.getDouble("lon"),
+			info.getDouble("lat"), info.getJSONObject("parada")
+				.getString("dir"), info.getJSONObject("parada")
+				.getString("referencia"), info.getJSONObject(
+				"parada").getString("imagen"));
+		paradasRuta.add(p);
+	    }
+
+	    // datos = jObject.getJSONObject("datos");
+	    // Log.d("Server", "" + datos);
+	    //
+	    // String dato = datos.getString("coordenadas");
+	    // Log.d("Server", "" + dato);
+	    //
+	    // int idParada = 0;
+	    // double lon = 0, lat = 0;
+	    // String dir = "", ref = "", urlImg = "";
+	    //
+	    // String[] fila = dato.split("#");
+	    // for (int i = 0; i < fila.length; i++) {
+	    // String[] col = fila[i].split("%");
+	    // idParada = Integer.parseInt(col[0]);
+	    // lon = Double.parseDouble(col[1]);
+	    // lat = Double.parseDouble(col[2]);
+	    // dir = covertirUTF8Decode(col[3]);
+	    // ref = covertirUTF8Decode(col[4]);
+	    // urlImg = col[5];
+	    // Paradas p = new Paradas(idParada, lon, lat, dir, ref, urlImg);
+	    // paradasRuta.add(p);
+	    // }
+
+	} catch (JSONException e) {
+	    throw new JSONException(e.getMessage().toString());
+	}
+
+	return paradasRuta;
+    }
+
+    /**
+     * Obtiene las paradas aproximadas a un punto en este caso 1km de la
+     * coordenada GPS, esta hace la consulta al servidor IRBU
+     * 
+     * @param x
+     * @param y
+     * @return ArrayList<Paradas>
+     * @throws IOException
+     * @throws SocketException
+     */
+    private ArrayList<Paradas> getParadasAproximacionIRBU(double latitud,
 	    double longitud, int distancia) throws IOException, SocketException {
 	String metros = "" + distancia;
 	ArrayList<Paradas> paradasRuta = new ArrayList<Paradas>();
@@ -398,7 +510,7 @@ public class ConsultarServer {
      * @throws IOException
      * @throws SocketException
      */
-    public boolean guardarDatosCasaEstudiante(String strDir, String strCI,
+    public Casa guardarDatosCasaEstudiante(String strDir, String strCI,
 	    double lon, double lat, String strPeriodo) throws IOException,
 	    SocketException {
 	final String url = Constantes.URL_GUARDAR_CASA_ESTUDIANTE;
@@ -433,11 +545,12 @@ public class ConsultarServer {
 	    jObject = new JSONObject(txtJson);
 	    rta = jObject.getString("success");
 	    Log.i("Respuesta", rta.toString());
+	    return new Casa(strDir, lat, lon);
 	} catch (JSONException e) {
 	    e.printStackTrace();
 	}
 
-	return Boolean.getBoolean(rta.toString());
+	return null;
     }
 
     /**
@@ -451,18 +564,23 @@ public class ConsultarServer {
      * @throws IOException
      * @throws SocketException
      */
-    public boolean guardarDatosParadaEstudiante(String strCI, int intIdParada,
+    // public boolean guardarDatosParadaEstudiante(String strCI, int
+    // intIdParada,
+    // String strPeriodo) throws IOException, SocketException {
+    public Paradas guardarDatosParadaEstudiante(String strCI, Paradas parada,
 	    String strPeriodo) throws IOException, SocketException {
 	final String url = Constantes.URL_GUARDAR_PARADA_ESTUDIANTE;
 
 	httppost = new HttpPost(url);
 
 	// Poner prametros a la consulta POST
-	List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+	List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 	nameValuePairs.add(new BasicNameValuePair("ci", strCI));
-	nameValuePairs
-		.add(new BasicNameValuePair("id_parada", "" + intIdParada));
+	nameValuePairs.add(new BasicNameValuePair("idparada", ""
+		+ parada.getIdParada()));
 	nameValuePairs.add(new BasicNameValuePair("periodo", strPeriodo));
+	nameValuePairs.add(new BasicNameValuePair("lat", "" + parada.getLat()));
+	nameValuePairs.add(new BasicNameValuePair("lon", "" + parada.getLon()));
 	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 	Log.d("URL", url);
@@ -475,15 +593,18 @@ public class ConsultarServer {
 	String rta = null;
 	try {
 	    String txtJson = EntityUtils.toString(resEntity);
-
+	    Log.d("json", txtJson);
 	    jObject = new JSONObject(txtJson);
 	    rta = jObject.getString("success");
+	    rta = jObject.getString("id");
 	    Log.i("Respuesta", rta.toString());
+	    parada.setIdParada(Integer.parseInt(rta));
+	    return parada;
 	} catch (JSONException e) {
 	    e.printStackTrace();
 	}
 
-	return Boolean.getBoolean(rta.toString());
+	return null;
     }
 
     /**
@@ -678,7 +799,8 @@ public class ConsultarServer {
      * @return ArrayList<CamposListaRutasParada>
      * @throws UnsupportedEncodingException
      */
-    public ArrayList<CamposListaRutasParada> getRutasParada(int idParada) {
+    public ArrayList<CamposListaRutasParada> getRutasParada(Paradas parada)
+	    throws ConnectTimeoutException {
 	ArrayList<CamposListaRutasParada> listaRutasParada = new ArrayList<CamposListaRutasParada>();
 	final String url = Constantes.URL_RUTAS_PARADA;
 
@@ -686,7 +808,10 @@ public class ConsultarServer {
 
 	// Poner prametros a la consulta POST
 	List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
-	nameValuePairs.add(new BasicNameValuePair("idparada", "" + idParada));
+	nameValuePairs.add(new BasicNameValuePair("idparada", ""
+		+ parada.getIdParada()));
+	nameValuePairs.add(new BasicNameValuePair("lon", "" + parada.getLon()));
+	nameValuePairs.add(new BasicNameValuePair("lat", "" + parada.getLat()));
 	try {
 	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
@@ -707,12 +832,12 @@ public class ConsultarServer {
 			    "NOMBRE");
 		    String strHora = jsArray.getJSONObject(i).getString("HORA");
 		    String strTipo = jsArray.getJSONObject(i).getString("TIPO");
-		    if(strTipo.equals('R')){
-			strTipo="RECOGE";
-		    }else if(strTipo.equals('B')){
-			strTipo="BAJA";
-		    }else{
-			strTipo="BAJA - RECOGE";
+		    if (strTipo.equals('R')) {
+			strTipo = "RECOGE";
+		    } else if (strTipo.equals('B')) {
+			strTipo = "BAJA";
+		    } else {
+			strTipo = "BAJA - RECOGE";
 		    }
 		    listaRutasParada.add(new CamposListaRutasParada(strRuta,
 			    strHora, strTipo));
@@ -720,6 +845,8 @@ public class ConsultarServer {
 	    } catch (JSONException e) {
 		e.printStackTrace();
 	    }
+	} catch (ConnectTimeoutException e) {
+	    throw new ConnectTimeoutException();
 	} catch (UnsupportedEncodingException e1) {
 	    e1.printStackTrace();
 	} catch (ClientProtocolException e) {
