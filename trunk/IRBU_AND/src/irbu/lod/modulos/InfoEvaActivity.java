@@ -2,9 +2,11 @@ package irbu.lod.modulos;
 
 import irbu.lod.R;
 import irbu.lod.mapa.ViewMapaActivity;
+import irbu.lod.objetos.Casa;
 import irbu.lod.objetos.ConsultarServer;
 import irbu.lod.objetos.Estudiante;
 import irbu.lod.objetos.LoginEvaUTPL;
+import irbu.lod.objetos.Paradas;
 import irbu.lod.sesion.SesionApplication;
 
 import java.io.IOException;
@@ -44,6 +46,7 @@ public class InfoEvaActivity extends Activity implements Runnable,
     private double lon;
     private double lat;
     private int idParada;
+    private Paradas parada;
     private ProgressDialog pd;
     private HashMap<String, String> infoUsuario;
     private SesionApplication sesion;
@@ -77,8 +80,11 @@ public class InfoEvaActivity extends Activity implements Runnable,
 		lat = getIntent().getExtras().getDouble("lat");
 		lon = getIntent().getExtras().getDouble("lon");
 	    }
-	    if (getIntent().hasExtra("id_parada")) {
-		idParada = getIntent().getExtras().getInt("id_parada");
+	    // if (getIntent().hasExtra("id_parada")) {
+	    // idParada = getIntent().getExtras().getInt("id_parada");
+	    // }
+	    if (getIntent().hasExtra("parada")) {
+		parada = getIntent().getParcelableExtra("parada");
 	    }
 	}
 
@@ -252,15 +258,23 @@ public class InfoEvaActivity extends Activity implements Runnable,
 			.getText().toString(), txtCI.getText().toString(),
 			txtMail.getText().toString(), user);
 		if (getIntent().hasExtra("lat") && getIntent().hasExtra("lon")) {
-		    new ConsultarServer().guardarDatosCasaEstudiante(
+		    Casa casaEst =new ConsultarServer().guardarDatosCasaEstudiante(
 			    txtDireccion.getText().toString(), txtCI.getText()
 				    .toString(), lon, lat, txtPeriodoAcademico
 				    .getText().toString());
+		    sesion.setCasaEstudiante(casaEst);
 		}
-		if (getIntent().hasExtra("id_parada")) {
-		    new ConsultarServer().guardarDatosParadaEstudiante(txtCI
-			    .getText().toString(), idParada,
-			    txtPeriodoAcademico.getText().toString());
+		// if (getIntent().hasExtra("id_parada")) {
+		// new ConsultarServer().guardarDatosParadaEstudiante(txtCI
+		// .getText().toString(), idParada,
+		// txtPeriodoAcademico.getText().toString());
+		// }
+		if (getIntent().hasExtra("parada")) {
+		    Paradas paradaFrec = new ConsultarServer()
+			    .guardarDatosParadaEstudiante(txtCI.getText()
+				    .toString(), parada, txtPeriodoAcademico
+				    .getText().toString());
+		    sesion.setParadaFrecuente(paradaFrec);
 		}
 		regresarMapa();
 	    } else {

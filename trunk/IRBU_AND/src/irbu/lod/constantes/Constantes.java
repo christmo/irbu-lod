@@ -14,9 +14,9 @@ public class Constantes {
      * Informacion del servidor al que se debe conectar el cliente para hacer
      * consultas
      */
-//    public static final String IP_SERVER = "10.0.2.2";
-//     public static final String IP_SERVER = "192.168.1.2";
-     public static final String IP_SERVER = "172.16.25.53";
+    // public static final String IP_SERVER = "10.0.2.2";
+     public static final String IP_SERVER = "192.168.1.2";
+//    public static final String IP_SERVER = "172.16.25.53";
     public static final String PUERTO_SERVER = "8080";
 
     /**
@@ -56,6 +56,7 @@ public class Constantes {
 
     /**
      * URL para obtener las paradas aproximadas a un punto o coordenadas GPS
+     * desde el servidor IRBU
      * 
      * @params x
      * @params y
@@ -63,6 +64,17 @@ public class Constantes {
      */
     public static final String URL_PARADAS_APROX = URL_SERVER + NOMBRE_PROYECTO
 	    + "core/php/core/RQ3_paradas_cercanas.php";
+
+    /**
+     * URL para obtener las paradas aproximadas a un punto o coordenadas GPS
+     * desde el servidor VIRTUOSO
+     * 
+     * @params x
+     * @params y
+     * @params meters
+     */
+    public static final String URL_PARADAS_APROX_VIRTUOSO = URL_SERVER
+	    + NOMBRE_PROYECTO + "core/php/gui/getParadasAproxVirtuoso.php";
 
     /**
      * URL para obtener la informacion de las paradas de un ruta determinada

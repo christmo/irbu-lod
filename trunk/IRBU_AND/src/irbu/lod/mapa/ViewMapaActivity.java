@@ -14,11 +14,8 @@ import irbu.lod.sesion.SesionApplication;
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.tileprovider.util.CloudmadeUtil;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
@@ -512,7 +509,7 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	Log.d("Distancia", "" + distancia);
 	try {
 	    paradas = new ConsultarServer().getParadasAproximacion(
-		    punto.getLatitude(), punto.getLongitude(), distancia);
+		    punto.getLatitude(), punto.getLongitude(), distancia,this);
 	    if (paradas != null) {
 		Intent mapa = new Intent(this, ViewMapaActivity.class);
 		mapa.putParcelableArrayListExtra("listaParadas", paradas);
@@ -686,9 +683,9 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 //	    }
 //	};
 //
-	osmViewController.animateTo(geoCasa);
-	osmViewController.setCenter(geoCasa);
-	osmViewController.setZoom(osmMapa.getZoomLevel()+1);
+//	osmViewController.animateTo(geoCasa);
+//	osmViewController.setCenter(geoCasa);
+//	osmViewController.setZoom(osmMapa.getZoomLevel()+1);
     }
 
     /**
