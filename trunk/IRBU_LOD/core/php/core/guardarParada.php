@@ -2,7 +2,7 @@
 session_start();
 require_once('../../../dll/php/conexionBD.php');
 require_once('../../../dll/php/constantes.php');
-require_once '../../../dll/php/Virtuoso.php';
+//require_once '../../../dll/php/Virtuoso.php';
 
 extract($_POST);
 
@@ -42,6 +42,6 @@ consulta($consultaSql);
 
 echo '{success: true, failed: ' . $failed . ', parada: ' .$id_parada. ', uploaded: ' . $uploaded . ', type: "' . $_FILES['img']['name'][0] . '"}';
 
-$rest=new Virtuoso();
-$rest->crear_parada($dir, $ref, $lon, $lat, $dir_img);
+//$rest=new Virtuoso();
+//$rest->crear_parada($dir, $ref, $lon, $lat, $dir_img);
 ?>

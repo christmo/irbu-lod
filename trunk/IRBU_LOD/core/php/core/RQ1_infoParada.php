@@ -5,6 +5,13 @@ require_once('../../../dll/php/conexionBD.php');
 extract($_GET);
 extract($_POST);
 
+if($idparada==0){
+    $sql = "SELECT ID_PARADA FROM PARADAS WHERE LON=".$lon." AND LAT=".$lat;
+    consulta($sql);
+    $r= unicaFila();
+    $idparada=$r["ID_PARADA"];
+}
+
 $consultaSql = "SELECT TIPO, NOMBRE, HORA
                 FROM RUTA_HORA R, (
                       SELECT ID_RUTA

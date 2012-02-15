@@ -6,7 +6,8 @@ extract($_POST);
 
 $consultaSql = "SELECT P.ID_PARADA,P.DIRECCION,P.REFERENCIA,P.LAT,P.LON,P.DIR_IMG
                 FROM PARADA_ESTUDIANTE PE, PARADAS P
-                WHERE P.ID_PARADA=PE.ID_PARADA AND PE.CI_EST = '$ci'";
+                WHERE P.ID_PARADA=PE.ID_PARADA AND PE.CI_EST = '$ci'
+                ORDER BY FECHA_HORA DESC";
 
 consulta($consultaSql);
 $resulset = unicaFila();

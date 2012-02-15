@@ -1,8 +1,8 @@
 <?php
 
 require_once('../../../dll/php/conexionBD.php');
-require_once '../../../dll/rest/Pest.php';
-require_once '../../../dll/php/Virtuoso.php';
+//require_once '../../../dll/rest/Pest.php';
+//require_once '../../../dll/php/Virtuoso.php';
 
 extract($_POST);
 $salida = "{failure:true}";
@@ -12,8 +12,8 @@ if (isset($ci)) {
     consulta($consultaSql);
     $salida = "{success:true}";
 
-    $rest = new Virtuoso();
-    $rest->crear_estudiante($ci);
+//    $rest = new Virtuoso();
+//    $rest->crear_estudiante($ci);
 }
 echo $salida;
 ?>
