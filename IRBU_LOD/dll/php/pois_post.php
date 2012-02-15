@@ -6,7 +6,7 @@
  */
 //session_start();
 include 'constantes.php';
-//require_once '../rest/Pest.php';
+require_once '../rest/Pest.php';
 require_once 'Virtuoso.php';
 
 //$rest = new Pest($url_servicio);
@@ -46,12 +46,16 @@ $demo = new Virtuoso();
 //echo $demo->get_info_individuo("pg20120202030514");
 //echo $demo->get_info_individuo("estd20120202024808");
 //echo $demo->get_info_individuo("ruta20120202212658");
-
 //$demo->add_hora_ruta("15:00", "ruta20120202212658")
 //echo $demo->buscar_individuo_campo_igual($demo->ESTUDIANTE, "Prefiere", "pg20120202030514");
 //echo $demo->buscar_individuo_campo_igual($demo->RUTA, "Prefiere", "pg20120202030514");
-
 //lat -3.9961339833352
-echo $demo->buscar_individuo_campo_igual($demo->PARADA, "lat", "-3.9961339833352");
-
+//echo $demo->buscar_individuo_campo_igual($demo->PARADA, "lat", "-3.9961339833352");
+//echo $demo->paradas();
+ $demo->getParadasCercaUnPunto(100, -79.20484, -3.97733);
+// echo $demo->get_info_individuo("prd15");
+// echo $demo->getInfoParada("prd15");
+// echo $demo->getInfoPoig("pg15");
+// echo $demo->get_info_individuo("pg15");
+//$demo->getParadasCercaUnPunto(200, -79.20155, -3.97782);
 ?>

@@ -335,6 +335,106 @@ class Virtuoso {
         return $this->rest->get($url);
     }
 
+    public function paradas() {
+        $url = $this->URL_SERVICIO . $this->PARADA;
+        $json = json_decode($this->rest->get($url));
+//        return $json->results->bindings->value;
+        $datos = array();
+        foreach ($json->results->bindings as $name => $value) {
+            $id = explode('#', $value->parada->value);
+//            $datos["value"][$name]=$id[1];//todos los valores
+            $lat = $value->lat->value;
+            $lon = $value->lon->value;
+            $datos[$name] = array('parada' => $id[1], 'lat' => $lat, 'lon' => $lon); //todos los valores
+//            $datos["value"] = $id[1]; //el ultimo
+        }
+        return json_encode($datos);
+    }
+
+    public function getParadasCercaUnPunto($meters, $x, $y) {
+
+        $factorLAT = $meters / (1852 * 60);
+        $factorLON = (($meters * 0.00001) / 0.000111 ) / 10000;
+
+        $lat1 = $y - $factorLAT;
+        $lat2 = $y + $factorLAT;
+        $lon1 = $x - $factorLON;
+        $lon2 = $x + $factorLON;
+
+        $paradas = json_decode($this->paradas(), true);
+        $datos = array();
+        $c = 0;
+        for ($i = 0; $i < count($paradas); $i++) {
+            $lat = $paradas[$i]["lat"];
+            $lon = $paradas[$i]["lon"];
+            if ($lat >= $lat1 && $lat <= $lat2 && $lon >= $lon1 && $lon <= $lon2) {
+                $info = json_decode($this->getInfoParada($paradas[$i]["parada"]), true);
+                $dir = array("dir" => $info["calle1"] . " y " . $info["calle2"],
+                    "referencia" => $info["referencia"],
+//                    "barrio" => $info["barrio"],
+                    "imagen" => $info["imagen"]);
+                $paradas[$i]["parada"] = $dir;
+                $datos[$c] = $paradas[$i];
+                $c++;
+            }
+        }
+
+        return json_encode($datos);
+    }
+
+    public function getInfoParada($id_parada) {
+        $info = json_decode($this->get_info_individuo($id_parada), true);
+        $parada = $info["results"]["bindings"];
+        $datos = array();
+        for ($i = 0; $i < count($parada); $i++) {
+            $value = explode('#', $parada[$i]["prop"]["value"]);
+            if ($value[1] == "referencia") {
+                $datos[$value[1]] = $parada[$i]["valor"]["value"];
+            }
+            if ($value[1] == "imagen") {
+                $datos[$value[1]] = $parada[$i]["valor"]["value"];
+            }
+            if ($value[1] == "LocalizadaEn") {
+                $pg = explode('#', $parada[$i]["valor"]["value"]);
+                $datos[$value[1]] = $pg[1];
+                /* Info de la parada */
+                $p = json_decode($this->getInfoPoig($pg[1]), true);
+                $datos["calle1"] = $p["calle1"];
+                $datos["calle2"] = $p["calle2"];
+                $datos["barrio"] = $p["barrio"];
+//                $datos["sector"]=$p["sector"];
+            }
+        }
+        return json_encode($datos);
+    }
+
+    public function getInfoPoig($id_pg) {
+        /* Info de la parada */
+        $info = json_decode($this->get_info_individuo($id_pg), true);
+        $parada = $info["results"]["bindings"];
+        $datos = array();
+        for ($i = 0; $i < count($parada); $i++) {
+            $value = explode('#', $parada[$i]["prop"]["value"]);
+            if ($value[1] == "calle1") {
+                $datos[$value[1]] = $parada[$i]["valor"]["value"];
+            }
+            if ($value[1] == "calle2") {
+                $datos[$value[1]] = $parada[$i]["valor"]["value"];
+            }
+            if ($value[1] == "barrio") {
+                $datos[$value[1]] = $parada[$i]["valor"]["value"];
+            }
+            if ($value[1] == "sector") {
+                $datos[$value[1]] = $parada[$i]["valor"]["value"];
+            }
+            if ($value[1] == "CoordenadaGeo") {
+                $pg = explode('#', $parada[$i]["valor"]["value"]);
+                $datos[$value[1]] = $pg[1];
+            }
+        }
+        return json_encode($datos);
+    }
+
 }
 
 ?>
