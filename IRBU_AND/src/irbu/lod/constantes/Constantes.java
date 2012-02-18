@@ -14,9 +14,9 @@ public class Constantes {
      * Informacion del servidor al que se debe conectar el cliente para hacer
      * consultas
      */
-    // public static final String IP_SERVER = "10.0.2.2";
+//     public static final String IP_SERVER = "10.0.2.2";
      public static final String IP_SERVER = "192.168.1.2";
-//    public static final String IP_SERVER = "172.16.25.53";
+//    public static final String IP_SERVER = "172.17.11.131";
     public static final String PUERTO_SERVER = "8080";
 
     /**

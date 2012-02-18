@@ -167,7 +167,10 @@
                         android:layout_marginLeft="15dp"
                         android:layout_marginRight="15dp"
                         android:layout_weight="1"
-                        android:text="@string/txtGuardar" />
+                        android:text="@string/txtGuardar" >
+
+                        <requestFocus />
+                    </Button>
 
                     <Button
                         android:id="@+id/btnCancelarGuardado"
