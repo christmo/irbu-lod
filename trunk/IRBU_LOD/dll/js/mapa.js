@@ -6,6 +6,7 @@ var lat = - 3.9912;
 var lon = - 79.20733;
 var zoom = 15;
 var lienzoParadas;
+var lienzoEstudiantes;
 var lienzoRecorridos;
 var capturarPosicion;
 var markerInicioFin;
@@ -243,6 +244,22 @@ function cargarCapas() {
         fontWeight      : "bold"
     });
 
+    var stylePuntosEstudiante = new OpenLayers.StyleMap( {
+        fillOpacity     : 0.7,
+        pointRadius     : 6,
+        ci              : "${ci}",
+        lat             : "${lat}",
+        lon             : "${lon}",
+        dir             : "${dir}",
+        fontColor       : "white",
+        fillColor       : "#DF3A01", //naranja
+        strokeColor     : "#FFFFFF",
+        strokeOpacity   : 0.7,
+        fontSize        : "12px",
+        fontFamily      : "Courier New, monospace",
+        fontWeight      : "bold"
+    });
+
     var stylePuntosRutas = new OpenLayers.StyleMap( {
         fillOpacity     : 0.7,
         pointRadius     : 9,
@@ -267,6 +284,12 @@ function cargarCapas() {
     });
 
     map.addLayer(lienzoRutas);
+   
+    lienzoEstudiantes = new OpenLayers.Layer.Vector('Puntos Estudiantes', {
+        styleMap: stylePuntosEstudiante
+    });
+
+    map.addLayer(lienzoEstudiantes);
 
     //Comportamiento de los Elementos de la Capa
     selectFeatures = new OpenLayers.Control.SelectFeature(
@@ -287,12 +310,55 @@ function cargarCapas() {
 
     map.addControl( selectFeatures );
     selectFeatures.activate();
+    
+    selectFeaturesEstudiante = new OpenLayers.Control.SelectFeature(
+        [ lienzoEstudiantes ],
+        {
+            clickout    : true,
+            toggle      : false,
+            multiple    : false,
+            hover       : false,
+            onSelect : function(feature){
+                infoEstudiantePopUp(feature);
+            },
+            onUnselect : function(feature){
+                map.removePopup( feature.popup );
+                feature.popup.destroy();
+                feature.attributes.poppedup = false;
+                feature.popup = null;
+            }
+        }
+        );
 
+    map.addControl( selectFeaturesEstudiante );
+   
     /**
      * Inicializa el mapa para que permita graficar los recorridos de los buses
      */
     capaRecorridos();
     permitirArrastrarPuntosRutas();
+}
+
+function infoEstudiantePopUp(feature){
+    var contenidoPopUp = "<div id='popid'><b>Direcci\xF3n:</b><br />"
+    + feature.data.dir + "<br /><br /><b>C\xE9dula:</b><br />"
+    + feature.data.ci  + "</div>";
+    var popup = 
+    new OpenLayers.Popup.AnchoredBubble( null,
+        new OpenLayers.LonLat( feature.geometry.x, feature.geometry.y ),
+        new OpenLayers.Size(170,75),
+        contenidoPopUp,
+        null,
+        true,
+        function () {
+            selectFeaturesEstudiante.unselect( feature );
+        }
+        );
+
+    //    popup.setBackgroundColor('#C8C8C8 '); // fondo
+    feature.popup = popup;
+    feature.attributes.poppedup = true;
+    map.addPopup( popup );
 }
 
 /**
@@ -519,4 +585,29 @@ function permitirArrastrarPuntosRutas(){
     });
     map.addControl(dragPuntosRuta);
     activarArrastradoPuntos(true);
+}
+
+/**
+ * Permite dibujar la casa de cada estudiante sobre el mapa, para identificar los
+ * sectores de mayor densidad estudiantil y reconocer graficamente cuales son 
+ * los sectores más habitados por parte de los estudiante
+ */
+function dibujarDensidadEstudiantes(datos){
+    var features = new Array();
+
+    for(var i=0;i<datos.length; i++){
+        var pt = new OpenLayers.Geometry.Point(datos[i].lon,datos[i].lat);
+        pt.transform( new OpenLayers.Projection( "EPSG:4326" ),
+            new OpenLayers.Projection( "EPSG:900913" ) );
+            
+        var puntoMap = new OpenLayers.Feature.Vector( pt, {
+            ci : datos[i].ci,
+            lat : datos[i].lat,
+            lon : datos[i].lon,
+            dir : datos[i].dir,
+            poppedup : true
+        });
+        features.push(puntoMap);
+    }
+    lienzoEstudiantes.addFeatures(features);
 }

@@ -2,10 +2,10 @@
 
 session_start();
 require_once('../../../dll/php/conexionBD.php');
-require_once '../../../dll/php/Virtuoso.php';
+//require_once '../../../dll/php/Virtuoso.php';
 
 extract($_POST);
-$rest = new Virtuoso();
+//$rest = new Virtuoso();
 $json = json_decode($paradas, true);
 
 if (count($json) > 0) {
@@ -17,8 +17,8 @@ if (count($json) > 0) {
         consulta($sql);
         
         //sacar id semantico de cada parada
-        $id_ordprd = $rest->orden_parada($json[$i]["numero"], $parada);
-        $rest->orden_parada_ruta($id_ordprd, $id_rlod);
+//        $id_ordprd = $rest->orden_parada($json[$i]["numero"], $parada);
+//        $rest->orden_parada_ruta($id_ordprd, $id_rlod);
         
     }
     $salida = "{success:true,id:$id_ruta}";

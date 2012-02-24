@@ -52,7 +52,7 @@ $demo = new Virtuoso();
 //lat -3.9961339833352
 //echo $demo->buscar_individuo_campo_igual($demo->PARADA, "lat", "-3.9961339833352");
 //echo $demo->paradas();
- $demo->getParadasCercaUnPunto(100, -79.20484, -3.97733);
+ echo $demo->getParadasCercaUnPunto(200, -79.20484, -3.97733);
 // echo $demo->get_info_individuo("prd15");
 // echo $demo->getInfoParada("prd15");
 // echo $demo->getInfoPoig("pg15");
