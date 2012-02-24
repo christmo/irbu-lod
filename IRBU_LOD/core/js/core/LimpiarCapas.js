@@ -11,6 +11,7 @@ function limpiarCapas(){
     limpiarCapaParadas();
     limpiarCapaNuevaRuta();
     limpiarCapturaNuevaRuta();
+    limpiarCapaEstudiantes();
 }
 
 /**
@@ -19,6 +20,17 @@ function limpiarCapas(){
 function limpiarCapaRecorridos(){
     lienzoRecorridos.destroyFeatures();
     removerMarcas();
+}
+
+/**
+ * Limpia la capa de los puntos de los estudiantes al sacar el reporte de densidad
+ */
+function limpiarCapaEstudiantes(){
+    lienzoEstudiantes.destroyFeatures();
+    if (map.popups.length == 1) {
+        map.removePopup(map.popups[0]);
+    }
+    selectFeaturesEstudiante.deactivate();
 }
 
 /**

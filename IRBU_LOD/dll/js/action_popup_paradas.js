@@ -49,8 +49,6 @@ function selectParada( feature ) {
     $(function() {
         $('.photo').lightBox();
     });
-
-
 }
 
 /**

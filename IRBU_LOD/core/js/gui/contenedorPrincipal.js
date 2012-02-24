@@ -25,8 +25,6 @@ Ext.onReady(function(){
             text    : 'Parada mas Cercana',
             handler: function(){
                 capturarPuntoReferencia();
-//                    console.info(storePuntosRuta.getCount());
-//                    storePuntosRuta.getAt(storePuntosRuta.find('numero',"n")).set('numero',"y");
                 
             }
         },'-',{
@@ -130,6 +128,23 @@ Ext.onReady(function(){
                     }
                 }]
             },{
+                text: 'Reportes',
+                icon: 'img/reportes.png',
+                menu: [{
+                    text: 'N\xFAmero Estudiantes Parada',
+                    icon: 'img/reportes.png',
+                    handler: function(){
+                        ventanaReporteEstudiantesParada();
+                    }
+                },{
+                    text: 'Densidad de Estudiantes',
+                    icon: 'img/map.png',
+                    handler: function(){
+                        //                        reporteDensidadEstudiantilTodo();
+                        ventanaReporteDensidadEstudiantil();
+                    }
+                }]
+            },{
                 text: 'Usuarios',
                 icon: 'img/user.png',
                 handler: function(){
@@ -149,10 +164,7 @@ Ext.onReady(function(){
         //            icon    : 'img/ayuda.png',
         //            text    : 'remover',
         //            handler: function(){
-        //                //console.info('remover');
-        ////                ventanaPuntosRuta(59,true);
-        //                //ventanaHorasRuta(1, true);
-        //                ventanaParadasRuta(59,true);
+        //                ventanaReporteEstudiantesParada();
         //            }
         //        },
         '->',{

@@ -29,8 +29,8 @@ if (count($resulset) >= 1) {
         $datos .= $fila["ID_PARADA"] . "%"
                 . $fila["LON"] . "%"
                 . $fila["LAT"] . "%"
-                . $fila["DIRECCION"] . "%"
-                . $fila["REFERENCIA"] . "%"
+                . utf8_encode($fila["DIRECCION"]) . "%"
+                . utf8_encode($fila["REFERENCIA"]) . "%"
                 . $fila["DIR_IMG"] . "%"
                 . $orden . "#";
         $orden = $orden + 1;

@@ -84,6 +84,11 @@ if (!isset($_SESSION)) {
         
         <!--   Usuarios     -->
         <script type="text/javascript" src="core/js/gui/ventanaUsuarios.js"></script>
+        
+        <!--Reportes-->
+        <script type="text/javascript" src="dll/js/ExporterXLS/exporter.js"></script>
+        <script type="text/javascript" src="core/js/gui/reportes/ventanaReporteEstudiantesParada.js"></script>
+        <script type="text/javascript" src="core/js/gui/reportes/ventanaReporteDensidadEstudiantil.js"></script>
 
         <script type='text/javascript'>
             $(function() {

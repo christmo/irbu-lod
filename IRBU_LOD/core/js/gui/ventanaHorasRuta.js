@@ -8,7 +8,7 @@ var grid;
 var spiner;
 var proxy;
 var id_ruta;
-var id_rlod;
+//var id_rlod;
 var contadorHoras=1;
 var storeHorasRuta;
 
@@ -172,8 +172,8 @@ function guardarHorasRuta(){
             timeout : 1000,
             params: {
                 horas   : getJsonOfStore(storeHorasRuta),
-                id_ruta : id_ruta,
-                id_rlod : id_rlod
+                id_ruta : id_ruta//,
+//                id_rlod : id_rlod
             }
         });
     }else{
@@ -205,7 +205,7 @@ function ventanaHorasRuta(resp,cargar){
         });
     }
     this.id_ruta = resp.id;
-    this.id_rlod = resp.id_rlod;
+    //this.id_rlod = resp.id_rlod;
     if(cargar){
         storeHorasRuta.proxy.conn.url = "core/php/gui/getHorasRuta.php?id_ruta="+resp.id;
         storeHorasRuta.load();
