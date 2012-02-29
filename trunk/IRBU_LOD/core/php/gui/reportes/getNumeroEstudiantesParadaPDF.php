@@ -10,20 +10,21 @@ class PDF extends FPDF {
     // Tabla coloreada
     function FancyTable($header, $data) {
         // Colores, ancho de línea y fuente en negrita
-        $this->SetFillColor(255, 0, 0);
+        $this->SetFillColor(255, 140, 0);
         $this->SetTextColor(255);
-        $this->SetDrawColor(128, 0, 0);
+        $this->SetDrawColor(0, 0, 0);
         $this->SetLineWidth(.3);
-        $this->SetFont('', 'B');
+        $this->SetFont('Helvetica', 'B', 12);
         // Cabecera
         $w = array(30, 100, 40);
-        for ($i = 0; $i < count($header); $i++)
+        for ($i = 0; $i < count($header); $i++){
             $this->Cell($w[$i], 7, $header[$i], 1, 0, 'C', true);
+        }
         $this->Ln();
         // Restauración de colores y fuentes
         $this->SetFillColor(224, 235, 255);
         $this->SetTextColor(0);
-        $this->SetFont('');
+        $this->SetFont('Helvetica', '', 12);
         // Datos
         $fill = false;
         foreach ($data as $row) {
@@ -39,7 +40,7 @@ class PDF extends FPDF {
 
     function Titulo($title) {
         // Arial bold 15
-        $this->SetFont('Helvetica', 'B', 15);
+        $this->SetFont('Helvetica', 'B', 18);
         // Calculamos ancho y posición del título.
         $w = $this->GetStringWidth($title) + 6;
         $this->SetX((210 - $w) / 2);
@@ -83,9 +84,9 @@ $title = utf8_decode('Reporte de Número de Estudiantes por Parada');
 
 // Títulos de las columnas
 $header = array('# Paradas', 'Paradas', '# Estudiantes');
-$pdf->SetFont('Helvetica', '', 14);
+$pdf->SetFont('Helvetica', '', 12);
 
-$pdf->SetTopMargin(30);
+$pdf->SetTopMargin(20);
 $pdf->SetLeftMargin(20);
 $pdf->SetRightMargin(20);
 $pdf->AddPage('P', 'A4');
