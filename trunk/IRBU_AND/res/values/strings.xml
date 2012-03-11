@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
-    <string name="hello">Hello World, IRBUActivity!</string>
     <string name="app_name">IRBU</string>
     <string name="txtBajaUTPL">Baja de la UTPL</string>
     <string name="txtSubeUTPL">Sube a la UTPL</string>
@@ -47,7 +46,7 @@
     <string name="txtNombreAutor">Christian Mora</string>
     <string name="txtAutor">Autor:</string>
     <string name="txtMailCM">cfmora@utpl.edu.ec</string>
-    <string name="txtNotificarProblemas">Notificar Problemas</string>
+    <string name="txtNotificarProblemas">Notificar Problemas de la App</string>
     <string name="txtProyecto">Proyecto:</string>
     <string name="txtDescripcionProyecto">Este proyecto fué desarrollado bajo la modalidad de tema de tesis de la Escuela de Ciencias de la Computación, tutelado por el ingeniero Jorge López dentro de la Universidad Técnica Particular de Loja, el código de esta aplicación es totalmente libre y puede ser utilizado como referencia para otros proyectos, los detalles se pueden encontrar en:</string>
     <string name="txtLinkGoogleCode">http://code.google.com/p/irbu-lod/</string>
