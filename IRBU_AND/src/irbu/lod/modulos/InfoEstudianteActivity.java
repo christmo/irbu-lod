@@ -25,6 +25,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class InfoEstudianteActivity extends Activity implements
 	    + Constantes.NOMBRE_PROYECTO;
     private Bitmap imgParada;
     private ImageView imView;
+    private ProgressBar pbCargarImagen;
     private SesionApplication sesion;
     private ConsultarServer consultar = new ConsultarServer();
     private LinearLayout infoParada;
@@ -90,7 +92,9 @@ public class InfoEstudianteActivity extends Activity implements
 	btnGraficarCasa = (Button) findViewById(R.id.btnGraficarCasa);
 
 	imView = (ImageView) findViewById(R.id.imview);
-	imView.setImageDrawable(getResources().getDrawable(R.drawable.loading));
+	// imView.setImageDrawable(getResources().getDrawable(R.drawable.loading));
+	pbCargarImagen = (ProgressBar) findViewById(R.id.pbCargarImagen);
+//	 pbCargarImagen.setVisibility(VISIBLE);
 	pd = ProgressDialog.show(InfoEstudianteActivity.this, "",
 		getResources().getText(R.string.txtMensajeServidor), true);
 
@@ -111,13 +115,11 @@ public class InfoEstudianteActivity extends Activity implements
     private Handler handler = new Handler() {
 	@Override
 	public void handleMessage(Message msg) {
-	    /**
-	     * TODO: Error cuando se cambia de orientacion la pantalla varias
-	     * veces
-	     */
 	    pd.dismiss();
 	    switch (msg.what) {
 	    case 0:
+		    pbCargarImagen.setVisibility(INVISIBLE);
+		
 		imView.setImageBitmap(imgParada);
 		break;
 	    case 1:

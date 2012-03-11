@@ -25,12 +25,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public class InfoParadasActivity extends Activity implements OnClickListener,
 	Runnable {
 
     private ImageView imView;
+    private ProgressBar pbCargarImagen;
     private String urlHostRemoto = Constantes.URL_SERVER
 	    + Constantes.NOMBRE_PROYECTO;
     private Bitmap imgParada;
@@ -86,7 +88,7 @@ public class InfoParadasActivity extends Activity implements OnClickListener,
 	}
 
 	imView = (ImageView) findViewById(R.id.imview);
-	imView.setImageDrawable(getResources().getDrawable(R.drawable.loading));
+	pbCargarImagen = (ProgressBar)findViewById(R.id.pbCargarImagen);
 	Thread thread = new Thread(this);
 	thread.start();
     }
@@ -104,6 +106,7 @@ public class InfoParadasActivity extends Activity implements OnClickListener,
 	public void handleMessage(Message msg) {
 	    switch (msg.what) {
 	    case 0:
+		pbCargarImagen.setVisibility(View.GONE);
 		imView.setImageBitmap(imgParada);
 		break;
 	    }
@@ -164,7 +167,7 @@ public class InfoParadasActivity extends Activity implements OnClickListener,
 	} else {
 	    login = new Intent(this, LoginEvaActivity.class);
 	}
-//	login.putExtra("id_parada", parada.getIdParada());
+	// login.putExtra("id_parada", parada.getIdParada());
 	login.putExtra("parada", parada);
 	startActivity(login);
     }
