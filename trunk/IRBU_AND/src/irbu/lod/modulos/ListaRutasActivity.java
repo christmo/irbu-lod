@@ -106,11 +106,18 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	@Override
 	public void handleMessage(Message msg) {
 	    if (msg.what == 0) { // carga valida
-		setListAdapter(m_adapter);
+		try {
+		    setListAdapter(m_adapter);
+		    Log.d("Lista Rutas", "Lista Cargada...");
+		} catch (NullPointerException e) {
+		    mensajeErrorConexion();
+		}
 	    } else if (msg.what == 1) { // error al cargar
 		mensajeErrorConexion();
 	    } else if (msg.what == 2) {
 		startActivity(mapa);
+	    } else if (msg.what == 3) {
+		mensajeErrorSinDatos();
 	    }
 	    /**
 	     * TODO: Error cuando se cambia de orientacion la pantalla varias
@@ -131,7 +138,10 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	    } else {
 		listaRutas = new ConsultarServer().getRutasServer(strTipoRuta);
 	    }
-	    handler.sendEmptyMessage(0); // enviar carga valida
+	    if (listaRutas.size() == 0) {
+		// Mensaje de error sin datos
+		handler.sendEmptyMessage(3);
+	    }
 	} catch (SocketException e) {
 	    msgNoServerConnection();
 	} catch (IOException e1) {
@@ -140,6 +150,7 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	try {
 	    m_adapter = new IconListViewAdapter(this, R.layout.lista_rutas,
 		    listaRutas);
+	    handler.sendEmptyMessage(0); // enviar carga valida
 	} catch (NullPointerException e) {
 	    msgNoServerConnection();
 	}
@@ -197,6 +208,21 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
     private void mensajeErrorConexion() {
 	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	builder.setMessage(R.string.txtErrorNoHayRutas).setCancelable(false)
+		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int id) {
+			ListaRutasActivity.this.finish();
+		    }
+		});
+	AlertDialog alert = builder.create();
+	alert.show();
+    }
+
+    /**
+     * Muestra el mensaje de error cuando no hay datos
+     */
+    private void mensajeErrorSinDatos() {
+	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	builder.setMessage(R.string.txtErrorSinDatos).setCancelable(false)
 		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int id) {
 			ListaRutasActivity.this.finish();

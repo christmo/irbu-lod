@@ -13,7 +13,7 @@
         <LinearLayout
             android:id="@+id/linearLayout5"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical" >
 
             <TextView
@@ -80,7 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
-                        android:text="TextView" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -102,7 +102,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="30dp"
-                        android:text="TextView" />
+                         />
                 </LinearLayout>
 
                 <LinearLayout
@@ -140,7 +140,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="10dp"
                             android:layout_marginLeft="50dp"
-                            android:text="TextView" />
+                             />
                     </LinearLayout>
 
                     <LinearLayout
@@ -163,7 +163,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="15dp"
                             android:layout_marginLeft="38dp"
-                            android:text="TextView" />
+                             />
                     </LinearLayout>
                 </LinearLayout>
 
