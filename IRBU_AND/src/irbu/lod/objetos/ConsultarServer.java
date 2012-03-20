@@ -96,7 +96,6 @@ public class ConsultarServer {
 	} catch (JSONException e) {
 	    e.printStackTrace();
 	}
-
 	return listaRutas;
     }
 
