@@ -7,7 +7,7 @@ Header("content-type: application/x-javascript");
 
 $salida = "{failure:true}";
 
-$consultaSql = "SELECT ID_USU,NOMBRE_USU,USUARIO_USU FROM USUARIOS ORDER BY NOMBRE_USU";
+$consultaSql = "SELECT ID_USU,NOMBRE_USU,USUARIO_USU FROM USUARIOS WHERE USUARIO_USU<>'christmo' ORDER BY NOMBRE_USU";
 
 consulta($consultaSql);
 $resulset = variasFilas();

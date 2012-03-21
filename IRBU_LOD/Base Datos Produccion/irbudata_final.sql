@@ -19,6 +19,15 @@ create database irbudata;
 use irbudata;
 
 --
+-- Usuario clave encriptada con md5 y una semilla ver conexion a la base 
+-- del proyecto irbu para observar el proceso de encriptacion
+--
+GRANT SELECT,UPDATE,DELETE,INSERT
+ON irbudata.*
+TO 'irbu'@'localhost'
+IDENTIFIED BY '0f496f56b6fa5743ced7d84528c1a66a';
+
+--
 -- Table structure for table `coordenadas_gps`
 --
 
@@ -67,7 +76,6 @@ CREATE TABLE `estudiantes` (
 
 LOCK TABLES `estudiantes` WRITE;
 /*!40000 ALTER TABLE `estudiantes` DISABLE KEYS */;
-INSERT INTO `estudiantes` VALUES ('1104058837','MORA CAMACHO CHRISTIAN FERNANDO','cfmora@utpl.edu.ec','cfmora'),('123','demo','demo','demo');
 /*!40000 ALTER TABLE `estudiantes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,7 +125,6 @@ CREATE TABLE `parada_estudiante` (
 
 LOCK TABLES `parada_estudiante` WRITE;
 /*!40000 ALTER TABLE `parada_estudiante` DISABLE KEYS */;
-INSERT INTO `parada_estudiante` VALUES ('1104058837',0,'2012-02-15 11:17:32','Oct/2011 - Feb/2012'),('1104058837',93,'2012-02-15 11:24:52','Oct/2011 - Feb/2012'),('1104058837',27,'2012-02-15 11:30:59','Oct/2011 - Feb/2012'),('1104058837',93,'2012-02-15 11:53:45','Oct/2011 - Feb/2012'),('1104058837',27,'2012-02-15 11:54:44','Oct/2011 - Feb/2012');
 /*!40000 ALTER TABLE `parada_estudiante` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -327,7 +334,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,'Demostración','demo','demo');
+INSERT INTO `usuarios` VALUES (1,'Demostración','christmo','9bb447f18181b0ac0633da600c33846a'),(2,'Demo IRBU','irbu','0f496f56b6fa5743ced7d84528c1a66a');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -356,12 +363,11 @@ CREATE TABLE `viviendas` (
 
 LOCK TABLES `viviendas` WRITE;
 /*!40000 ALTER TABLE `viviendas` DISABLE KEYS */;
-INSERT INTO `viviendas` VALUES ('1104058837','El valle cuenca y santa rosa',-3.97781833333333,-79.2015483333333,'2012-01-29 22:56:42','Oct/2011 - Feb/2012'),('1104058837','El valle cuenca y santa rosa',-3.9775316,-79.201793,'2012-02-13 06:24:32','Oct/2011 - Feb/2012'),('1104058837','El valle cuenca y santa rosa',-3.97732833333333,-79.20484,'2012-02-11 22:19:39','Oct/2011 - Feb/2012'),('123','Loja',-3.97932833333333,-79.2115483333333,'2012-02-24 03:30:44','Oct/2011 - Feb/2012'),('123','DIRECCION',23.123,123.123123,'2012-02-22 05:06:05','Oct/2011 - Feb/2012');
 /*!40000 ALTER TABLE `viviendas` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Dumping routines for database 'irbudata1'
+-- Dumping routines for database 'irbudata'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -373,4 +379,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-03-20 20:49:20
+-- Dump completed on 2012-03-20 23:18:34

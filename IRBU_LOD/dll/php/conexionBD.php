@@ -3,18 +3,17 @@
 $Conexion_ID = 0;
 $Consulta_ID = 0;
 
-/* numero de error y texto error */
+/*numero de error y texto error */
 $Errno = 0;
 $Error = "";
-$BaseDatos = "irbudata1";
+/*Parametros de la base de datos*/
+$BaseDatos = "irbudata";
 $Servidor = "localhost";
-$Usuario = "root";
-$Clave = "";
-
+$Usuario = "irbu";
+$Clave = "irbu";
 
 // Conectamos al servidor
-$Conexion_ID = mysql_connect($Servidor, $Usuario, $Clave);
-
+$Conexion_ID = mysql_connect($Servidor, $Usuario, encriptar($Clave));
 
 if (!$Conexion_ID) {
     $Error = "Ha fallado la conexi\xF3n.";
@@ -29,9 +28,7 @@ if (!@mysql_select_db($BaseDatos, $Conexion_ID)) {
     echo '$Error';
 }
 
-
 /* Ejecuta un consulta */
-
 function consulta($sql = "") {
     if ($sql == "") {
         $Error = "No ha especificado una consulta SQL";
@@ -73,7 +70,6 @@ function variasFilas() {
  * Devuelve la primer fila de la consulta
  * (nombres de campos en MAYUSCULAS)
  * */
-
 function unicaFila() {
 
     $fila = "";
@@ -93,11 +89,22 @@ function cerrarConexion() {
     @mysql_close($_SESSION["idBD"]);
 }
 
-/** Consulta JSON
- *
+/** 
+ * Consulta JSON
  */
 function consultaJSON($sql){
     return mysql_query($sql, $_SESSION["idBD"]);
+}
+
+
+/**
+ * Encliptar las claves
+ * @param type $clave
+ * @return type 
+ */
+function encriptar($clave){
+    $semilla = "christmo99@gmail.com";
+    return md5(md5($semilla).md5($clave));
 }
 
 ?>
