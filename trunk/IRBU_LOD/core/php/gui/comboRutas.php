@@ -24,10 +24,6 @@ for ($i = 0; $i < count($resulset); $i++) {
             \"id\":\"" . $fila["ID_RUTA"] . "\",
             \"name\":\"" . utf8_encode($fila["NOMBRE"]) . "\"
         }";
-//    $salida .= "{
-//            \"id\":\"" . $fila["ID_RUTA"] . "\",
-//            \"name\":\"" . $fila["NOMBRE"] . "\"
-//        }";
     if ($i != count($resulset) - 1) {
         $salida .= ",";
     }

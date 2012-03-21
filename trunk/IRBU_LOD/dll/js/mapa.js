@@ -126,9 +126,7 @@ function init(){
         controls : [
         new OpenLayers.Control.Navigation(),
         new OpenLayers.Control.PanZoomBar(),
-        //new OpenLayers.Control.ZoomToMaxExtent(),
-        new OpenLayers.Control.KeyboardDefaults(),
-        new OpenLayers.Control.LayerSwitcher(),
+        new OpenLayers.Control.KeyboardDefaults()
         ],
         restrictedExtent    : extent,
         displayProjection   : new OpenLayers.Projection( "EPSG:4326" ),
@@ -235,7 +233,6 @@ function cargarCapas() {
         ref             : "${ref}",
         img             : "${img}",
         fontColor       : "white",
-        //        fillColor       : "#003DF5", //azul
         fillColor       : "#1C5E06", //verde
         strokeColor     : "#FFFFFF",
         strokeOpacity   : 0.7,
@@ -355,7 +352,6 @@ function infoEstudiantePopUp(feature){
         }
         );
 
-    //    popup.setBackgroundColor('#C8C8C8 '); // fondo
     feature.popup = popup;
     feature.attributes.poppedup = true;
     map.addPopup( popup );
@@ -544,33 +540,6 @@ function insertarDatosTablaPuntosRuta(aux){
     features.push(idPt);
     lienzoRutas.addFeatures(features);
 }    
-
-/**
- * Inserta el punto al final de la linea dibujada para que se vaya editando la
- * ruta ya ingresada
- */
-//function insertarDatosTablaPuntosRutaEditar(aux){
-//    var features = new Array();
-//    var pt = new OpenLayers.Geometry.Point(aux.x,aux.y);
-//    pt.transform( new OpenLayers.Projection( "EPSG:4326" ),
-//        new OpenLayers.Projection( "EPSG:900913" ) );
-//    
-//    var idPt = new OpenLayers.Feature.Vector( pt, {
-//        id : contadorPuntos
-//    });
-//    
-//    storePuntosRuta.add(new Ext.data.Record({
-//        numero  : contadorPuntos,
-//        latitud : aux.y,
-//        longitud: aux.x
-//    }));
-//                    
-//    /* linea */
-//    puntosLineaRuta.push(pt);
-//    idPt.id = contadorPuntos;
-//    features.push(idPt);
-//    lienzoRutas.addFeatures(features);
-//}
 
 /**
  * Activa el control para arrastrar los puntos de una ruta para editarlos de 
