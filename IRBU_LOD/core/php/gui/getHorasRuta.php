@@ -14,7 +14,6 @@ consulta($consultaSql);
 $resulset = variasFilas();
 
 $salida = "{\"horas\": [";
-//$salida = "stcCallback1001([";
 
 for ($i = 0; $i < count($resulset); $i++) {
     $fila = $resulset[$i];
@@ -27,7 +26,6 @@ for ($i = 0; $i < count($resulset); $i++) {
     }
 }
 
-//$salida .="]);";
 $salida .="]}";
 
 echo $salida;
