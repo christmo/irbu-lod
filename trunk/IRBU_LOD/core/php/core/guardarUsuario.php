@@ -7,7 +7,7 @@ extract($_POST);
 $salida = "{failure:true}";
 
 $consultaSql = "INSERT INTO USUARIOS(NOMBRE_USU,USUARIO_USU,CLAVE_USU)
-                VALUES('" . utf8_decode($nombre) . "','" . utf8_decode($usuario) . "','$clave')";
+                VALUES('" . utf8_decode($nombre) . "','" . utf8_decode($usuario) . "','".encriptar($clave)."')";
 consulta($consultaSql);
 $salida = "{success:true}";
 
