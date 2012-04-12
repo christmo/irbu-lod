@@ -20,8 +20,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
-import android.util.Log;
-
 /**
  * 
  * @author DellXPS_L401X
