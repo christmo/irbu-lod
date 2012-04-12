@@ -115,7 +115,6 @@ public class BuscarRutaHoraActivity extends Activity implements OnClickListener 
     };
 
     private void updateDisplay(TimePicker timePicker, int hourOfDay, int minute) {
-
 	// do calculation of next time
 	int nextHour = 6;
 	int nextMinute = 0;

@@ -17,6 +17,10 @@ public class SesionApplication extends Application {
     private Casa casaEstudiante;
     private boolean isLogin = false;
 
+    private String server;
+    private String puerto;
+    private String proyecto;
+
     /**
      * Devuelve la instancia del estudiante, este alamcena los datos del
      * estudiante logueado
@@ -53,6 +57,30 @@ public class SesionApplication extends Application {
 
     public void setLogin(boolean isLogin) {
 	this.isLogin = isLogin;
+    }
+
+    public String getServer() {
+	return server;
+    }
+
+    public void setServer(String server) {
+	this.server = server;
+    }
+
+    public String getPuerto() {
+	return puerto;
+    }
+
+    public void setPuerto(String puerto) {
+	this.puerto = puerto;
+    }
+
+    public String getProyecto() {
+	return proyecto;
+    }
+
+    public void setProyecto(String proyecto) {
+	this.proyecto = proyecto;
     }
 
     /**

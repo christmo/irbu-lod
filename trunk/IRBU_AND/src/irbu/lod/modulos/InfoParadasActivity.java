@@ -120,7 +120,6 @@ public class InfoParadasActivity extends Activity implements OnClickListener,
      */
     private void downloadFile(String fileUrl) {
 	URL myFileUrl = null;
-	Log.i("URL IMG", fileUrl);
 	try {
 	    myFileUrl = new URL(fileUrl);
 	} catch (MalformedURLException e) {
@@ -167,7 +166,6 @@ public class InfoParadasActivity extends Activity implements OnClickListener,
 	} else {
 	    login = new Intent(this, LoginEvaActivity.class);
 	}
-	// login.putExtra("id_parada", parada.getIdParada());
 	login.putExtra("parada", parada);
 	startActivity(login);
     }

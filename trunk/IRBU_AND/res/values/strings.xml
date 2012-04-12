@@ -55,4 +55,8 @@
     <string name="txtGuiaIntroduccion2">Se permiten busquedas de rutas dependiendo del tipo de recorrido que realizan los buses, información de paradas, utilización de GPS para ver paradas cercanas a un punto, guardado de información del estudiante como parada frecuente y coordenadas de la casa.</string>
     <string name="txtGuiaIntroduccion3">La utilización de la aplicación es bastante sensilla solo requiere ingresar los parámetros de las rutas que se quiere buscar y de alli solo pulsar en los iconos para ver la información que contiene.</string>
     <string name="txtGuiaIntroduccion4">Al momento de autenticarse en el EVA y obtener la información de parada y casa, estos datos pemanecen accesibles a través de esta aplicación hasta cerrar la sesión, esta puede ser cerrada simplemente con entrar a esta página de ayuda, para comprobarlo si ya ingresamos con el usuario y la clave e ingresamos a esta página de ayuda y volvemos a ingresar a información del estudiante nos pedirá que ingresemos nuevamente los datos de autenticación.</string>
+    <string name="txtGuiaConfiguracion">En este  lugar se puede hacer un cambio sobre el servidor que se quiere consultar por las rutas.</string>
+    <string name="txtConfiguracion">Configuración</string>
+    <string name="txtServidor">Servidor:</string>
+    <string name="txtPuerto">Puerto:</string>
 </resources>

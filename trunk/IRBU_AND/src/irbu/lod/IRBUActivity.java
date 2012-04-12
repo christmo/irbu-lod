@@ -1,5 +1,6 @@
 package irbu.lod;
 
+import irbu.lod.constantes.Constantes;
 import irbu.lod.mapa.ViewMapaActivity;
 import irbu.lod.modulos.AyudaActivity;
 import irbu.lod.modulos.BuscarRutaActivity;
@@ -21,7 +22,7 @@ public class IRBUActivity extends Activity implements OnClickListener {
     private ImageButton btnBuscarRutaHora;
     private ImageButton btnAyuda;
     private ImageButton btnInformacion;
-    private SesionApplication sesion;
+    public static SesionApplication sesion;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,19 @@ public class IRBUActivity extends Activity implements OnClickListener {
 	btnAyuda.setOnClickListener(this);
 
 	sesion = (SesionApplication) getApplicationContext();
+	try {
+	    
+	    if (sesion.getServer().equals("")) {
+		sesion.setServer("carbono.utpl.edu.ec");
+		sesion.setPuerto("80");
+		sesion.setProyecto("IRBU_LOD");
+	    }
+	} catch (NullPointerException e) {
+	    sesion.setServer("carbono.utpl.edu.ec");
+	    sesion.setPuerto("80");
+	    sesion.setProyecto("IRBU_LOD");
+	}
+	Constantes.refrescarVariables();
     }
 
     public void onClick(View v) {

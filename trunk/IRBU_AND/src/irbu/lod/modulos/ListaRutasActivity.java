@@ -20,7 +20,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,7 +107,6 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	    if (msg.what == 0) { // carga valida
 		try {
 		    setListAdapter(m_adapter);
-		    Log.d("Lista Rutas", "Lista Cargada...");
 		} catch (NullPointerException e) {
 		    mensajeErrorConexion();
 		}
@@ -118,11 +116,9 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 		startActivity(mapa);
 	    } else if (msg.what == 3) {
 		mensajeErrorSinDatos();
+	    } else if (msg.what == 4) {
+		msgNoServidorConfigurado();
 	    }
-	    /**
-	     * TODO: Error cuando se cambia de orientacion la pantalla varias
-	     * veces
-	     */
 	    pd.dismiss();
 	}
     };
@@ -146,6 +142,8 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	    msgNoServerConnection();
 	} catch (IOException e1) {
 	    msgNoServerConnection();
+	} catch (IllegalArgumentException e) {
+	    handler.sendEmptyMessage(4); // No configurado
 	}
 	try {
 	    m_adapter = new IconListViewAdapter(this, R.layout.lista_rutas,
@@ -198,7 +196,6 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
      * al servidor
      */
     private void msgNoServerConnection() {
-	Log.e("ListaRutas", "No se puede conectar al servidor...");
 	handler.sendEmptyMessage(1); // enviar error al cargar
     }
 
@@ -223,6 +220,21 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
     private void mensajeErrorSinDatos() {
 	AlertDialog.Builder builder = new AlertDialog.Builder(this);
 	builder.setMessage(R.string.txtErrorSinDatos).setCancelable(false)
+		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+		    public void onClick(DialogInterface dialog, int id) {
+			ListaRutasActivity.this.finish();
+		    }
+		});
+	AlertDialog alert = builder.create();
+	alert.show();
+    }
+
+    /**
+     * Mensaje de error cuando no se ha establecido un servidor
+     */
+    private void msgNoServidorConfigurado() {
+	AlertDialog.Builder builder = new AlertDialog.Builder(this);
+	builder.setMessage(R.string.txtSinServidor).setCancelable(false)
 		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int id) {
 			ListaRutasActivity.this.finish();

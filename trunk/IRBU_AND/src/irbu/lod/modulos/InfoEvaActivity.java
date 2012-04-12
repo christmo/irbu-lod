@@ -80,9 +80,6 @@ public class InfoEvaActivity extends Activity implements Runnable,
 		lat = getIntent().getExtras().getDouble("lat");
 		lon = getIntent().getExtras().getDouble("lon");
 	    }
-	    // if (getIntent().hasExtra("id_parada")) {
-	    // idParada = getIntent().getExtras().getInt("id_parada");
-	    // }
 	    if (getIntent().hasExtra("parada")) {
 		parada = getIntent().getParcelableExtra("parada");
 	    }
@@ -155,10 +152,6 @@ public class InfoEvaActivity extends Activity implements Runnable,
 	@Override
 	public void handleMessage(Message msg) {
 	    if (!sesion.isLogin()) {
-		/**
-		 * TODO: Error cuando se cambia de orientacion la pantalla
-		 * varias veces
-		 */
 		pd.dismiss();
 	    }
 	    switch (msg.what) {
@@ -223,7 +216,6 @@ public class InfoEvaActivity extends Activity implements Runnable,
      * del logueo
      */
     private void cargarDatosSesion() {
-	Log.d("cargarDatosVista", "Sesion:" + sesion.isLogin());
 	if (!sesion.isLogin()) {
 	    Estudiante estudiante = new Estudiante();
 	    estudiante.setStrCI(infoUsuario.get("ci"));
@@ -234,7 +226,6 @@ public class InfoEvaActivity extends Activity implements Runnable,
 
 	    sesion.setEstudiante(estudiante);
 	    sesion.setLogin(true);
-	    Log.d("SeSiOn", "LOGIN");
 	}
     }
 
@@ -264,11 +255,6 @@ public class InfoEvaActivity extends Activity implements Runnable,
 				    .getText().toString());
 		    sesion.setCasaEstudiante(casaEst);
 		}
-		// if (getIntent().hasExtra("id_parada")) {
-		// new ConsultarServer().guardarDatosParadaEstudiante(txtCI
-		// .getText().toString(), idParada,
-		// txtPeriodoAcademico.getText().toString());
-		// }
 		if (getIntent().hasExtra("parada")) {
 		    Paradas paradaFrec = new ConsultarServer()
 			    .guardarDatosParadaEstudiante(txtCI.getText()

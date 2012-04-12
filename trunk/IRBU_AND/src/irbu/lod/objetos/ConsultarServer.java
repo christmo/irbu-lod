@@ -37,7 +37,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
 import android.widget.Toast;
 
 public class ConsultarServer {
@@ -62,13 +61,11 @@ public class ConsultarServer {
      * @throws IOException
      */
     public ArrayList<Ruta> getRutasServer(String strTipoRuta)
-	    throws IOException, SocketException {
+	    throws IOException, SocketException, IllegalArgumentException {
 	ArrayList<Ruta> listaRutas = new ArrayList<Ruta>();
 	final String url = Constantes.URL_RUTAS + "?op=" + strTipoRuta;
 
 	httppost = new HttpPost(url);
-
-	Log.d("respuesta", url);
 
 	// Execute HTTP Post Request
 	HttpResponse response = httpclient.execute(httppost);
@@ -81,8 +78,6 @@ public class ConsultarServer {
 
 	    jObject = new JSONObject(txtJson);
 	    rutas = jObject.getJSONArray("rutas");
-
-	    Log.i("rutas", rutas.toString());
 
 	    JSONObject gp;
 	    for (int i = 0; i < rutas.length(); i++) {
@@ -110,14 +105,12 @@ public class ConsultarServer {
      * @throws SocketException
      */
     public ArrayList<Ruta> getRutasServer(String strTipoRuta, String strHora)
-	    throws IOException, SocketException {
+	    throws IOException, SocketException, IllegalArgumentException {
 	ArrayList<Ruta> listaRutas = new ArrayList<Ruta>();
 	final String url = Constantes.URL_RUTAS_HORA + "?op=" + strTipoRuta
 		+ "&hora=" + strHora;
 
 	httppost = new HttpPost(url);
-
-	Log.d("respuesta", url);
 
 	// Execute HTTP Post Request
 	HttpResponse response = httpclient.execute(httppost);
@@ -130,8 +123,6 @@ public class ConsultarServer {
 
 	    jObject = new JSONObject(txtJson);
 	    rutas = jObject.getJSONArray("rutas");
-
-	    Log.i("rutas", rutas.toString());
 
 	    JSONObject gp;
 	    for (int i = 0; i < rutas.length(); i++) {
@@ -184,8 +175,6 @@ public class ConsultarServer {
 
 	httppost = new HttpPost(url);
 
-	Log.d("respuesta", url);
-
 	// Execute HTTP Post Request
 	HttpResponse response = httpclient.execute(httppost);
 	HttpEntity resEntity = response.getEntity();
@@ -235,8 +224,6 @@ public class ConsultarServer {
 	nameValuePairs.add(new BasicNameValuePair("id_ruta", "" + idRuta));
 	nameValuePairs.add(new BasicNameValuePair("tipo", strTipoRuta));
 	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-	Log.d("respuesta", url);
 
 	// Execute HTTP Post Request
 	HttpResponse response = httpclient.execute(httppost);
@@ -331,8 +318,6 @@ public class ConsultarServer {
 	nameValuePairs.add(new BasicNameValuePair("meters", metros));
 	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-	Log.d("respuesta", url);
-
 	// Execute HTTP Post Request
 	HttpResponse response = httpclient.execute(httppost);
 	HttpEntity resEntity = response.getEntity();
@@ -341,8 +326,6 @@ public class ConsultarServer {
 	try {
 	    String txtJson = EntityUtils.toString(resEntity);
 	    jObject = new JSONArray(txtJson);
-	    Log.d("Server", "" + jObject);
-
 	    for (int i = 0; i < jObject.length(); i++) {
 		JSONObject info = (JSONObject) jObject.get(i);
 		Paradas p = new Paradas(0, info.getDouble("lon"),
@@ -352,30 +335,6 @@ public class ConsultarServer {
 				"parada").getString("imagen"));
 		paradasRuta.add(p);
 	    }
-
-	    // datos = jObject.getJSONObject("datos");
-	    // Log.d("Server", "" + datos);
-	    //
-	    // String dato = datos.getString("coordenadas");
-	    // Log.d("Server", "" + dato);
-	    //
-	    // int idParada = 0;
-	    // double lon = 0, lat = 0;
-	    // String dir = "", ref = "", urlImg = "";
-	    //
-	    // String[] fila = dato.split("#");
-	    // for (int i = 0; i < fila.length; i++) {
-	    // String[] col = fila[i].split("%");
-	    // idParada = Integer.parseInt(col[0]);
-	    // lon = Double.parseDouble(col[1]);
-	    // lat = Double.parseDouble(col[2]);
-	    // dir = covertirUTF8Decode(col[3]);
-	    // ref = covertirUTF8Decode(col[4]);
-	    // urlImg = col[5];
-	    // Paradas p = new Paradas(idParada, lon, lat, dir, ref, urlImg);
-	    // paradasRuta.add(p);
-	    // }
-
 	} catch (JSONException e) {
 	    throw new JSONException(e.getMessage().toString());
 	}
@@ -408,8 +367,6 @@ public class ConsultarServer {
 	nameValuePairs.add(new BasicNameValuePair("meters", metros));
 	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-	Log.d("respuesta", url);
-
 	// Execute HTTP Post Request
 	HttpResponse response = httpclient.execute(httppost);
 	HttpEntity resEntity = response.getEntity();
@@ -419,14 +376,8 @@ public class ConsultarServer {
 	try {
 	    String txtJson = EntityUtils.toString(resEntity);
 	    jObject = new JSONObject(txtJson);
-	    Log.d("Server", "" + jObject);
-
 	    datos = jObject.getJSONObject("datos");
-	    Log.d("Server", "" + datos);
-
 	    String dato = datos.getString("coordenadas");
-	    Log.d("Server", "" + dato);
-
 	    int idParada = 0;
 	    double lon = 0, lat = 0;
 	    String dir = "", ref = "", urlImg = "";
@@ -475,8 +426,6 @@ public class ConsultarServer {
 	nameValuePairs.add(new BasicNameValuePair("user_est", strUser));
 	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-	Log.d("URL", url);
-
 	// Execute HTTP Post Request
 	HttpResponse response = httpclient.execute(httppost);
 	HttpEntity resEntity = response.getEntity();
@@ -488,7 +437,6 @@ public class ConsultarServer {
 
 	    jObject = new JSONObject(txtJson);
 	    rta = jObject.getString("success");
-	    Log.i("Respuesta", rta.toString());
 	} catch (JSONException e) {
 	    e.printStackTrace();
 	}
@@ -530,8 +478,6 @@ public class ConsultarServer {
 	}
 	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-	Log.d("URL", url);
-
 	// Execute HTTP Post Request
 	HttpResponse response = httpclient.execute(httppost);
 	HttpEntity resEntity = response.getEntity();
@@ -543,7 +489,6 @@ public class ConsultarServer {
 
 	    jObject = new JSONObject(txtJson);
 	    rta = jObject.getString("success");
-	    Log.i("Respuesta", rta.toString());
 	    return new Casa(strDir, lat, lon);
 	} catch (JSONException e) {
 	    e.printStackTrace();
@@ -582,8 +527,6 @@ public class ConsultarServer {
 	nameValuePairs.add(new BasicNameValuePair("lon", "" + parada.getLon()));
 	httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-	Log.d("URL", url);
-
 	// Execute HTTP Post Request
 	HttpResponse response = httpclient.execute(httppost);
 	HttpEntity resEntity = response.getEntity();
@@ -592,11 +535,9 @@ public class ConsultarServer {
 	String rta = null;
 	try {
 	    String txtJson = EntityUtils.toString(resEntity);
-	    Log.d("json", txtJson);
 	    jObject = new JSONObject(txtJson);
 	    rta = jObject.getString("success");
 	    rta = jObject.getString("id");
-	    Log.i("Respuesta", rta.toString());
 	    parada.setIdParada(Integer.parseInt(rta));
 	    return parada;
 	} catch (JSONException e) {
@@ -615,7 +556,6 @@ public class ConsultarServer {
      * @throws SocketException
      */
     public HashMap<String, String> getInforEstudiante(String strUser) {
-	System.out.println("Usuario:" + strUser);
 	HashMap<String, String> infoEstudiante = new HashMap<String, String>();
 	final String url = Constantes.URL_ESTUDIANTE;
 
@@ -627,8 +567,6 @@ public class ConsultarServer {
 	try {
 	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-	    Log.d("respuesta", url);
-
 	    // Execute HTTP Post Request
 	    HttpResponse response = httpclient.execute(httppost);
 	    HttpEntity resEntity = response.getEntity();
@@ -636,8 +574,6 @@ public class ConsultarServer {
 	    JSONObject jObject = null;
 	    try {
 		String txtJson = EntityUtils.toString(resEntity);
-
-		Log.d("respuesta", txtJson);
 
 		jObject = new JSONObject(txtJson);
 		jObject = jObject.getJSONObject("estudiante");
@@ -654,13 +590,9 @@ public class ConsultarServer {
 		infoEstudiante.put("periodo", getPeriodoAcademico());
 		return infoEstudiante;
 	    } catch (JSONException e) {
-		// e.printStackTrace();
-		Log.d("Base Datos Server",
-			"No se recuperaron datos del servidor...");
 		return null;
 	    }
 	} catch (IOException e) {
-	    Log.d("Base Datos Server", "No se pudo conectar...");
 	    return null;
 	}
     }
@@ -687,8 +619,6 @@ public class ConsultarServer {
 	try {
 	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-	    Log.d("respuesta", url);
-
 	    // Execute HTTP Post Request
 	    HttpResponse response = httpclient.execute(httppost);
 	    HttpEntity resEntity = response.getEntity();
@@ -696,8 +626,6 @@ public class ConsultarServer {
 	    JSONObject jObject = null;
 	    try {
 		String txtJson = EntityUtils.toString(resEntity);
-
-		Log.d("respuesta", txtJson);
 
 		jObject = new JSONObject(txtJson);
 		JSONObject jsParada = jObject.getJSONObject("parada");
@@ -713,8 +641,7 @@ public class ConsultarServer {
 			imgPar);
 		info.setParada(p);
 	    } catch (JSONException e) {
-		Log.d("Base Datos Server",
-			"No se recuperaron datos del servidor para Parasa Estudiante...");
+		//No se recuperaron datos del servidor para Parasa Estudiante...
 	    }
 	    try {
 		JSONObject jsCasa = jObject.getJSONObject("casa");
@@ -725,11 +652,9 @@ public class ConsultarServer {
 		Casa c = new Casa(dirCasa, latCasa, lonCasa);
 		info.setCasa(c);
 	    } catch (JSONException e) {
-		Log.d("Base Datos Server",
-			"No se recuperaron datos del servidor para Casa Estudiante...");
+		//No se recuperaron datos del servidor para Casa Estudiante...
 	    }
 	} catch (IOException e) {
-	    Log.d("Base Datos Server", "No se pudo conectar...");
 	    return null;
 	}
 
@@ -769,7 +694,6 @@ public class ConsultarServer {
      */
     public InputStream getImagenParada(String fileUrl) {
 	URL myFileUrl = null;
-	Log.i("URL IMG", fileUrl);
 	try {
 	    myFileUrl = new URL(fileUrl);
 	} catch (MalformedURLException e) {
@@ -814,8 +738,6 @@ public class ConsultarServer {
 	try {
 	    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-	    Log.d("respuesta", url);
-
 	    // Execute HTTP Post Request
 	    HttpResponse response = httpclient.execute(httppost);
 	    HttpEntity resEntity = response.getEntity();
@@ -824,7 +746,6 @@ public class ConsultarServer {
 	    try {
 		String txtJson = EntityUtils.toString(resEntity);
 		jsArray = new JSONArray(txtJson);
-		Log.d("Server", "" + jsArray);
 
 		for (int i = 0; i < jsArray.length(); i++) {
 		    String strRuta = jsArray.getJSONObject(i).getString(
