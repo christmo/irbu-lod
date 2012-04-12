@@ -37,9 +37,6 @@ public class LoginEvaUTPL {
 	return isLogin;
     }
 
-    public LoginEvaUTPL() {
-    }
-
     /**
      * Hace el login dentro del entorno virtual de aprendizaje EVA para obtener
      * los datos del estudiante de alli
@@ -86,12 +83,10 @@ public class LoginEvaUTPL {
     private HttpEntity conectarSitio(String url)
 	    throws UnsupportedOperationException, IOException {
 	if (url != null) {
-	    Log.d("Login", "URL:" + url);
 	    HttpPost httpost = new HttpPost(url);
 	    HttpResponse response = httpclient.execute(httpost);
 	    return response.getEntity();
 	} else {
-	    Log.d("Login", "Dentro del EVA, NO hay link para obtener datos...");
 	    throw new UnsupportedOperationException(
 		    "Dentro del EVA, NO hay link para obtener datos...");
 	}
@@ -109,7 +104,6 @@ public class LoginEvaUTPL {
     private HttpEntity conectarSitio(String url, List<NameValuePair> parametros)
 	    throws IllegalArgumentException, ConnectTimeoutException {
 	if (url != null) {
-	    Log.d("Login", "Conectar:" + url);
 	    HttpPost httpost = new HttpPost(url);
 	    try {
 		httpost.setEntity(new UrlEncodedFormEntity(parametros,
@@ -131,7 +125,6 @@ public class LoginEvaUTPL {
 	    return null;
 
 	} else {
-	    Log.d("Login", "Conexion NULL");
 	    throw new IllegalArgumentException("Conexión NULL...");
 	}
     }
@@ -146,7 +139,6 @@ public class LoginEvaUTPL {
 	String url = null;
 	String periodo = null;
 	if (entity != null) {
-	    Log.d("Login", "Procesando index moodle...");
 	    InputStream instream = null;
 	    try {
 		instream = entity.getContent();
@@ -172,14 +164,11 @@ public class LoginEvaUTPL {
 		}
 		in.close();
 		entity.consumeContent();
-		Log.d("Login", "" + isLogin());
 		/* Hacer si esta logueado en el eva */
 		if (isLogin()) {
 		    if (inforUsuario == null) {
 			inforUsuario = new HashMap<String, String>();
 			inforUsuario.put("periodo", periodo);
-			Log.d("respuesta",
-				"No hay info del estudiante conectar a:" + url);
 			procesarPagina2(conectarSitio(url));
 		    }
 		}
@@ -202,7 +191,6 @@ public class LoginEvaUTPL {
     private void procesarPagina2(HttpEntity entity) throws IOException {
 	if (entity != null) {
 	    String url = null;
-	    Log.d("Login", "Procesando menssaje de navegador...");
 	    InputStream instream = entity.getContent();
 	    BufferedReader in = new BufferedReader(new InputStreamReader(
 		    instream));
@@ -230,7 +218,6 @@ public class LoginEvaUTPL {
 	HttpEntity entity = conectarSitio(url);
 
 	if (entity != null) {
-	    Log.d("Login", "Sacando datos...");
 	    InputStream instream = entity.getContent();
 	    BufferedReader in = new BufferedReader(new InputStreamReader(
 		    instream));

@@ -27,7 +27,6 @@ public class LlenarDatosEvaActivity extends Activity implements OnClickListener 
 	private Button btnCancelar;
 
 	private String user;
-	// private String pass;
 	private double lon;
 	private double lat;
 
@@ -42,7 +41,6 @@ public class LlenarDatosEvaActivity extends Activity implements OnClickListener 
 		txtMail = (EditText) findViewById(R.id.tfMail);
 
 		user = getIntent().getExtras().getString("usuario");
-		// pass = getIntent().getExtras().getString("clave");
 		lat = getIntent().getExtras().getDouble("lat") * 1e6;
 		lon = getIntent().getExtras().getDouble("lon") * 1e6;
 

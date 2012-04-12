@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -20,7 +22,6 @@ public class AyudaActivity extends Activity {
 	SesionApplication sesion = (SesionApplication) getApplicationContext();
 	if (sesion.isLogin()) {
 	    sesion.cerrarSesion();
-	    Log.d("SESION", "CERRAR SESION");
 	}
 
 	Button btnProblemas = (Button) findViewById(R.id.btnProblemas);
@@ -36,12 +37,32 @@ public class AyudaActivity extends Activity {
 			new String[] { "cfmora@utpl.edu.ec" });
 		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
 			"Problemas IRBU Android");
-		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Hola tengo un problema cuando!!!\n");
+		emailIntent.putExtra(android.content.Intent.EXTRA_TEXT,
+			"Hola tengo un problema cuando!!!\n");
 
 		/* Send it off to the Activity-Chooser */
-		startActivity(Intent.createChooser(emailIntent, "Enviar mail..."));
+		startActivity(Intent.createChooser(emailIntent,
+			"Enviar mail..."));
 	    }
 	});
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+	menu.add(0, 0, Menu.NONE, R.string.txtConfiguracion).setIcon(
+		android.R.drawable.ic_menu_preferences);
+	return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	switch (item.getItemId()) {
+	case 0:
+	    Intent config = new Intent(this, ConfiguracionActivity.class);
+	    startActivity(config);
+	    return true;
+	}
+	return false;
     }
 }

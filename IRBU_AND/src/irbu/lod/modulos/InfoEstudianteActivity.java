@@ -92,9 +92,7 @@ public class InfoEstudianteActivity extends Activity implements
 	btnGraficarCasa = (Button) findViewById(R.id.btnGraficarCasa);
 
 	imView = (ImageView) findViewById(R.id.imview);
-	// imView.setImageDrawable(getResources().getDrawable(R.drawable.loading));
 	pbCargarImagen = (ProgressBar) findViewById(R.id.pbCargarImagen);
-//	 pbCargarImagen.setVisibility(VISIBLE);
 	pd = ProgressDialog.show(InfoEstudianteActivity.this, "",
 		getResources().getText(R.string.txtMensajeServidor), true);
 
@@ -142,7 +140,6 @@ public class InfoEstudianteActivity extends Activity implements
     private void inicializarComponentesGraficos() {
 	try {
 	    parada = info.getParada();
-	    Log.d("ID PARADA", "" + parada.getIdParada());
 	    try {
 		txtDirParada.setText(parada.getDir());
 	    } catch (NullPointerException e) {

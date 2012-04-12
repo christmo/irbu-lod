@@ -19,7 +19,6 @@ public class LoginEvaActivity extends Activity implements OnClickListener {
     private Button btnIngresar;
     private double lon;
     private double lat;
-//    private int idParada;
     private Paradas parada;
     private boolean irInformacion = false;
 
@@ -35,9 +34,6 @@ public class LoginEvaActivity extends Activity implements OnClickListener {
 		lat = getIntent().getExtras().getDouble("lat");
 		lon = getIntent().getExtras().getDouble("lon");
 	    }
-//	    if (getIntent().hasExtra("id_parada")) {
-//		idParada = getIntent().getExtras().getInt("id_parada");
-//	    }
 	    if (getIntent().hasExtra("parada")) {
 		parada = getIntent().getParcelableExtra("parada");
 	    }
@@ -76,9 +72,6 @@ public class LoginEvaActivity extends Activity implements OnClickListener {
 		    datosEva.putExtra("lon", lon);
 		    datosEva.putExtra("lat", lat);
 		}
-//		if (getIntent().hasExtra("id_parada")) {
-//		    datosEva.putExtra("id_parada", idParada);
-//		}
 		if (getIntent().hasExtra("parada")) {
 		    datosEva.putExtra("parada", parada);
 		}

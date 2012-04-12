@@ -10,16 +10,16 @@
         android:targetSdkVersion="8" />
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-<!--     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" /> -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.INTERNET" />
-<!--     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> -->
-<!--     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> -->
-<!--     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- quitar debuggable para subir a un dispositivo -->
     <application
         android:name=".sesion.SesionApplication"
-        android:debuggable="true"
+        android:debuggable="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
         <activity
@@ -84,6 +84,11 @@
             android:name="irbu.lod.modulos.listarrutas.ListaRutasParada"
             android:configChanges="orientation|keyboardHidden|keyboard"
             android:label="@string/txtListaRutasHorarios" >
+        </activity>
+        <activity
+            android:name="irbu.lod.modulos.ConfiguracionActivity"
+            android:configChanges="orientation|keyboardHidden|keyboard"
+            android:label="@string/txtConfiguracion" >
         </activity>
     </application>
 
