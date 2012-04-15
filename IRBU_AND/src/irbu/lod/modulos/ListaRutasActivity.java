@@ -2,6 +2,7 @@ package irbu.lod.modulos;
 
 import irbu.lod.R;
 import irbu.lod.mapa.ViewMapaActivity;
+import irbu.lod.objetos.ConectarServidorExterno;
 import irbu.lod.objetos.ConsultarServer;
 import irbu.lod.objetos.Paradas;
 import irbu.lod.objetos.Puntos;
@@ -207,6 +208,9 @@ public class ListaRutasActivity extends ListActivity implements Runnable {
 	builder.setMessage(R.string.txtErrorNoHayRutas).setCancelable(false)
 		.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int id) {
+			ConectarServidorExterno con = new ConectarServidorExterno(
+				ListaRutasActivity.this);
+			con.start();
 			ListaRutasActivity.this.finish();
 		    }
 		});

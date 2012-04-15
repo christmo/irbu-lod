@@ -158,7 +158,7 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	osmViewController = osmMapa.getController();
 	sesion = (SesionApplication) getApplicationContext();
 	ArrayList<OverlayItem> listaItemsIconos = new ArrayList<OverlayItem>();
-	
+
 	if (getIntent().hasExtra("listaPuntos")) {
 	    puntosLinea = getIntent()
 		    .getParcelableArrayListExtra("listaPuntos");
@@ -211,33 +211,33 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	{
 	    this.lineaOverlay = new PathOverlay(Color.BLUE, mResourceProxy);
 	    if (puntosLinea != null) {
-		int i=0;
+		int i = 0;
 		for (Puntos p : puntosLinea) {
 		    lineaOverlay.addPoint((int) (p.getLat() * 1e6),
 			    (int) (p.getLon() * 1e6));
-		    if(i==0){
-			//estrella
+		    if (i == 0) {
+			// estrella
 			OverlayItem overlayDibujo = new OverlayItem(
-				"Inicio de la Ruta!!!", 
-				"", 
-				new GeoPoint(p.getLat(), p.getLon()));
-			overlayDibujo.setMarker(this.getResources().getDrawable(R.drawable.star));
+				"Inicio de la Ruta!!!", "", new GeoPoint(
+					p.getLat(), p.getLon()));
+			overlayDibujo.setMarker(this.getResources()
+				.getDrawable(R.drawable.star));
 			listaItemsIconos.add(overlayDibujo);
 			i++;
-		    }else if(i==puntosLinea.size()-1){
-			//meta
+		    } else if (i == puntosLinea.size() - 1) {
+			// meta
 			OverlayItem overlayDibujo = new OverlayItem(
-				"Fin de la Ruta!!!", 
-				"", 
-				new GeoPoint(p.getLat(), p.getLon()));
-			overlayDibujo.setMarker(this.getResources().getDrawable(R.drawable.finish));
+				"Fin de la Ruta!!!", "", new GeoPoint(
+					p.getLat(), p.getLon()));
+			overlayDibujo.setMarker(this.getResources()
+				.getDrawable(R.drawable.finish));
 			listaItemsIconos.add(overlayDibujo);
 			i++;
-		    }else{
+		    } else {
 			i++;
 		    }
 		}
-		
+
 	    }
 	    this.osmMapa.getOverlays().add(lineaOverlay);
 	}
@@ -484,18 +484,25 @@ public class ViewMapaActivity extends Activity implements LocationListener {
      * posicion actual del usuario
      */
     public void activarGPS() {
-	lmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-	if (!lmgr
-		.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
-	    Intent myIntent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
-	    startActivity(myIntent);
-	}
+	try {
+	    lmgr = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+	    if (!lmgr
+		    .isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+		Intent myIntent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+		startActivity(myIntent);
+	    }
 
-	/* Para trabajar con el emulador y telefono para obtener por gps */
-	lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
-	/* Para obtener el el movil dentro de edificios por red e internet */
-	lmgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1,
-		this);
+	    /* Para trabajar con el emulador y telefono para obtener por gps */
+	    lmgr.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1,
+		    this);
+	    /* Para obtener el el movil dentro de edificios por red e internet */
+	    lmgr.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000,
+		    1, this);
+	} catch (IllegalArgumentException e) {
+	    Toast t = Toast.makeText(ViewMapaActivity.this,
+		    "El dispositivo no tiene GPS", Toast.LENGTH_LONG);
+	    t.show();
+	}
     }
 
     /**
@@ -524,7 +531,7 @@ public class ViewMapaActivity extends Activity implements LocationListener {
     private void buscarParadasAproximadas(int distancia) {
 	try {
 	    paradas = new ConsultarServer().getParadasAproximacion(
-		    punto.getLatitude(), punto.getLongitude(), distancia,this);
+		    punto.getLatitude(), punto.getLongitude(), distancia, this);
 	    if (paradas != null) {
 		Intent mapa = new Intent(this, ViewMapaActivity.class);
 		mapa.putParcelableArrayListExtra("listaParadas", paradas);
@@ -627,7 +634,6 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 	dibujarIconoMapa(listaItemsCasa);
     }
 
-    
     /**
      * Prmite dibujar la casa del estudiante sobre el mapa
      */
@@ -638,10 +644,8 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 		    public boolean onItemSingleTapUp(final int index,
 			    final OverlayItem item) {
 			try {
-			    Toast t = Toast.makeText(
-				    ViewMapaActivity.this,
-				    item.getTitle(),
-				    Toast.LENGTH_LONG);
+			    Toast t = Toast.makeText(ViewMapaActivity.this,
+				    item.getTitle(), Toast.LENGTH_LONG);
 			    t.show();
 			} catch (IndexOutOfBoundsException e) {
 			}
@@ -657,8 +661,7 @@ public class ViewMapaActivity extends Activity implements LocationListener {
 		}, mResourceProxy);
 	this.osmMapa.getOverlays().add(this.listaIconosParadasOverlay);
     }
-    
-    
+
     /**
      * Dibuja los datos del estudiante parada frecuente y casa
      */

@@ -37,6 +37,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
 import android.widget.Toast;
 
 public class ConsultarServer {
@@ -483,12 +484,12 @@ public class ConsultarServer {
 	HttpEntity resEntity = response.getEntity();
 
 	JSONObject jObject = null;
-	String rta = null;
+//	String rta = null;
 	try {
 	    String txtJson = EntityUtils.toString(resEntity);
 
 	    jObject = new JSONObject(txtJson);
-	    rta = jObject.getString("success");
+//	    rta = jObject.getString("success");
 	    return new Casa(strDir, lat, lon);
 	} catch (JSONException e) {
 	    e.printStackTrace();
@@ -611,6 +612,8 @@ public class ConsultarServer {
 
 	final String url = Constantes.URL_DATOS_ALMACENADAOS_ESTUDIANTE;
 
+	Log.d("Conectar", url);
+	
 	httppost = new HttpPost(url);
 
 	// Poner prametros a la consulta POST

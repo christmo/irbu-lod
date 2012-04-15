@@ -19,6 +19,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -115,8 +116,7 @@ public class InfoEstudianteActivity extends Activity implements
 	    pd.dismiss();
 	    switch (msg.what) {
 	    case 0:
-		    pbCargarImagen.setVisibility(INVISIBLE);
-		
+		pbCargarImagen.setVisibility(INVISIBLE);
 		imView.setImageBitmap(imgParada);
 		break;
 	    case 1:
@@ -159,7 +159,8 @@ public class InfoEstudianteActivity extends Activity implements
 	    } catch (NullPointerException e) {
 		txtLonParada.setText("");
 	    }
-	    try {
+
+	    if (parada.getUrlImg() != null) {
 		imView = (ImageView) findViewById(R.id.imview);
 		Thread getImagen = new Thread(new Runnable() {
 		    public void run() {
@@ -167,8 +168,6 @@ public class InfoEstudianteActivity extends Activity implements
 		    }
 		});
 		getImagen.start();
-
-	    } catch (NullPointerException e) {
 	    }
 
 	    btnGraficarParada.setOnClickListener(this);
@@ -203,7 +202,7 @@ public class InfoEstudianteActivity extends Activity implements
      */
     private void ocultarCamposParada() {
 	Toast msg = Toast.makeText(this,
-		"No se pudo cargar los datos de la parada frecuente...",
+		"No se pudo cargar los datos de la parada frecuente...\nPosiblemente no se los haya ingresado...",
 		Toast.LENGTH_LONG);
 	msg.show();
 
@@ -215,7 +214,7 @@ public class InfoEstudianteActivity extends Activity implements
      */
     private void ocultarCamposCasa() {
 	Toast msg = Toast.makeText(this,
-		"No se pudo cargar los datos de la casa...", Toast.LENGTH_LONG);
+		"No se pudo cargar los datos de la casa...\nPosiblemente no se los haya ingresado...", Toast.LENGTH_LONG);
 	msg.show();
 
 	infoCasa.setVisibility(INVISIBLE);
@@ -264,6 +263,7 @@ public class InfoEstudianteActivity extends Activity implements
      * Descarga la imagen de la parada desde el servidor
      */
     private void obtenerImagenParada(String url) {
+	Log.d("Imagen", url);
 	InputStream is = consultar.getImagenParada(url);
 	imgParada = BitmapFactory.decodeStream(is);
 	handler.sendEmptyMessage(0);

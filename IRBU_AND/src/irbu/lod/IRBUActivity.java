@@ -1,12 +1,12 @@
 package irbu.lod;
 
-import irbu.lod.constantes.Constantes;
 import irbu.lod.mapa.ViewMapaActivity;
 import irbu.lod.modulos.AyudaActivity;
 import irbu.lod.modulos.BuscarRutaActivity;
 import irbu.lod.modulos.BuscarRutaHoraActivity;
 import irbu.lod.modulos.InfoEstudianteActivity;
 import irbu.lod.modulos.LoginEvaActivity;
+import irbu.lod.objetos.ConectarServidorExterno;
 import irbu.lod.sesion.SesionApplication;
 import android.app.Activity;
 import android.content.Intent;
@@ -42,19 +42,10 @@ public class IRBUActivity extends Activity implements OnClickListener {
 	btnAyuda.setOnClickListener(this);
 
 	sesion = (SesionApplication) getApplicationContext();
-	try {
-	    
-	    if (sesion.getServer().equals("")) {
-		sesion.setServer("carbono.utpl.edu.ec");
-		sesion.setPuerto("80");
-		sesion.setProyecto("IRBU_LOD");
-	    }
-	} catch (NullPointerException e) {
-	    sesion.setServer("carbono.utpl.edu.ec");
-	    sesion.setPuerto("80");
-	    sesion.setProyecto("IRBU_LOD");
+	if (sesion.getServer() == null) {
+	    ConectarServidorExterno con = new ConectarServidorExterno(this);
+	    con.start();
 	}
-	Constantes.refrescarVariables();
     }
 
     public void onClick(View v) {
@@ -89,4 +80,5 @@ public class IRBUActivity extends Activity implements OnClickListener {
 	    break;
 	}
     }
+
 }

@@ -20,6 +20,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 
+import android.util.Log;
+
 /**
  * 
  * @author DellXPS_L401X
@@ -44,8 +46,8 @@ public class LoginEvaUTPL {
      * @throws IOException
      * @throws IllegalArgumentException
      */
-    public void loginFormUTPL(String user, String pass) throws IOException,
-	    ConnectTimeoutException {
+    public void loginFormUTPL(String user, String pass)
+	    throws IOException, ConnectTimeoutException {
 	String url = "http://rsa.utpl.edu.ec/eva/login/index.php";
 	List<NameValuePair> nvps = null;
 	try {
@@ -83,6 +85,7 @@ public class LoginEvaUTPL {
 	if (url != null) {
 	    HttpPost httpost = new HttpPost(url);
 	    HttpResponse response = httpclient.execute(httpost);
+	    Log.d("Conectado", url);
 	    return response.getEntity();
 	} else {
 	    throw new UnsupportedOperationException(
@@ -102,6 +105,7 @@ public class LoginEvaUTPL {
     private HttpEntity conectarSitio(String url, List<NameValuePair> parametros)
 	    throws IllegalArgumentException, ConnectTimeoutException {
 	if (url != null) {
+	    Log.d("Conectado", url);
 	    HttpPost httpost = new HttpPost(url);
 	    try {
 		httpost.setEntity(new UrlEncodedFormEntity(parametros,
@@ -112,6 +116,7 @@ public class LoginEvaUTPL {
 	    HttpResponse response;
 	    try {
 		response = httpclient.execute(httpost);
+
 		return response.getEntity();
 	    } catch (ConnectTimeoutException e) {
 		throw new ConnectTimeoutException();
@@ -214,7 +219,6 @@ public class LoginEvaUTPL {
     private void procesarPagina3() throws IOException {
 	String url = "https://wsutpl.utpl.edu.ec/sgcolestudiante/InformacionPersonal/Main.aspx";
 	HttpEntity entity = conectarSitio(url);
-
 	if (entity != null) {
 	    InputStream instream = entity.getContent();
 	    BufferedReader in = new BufferedReader(new InputStreamReader(

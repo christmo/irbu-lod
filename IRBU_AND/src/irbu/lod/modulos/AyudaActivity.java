@@ -5,8 +5,6 @@ import irbu.lod.sesion.SesionApplication;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -45,23 +43,5 @@ public class AyudaActivity extends Activity {
 	    }
 	});
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-	menu.add(0, 0, Menu.NONE, R.string.txtConfiguracion).setIcon(
-		android.R.drawable.ic_menu_preferences);
-	return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
-	switch (item.getItemId()) {
-	case 0:
-	    Intent config = new Intent(this, ConfiguracionActivity.class);
-	    startActivity(config);
-	    return true;
-	}
-	return false;
     }
 }
