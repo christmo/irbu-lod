@@ -4,6 +4,12 @@ import irbu.lod.IRBUActivity;
 
 public class Constantes {
 
+    /**
+     * Servidor Externo donde se consulta donde está el servidor de rutas IRBU en php
+     */
+//    public static final String SERVER_RUTA_IRBU = "http://j4loxa.com/mobil/irbu.html"; 
+    public static final String SERVER_RUTA_IRBU = "http://192.168.1.4:8080/mobil/irbu.html"; 
+    
     /*
      * Constantes para el tipo de recorrido, estos son los parametros que se
      * envia al servidor

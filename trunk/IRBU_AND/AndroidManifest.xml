@@ -19,7 +19,7 @@
     <!-- quitar debuggable para subir a un dispositivo -->
     <application
         android:name=".sesion.SesionApplication"
-        android:debuggable="false"
+        android:debuggable="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
         <activity
@@ -84,11 +84,6 @@
             android:name="irbu.lod.modulos.listarrutas.ListaRutasParada"
             android:configChanges="orientation|keyboardHidden|keyboard"
             android:label="@string/txtListaRutasHorarios" >
-        </activity>
-        <activity
-            android:name="irbu.lod.modulos.ConfiguracionActivity"
-            android:configChanges="orientation|keyboardHidden|keyboard"
-            android:label="@string/txtConfiguracion" >
         </activity>
     </application>
 
